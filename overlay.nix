@@ -7,6 +7,9 @@ let
   ;
 in
 {
+  linux-firmware = final.callPackage ./pkgs/linux-firmware {
+    linux-firmware = super.linux-firmware;
+  };
   linuxPackages_jovian = linuxPackagesFor final.linux_jovian;
   linux_jovian = super.callPackage ./pkgs/linux-jovian {
     kernelPatches = [
