@@ -1,6 +1,9 @@
 Jovian NixOS
 ============
 
+> **Jovian**  
+> “Relating to [...] Jupiter or the class of [...] which Jupiter belongs.”
+
 *By jove! What a weird name!*
 
 This is a "jupiter-compatible" set of packages and configurations for NixOS.
