@@ -23,10 +23,23 @@ in
         default = true;
         type = types.bool;
       };
+      enableDefaultStage1Modules = mkOption {
+        default = true;
+        type = types.bool;
+      };
     };
   };
 
   config = mkMerge [
+    (mkIf (cfg.enableDefaultStage1Modules) {
+      boot.initrd.availableKernelModules = [
+        "nvme"
+        "sdhci"
+        "sdhci_pci"
+        "cqhci"
+        "mmc_block"
+      ];
+    })
     (mkIf (cfg.enableDefaultCmdlineConfig) {
       boot.kernelParams = [
         # From grub-steamos
