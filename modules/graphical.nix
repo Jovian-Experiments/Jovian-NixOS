@@ -14,7 +14,7 @@ in
         default = true;
         type = lib.types.bool;
       };
-      enableFbconRotation = lib.mkOption {
+      enableDRMRotation = lib.mkOption {
         default = true;
         type = lib.types.bool;
       };
@@ -31,9 +31,9 @@ in
         "amdgpu"
       ];
     })
-    (mkIf cfg.enableFbconRotation {
+    (mkIf cfg.enableDRMRotation {
       boot.kernelParams = [
-        "fbcon=rotate:1"
+        "video=eDP-1:panel_orientation=right_side_up"
       ];
     })
     (mkIf cfg.enableXorgRotation {
