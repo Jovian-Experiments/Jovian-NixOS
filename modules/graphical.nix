@@ -14,8 +14,8 @@ in
         default = true;
         type = lib.types.bool;
       };
-      enableDRMRotation = lib.mkOption {
-        default = true;
+      enableDRMRotationParam = lib.mkOption {
+        default = !config.jovian.hasKernelPatches;
         type = lib.types.bool;
       };
       enableXorgRotation = lib.mkOption {
@@ -31,7 +31,7 @@ in
         "amdgpu"
       ];
     })
-    (mkIf cfg.enableDRMRotation {
+    (mkIf cfg.enableDRMRotationParam {
       boot.kernelParams = [
         "video=eDP-1:panel_orientation=right_side_up"
       ];
