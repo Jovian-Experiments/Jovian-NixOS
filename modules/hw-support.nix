@@ -32,6 +32,18 @@ in
 
   config = mkMerge [
     (mkIf (cfg.enableDefaultStage1Modules) {
+      boot.initrd.kernelModules = [
+        "hid-generic"
+
+        # Touch
+        "hid-multitouch"
+        "i2c-designware-core"
+        "i2c-designware-platform"
+        "i2c-hid-acpi"
+
+        # Gamepad
+        "usbhid"
+      ];
       boot.initrd.availableKernelModules = [
         "nvme"
         "sdhci"
