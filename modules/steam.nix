@@ -53,7 +53,7 @@ in
             exec gamescope \
               --fullscreen \
               --steam \
-              -- steam -gamepadui -pipewire-dmabuf
+              -- steam -steamos3 -gamepadui -pipewire-dmabuf
           '';
         };
         unitConfig = {
