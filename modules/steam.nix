@@ -8,6 +8,8 @@ let
     mkOption
     types
   ;
+  # ¯\_(ツ)_/¯
+  token = "steampal_stable_9a24a2bf68596b860cb6710d9ea307a76c29a04d";
 in
 {
   options = {
@@ -44,6 +46,9 @@ in
               gamescope
               steam
             ])}"
+            # This forces the user in the steampal beta.
+            # Not ideal, as it's not reversed by disabling this service.
+            echo "${token}" > ~/.local/share/Steam/package/beta
             exec gamescope \
               --fullscreen \
               --steam \
