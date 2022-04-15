@@ -34,6 +34,7 @@ in
     (mkIf config.jovian.steam.enable {
       hardware.opengl.driSupport32Bit = true;
       hardware.pulseaudio.support32Bit = true;
+      jovian.enableControllerUdevRules = true;
 
       systemd.user.services."steam" = {
         enable = true;
