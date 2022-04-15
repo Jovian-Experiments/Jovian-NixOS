@@ -19,4 +19,7 @@ in
       kernelPatches.export-rt-sched-migrate
     ];
   };
+  gamescope = super.callPackage ./pkgs/gamescope {
+    udev = final.systemdMinimal;
+  };
 }
