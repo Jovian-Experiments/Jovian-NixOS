@@ -5,6 +5,7 @@
     ./kernel.nix
     ./overlay.nix
     ./sound.nix
+    ./steam.nix
     ./workarounds.nix
   ];
 }
