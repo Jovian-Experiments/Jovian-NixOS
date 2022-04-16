@@ -10,6 +10,24 @@ let
   ;
   # ¯\_(ツ)_/¯
   token = "steampal_stable_9a24a2bf68596b860cb6710d9ea307a76c29a04d";
+
+  # This script is used to hijack the call to `dbus-send` that the steam client
+  # will to to return to the desktop.
+  dbus-hijacker = (pkgs.writeShellScriptBin "dbus-send" ''
+    if echo "$@" | grep 'DisplayManager.*SwitchToUser.*doorstop.*plasma'; then
+      systemctl --user stop steam
+      exit 0
+    fi
+
+    # Snitches on unhandled calls to `dbus-send`
+    # echo dbus-send "$@" >> ~/dbus-hijacker.log
+
+    exec ${pkgs.dbus}/bin/dbus-send "$@"
+  '').overrideAttrs({ meta, ... }: { meta = meta // { piority = 9999; }; });
+
+  steam = pkgs.steam.override {
+    extraPkgs = pkgs: [ dbus-hijacker ];
+  };
 in
 {
   options = {
@@ -43,17 +61,17 @@ in
           Restart = "always";
           RestartSec = "1";
           ExecStart = pkgs.writeShellScript "steam-pal-ui" ''
-            export PATH="$PATH:${lib.makeBinPath (with pkgs;[
-              gamescope
+            export PATH="${lib.makeBinPath ([
+              pkgs.gamescope
               steam
-            ])}"
+            ])}:$PATH"
             # This forces the user in the steampal beta.
             # Not ideal, as it's not reversed by disabling this service.
             echo "${token}" > ~/.local/share/Steam/package/beta
             exec gamescope \
               --fullscreen \
               --steam \
-              -- steam -steamos3 -gamepadui -pipewire-dmabuf
+              -- steam -steamos -gamepadui -pipewire-dmabuf
           '';
         };
         unitConfig = {
