@@ -22,6 +22,15 @@ in
             switch the controller from out of its default "lizard" mode.
         '';
       };
+      controller = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Enables the Jovian Controller input userspace service.
+          '';
+        };
+      };
     };
   };
   config = mkMerge [
@@ -37,6 +46,21 @@ in
         # Valve HID devices over USB hidraw
         KERNEL=="hidraw*", ATTRS{idVendor}=="28de", MODE="0666"
       '';
+    })
+    (mkIf config.jovian.controller.enable {
+      jovian.enableControllerUdevRules = true;
+      systemd.user.services."Jovian-Controller" = {
+        enable = true;
+        serviceConfig = {
+          Restart = "always";
+          ExecStart = "${pkgs.jovian-controller}/bin/Jovian-Controller";
+        };
+        unitConfig = {
+          ConditionPathExists = "/run/user/%U";
+        };
+        wantedBy = [ "graphical-session.target" ];
+        partOf = [ "graphical-session.target" ];
+      };
     })
   ];
 }
