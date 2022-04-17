@@ -61,6 +61,14 @@ in
         wantedBy = [ "graphical-session.target" ];
         partOf = [ "graphical-session.target" ];
       };
+      # Configures the steam service to conflict and restart the
+      # Jovian-Controller service.
+      systemd.user.services."steam" = mkIf config.jovian.steam.enable {
+        conflicts = [ "Jovian-Controller.service" ];
+        serviceConfig = {
+          ExecStopPost = "systemctl --user start Jovian-Controller.service";
+        };
+      };
     })
   ];
 }
