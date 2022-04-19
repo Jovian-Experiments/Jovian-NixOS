@@ -15,7 +15,7 @@ let
   # will to to return to the desktop.
   dbus-hijacker = (pkgs.writeShellScriptBin "dbus-send" ''
     if echo "$@" | grep 'DisplayManager.*SwitchToUser.*doorstop.*plasma'; then
-      systemctl --user stop steam
+      systemctl --user stop steam.target
       exit 0
     fi
 
@@ -40,9 +40,9 @@ in
             Enables stopped-by-default systemd service to launch steam
             in "PAL" user interface (steam deck interface).
 
-            Use `systemctl --user start steam` to launch.
+            Use `systemctl --user start steam.target` to launch.
 
-            Use `systemctl --user stop steam` to stop.
+            Use `systemctl --user stop steam.target` to stop.
           '';
         };
       };
@@ -57,9 +57,7 @@ in
       systemd.user.services."steam" = {
         enable = true;
         serviceConfig = {
-          KillMode = "process";
           Restart = "always";
-          RestartSec = "1";
           ExecStart = pkgs.writeShellScript "steam-pal-ui" ''
             export PATH="${lib.makeBinPath ([
               pkgs.gamescope
@@ -77,6 +75,22 @@ in
         unitConfig = {
           ConditionPathExists = "/run/user/%U";
         };
+        requisite = [ "steam.target" ];
+        bindsTo = [ "steam.target" ];
+      };
+      # This target is used to manage the "dependency" on running steam.
+      # Using `Upholds` here means the steam service will actually be
+      # restarted if it has been killed, or exited otherwise.
+      # Without this, `pkill gamescope` would not restart the service
+      # even though it declared `Restart=always`.
+      # ¯\_(ツ)_/¯
+      # Though, in a way it makes more sense to have a *target* here
+      # than a service.
+      systemd.user.targets."steam" = {
+        unitConfig = {
+          Upholds = [ "steam.service" ];
+        };
+        enable = true;
         # wantedBy is not used, as this would make it a hard
         # requirement on the graphical session.
         # This service is only used to manage (start/stop) steam.
