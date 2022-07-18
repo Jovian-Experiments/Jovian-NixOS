@@ -9,7 +9,7 @@ let
   ;
 
   kernelVersion = "5.13.0";
-  vendorVersion = "valve10.3";
+  vendorVersion = "valve21";
 in
 buildLinux (args // rec {
   version = "${kernelVersion}-${vendorVersion}";
@@ -66,6 +66,6 @@ buildLinux (args // rec {
     owner = "Jovian-Experiments";
     repo = "linux";
     rev = version;
-    hash = "sha256-Jj3Rj1hNHy9tXzDUzLmmkIN8Aodm7QMAGQlDcgvI/ig=";
+    hash = "sha256-R5L698t7hJYRT63aAyLgXHJ1b0UnCwYYjEr2WIly11o=";
   };
 } // (args.argsOverride or { }))
