@@ -1,6 +1,7 @@
 {
   imports = [
     ./controller.nix
+    ./fan-control.nix
     ./graphical.nix
     ./hw-support.nix
     ./kernel.nix
