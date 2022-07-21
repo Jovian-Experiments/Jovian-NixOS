@@ -22,4 +22,6 @@ in
   gamescope = super.callPackage ./pkgs/gamescope {
     udev = final.systemdMinimal;
   };
+
+  jupiter-fan-control = final.callPackage ./pkgs/jupiter-fan-control { };
 }
