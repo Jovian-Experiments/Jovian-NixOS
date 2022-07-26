@@ -1,0 +1,26 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ffi (1.15.5)
+    hexdump (1.0.0)
+    libusb (0.6.4)
+      ffi (~> 1.0)
+      mini_portile2 (~> 2.1)
+    linux_input (1.1.1)
+      ffi (~> 1.9)
+    mini_portile2 (2.8.0)
+    uinput (1.2.0)
+      linux_input (~> 1.0)
+    uinput-device (0.4.0)
+      uinput (~> 1.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  hexdump
+  libusb
+  uinput-device
+
+BUNDLED WITH
+   2.2.32
