@@ -8,13 +8,14 @@ let
     mkOption
     types
   ;
+  cfg = config.jovian.devices.steamdeck;
 in
 {
   options = {
-    jovian = {
+    jovian.devices.steamdeck = {
       enableControllerUdevRules = mkOption {
         type = types.bool;
-        default = true;
+        default = cfg.enable;
         description = ''
             Enables udev rules to make the controller controllable by users.
 
@@ -25,7 +26,7 @@ in
     };
   };
   config = mkMerge [
-    (mkIf config.jovian.enableControllerUdevRules {
+    (mkIf (cfg.enableControllerUdevRules) {
       # Necessary for the controller parts to work correctly.
       services.udev.extraRules = ''
         # This rule is necessary for gamepad emulation.

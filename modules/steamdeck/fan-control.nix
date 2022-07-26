@@ -10,11 +10,11 @@ let
     mkOption
     types
   ;
-  cfg = config.jovian;
+  cfg = config.jovian.devices.steamdeck;
 in
 {
   options = {
-    jovian = {
+    jovian.devices.steamdeck = {
       enableOsFanControl = mkOption {
         description = ''
           Whether to enable the OS-controlled fan curve.
@@ -22,7 +22,7 @@ in
           This is enabled by default since SteamOS 3.2.
         '';
         type = types.bool;
-        default = true;
+        default = cfg.enable;
       };
     };
   };
