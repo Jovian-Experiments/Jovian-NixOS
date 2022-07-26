@@ -45,6 +45,17 @@ in
             Use `systemctl --user stop steam.target` to stop.
           '';
         };
+        enableUdevRules = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Whether to make certain device attributes controllable by users.
+
+            The Steam Deck Client directly modifies several device attributes to
+            control the display brightness and to enable performance tuning (TDP
+            limit, GPU clock control).
+          '';
+        };
       };
     };
   };
@@ -97,6 +108,22 @@ in
         requisite = [ "graphical-session.target" ];
         partOf = [ "graphical-session.target" ];
       };
+    })
+    (mkIf (config.jovian.steam.enableUdevRules) {
+      services.udev.extraRules = ''
+        # Enables brightness slider in Steam
+        # - /sys/class/backlight/amdgpu_bl0/brightness
+        ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="amdgpu_bl0", RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/class/backlight/%k/brightness"
+
+        # Enables manual GPU clock control in Steam
+        # - /sys/class/drm/card0/device/power_dpm_force_performance_level
+        # - /sys/class/drm/card0/device/pp_od_clk_voltage
+        ACTION=="add", SUBSYSTEM=="pci", DRIVER=="amdgpu", RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/%p/power_dpm_force_performance_level /sys/%p/pp_od_clk_voltage"
+
+        # Enables manual TDP limiter in Steam
+        # - /sys/class/hwmon/hwmon0/power{1,2}_cap
+        ACTION=="add", SUBSYSTEM=="hwmon", DEVPATH=="*/hwmon0", RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/%p/power1_cap /sys/%p/power2_cap"
+      '';
     })
   ];
 }
