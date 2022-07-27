@@ -10,21 +10,21 @@ let
     mkOption
     types
   ;
-  cfg = config.jovian;
+  cfg = config.jovian.devices.steamdeck;
 in
 {
   options = {
-    jovian = {
+    jovian.devices.steamdeck = {
       enableDefaultSysctlConfig = mkOption {
-        default = true;
+        default = cfg.enable;
         type = types.bool;
       };
       enableDefaultCmdlineConfig = mkOption {
-        default = true;
+        default = cfg.enable;
         type = types.bool;
       };
       enableDefaultStage1Modules = mkOption {
-        default = true;
+        default = cfg.enable;
         type = types.bool;
       };
     };

@@ -5,27 +5,27 @@ let
     mkIf
     mkMerge
   ;
-  cfg = config.jovian;
+  cfg = config.jovian.devices.steamdeck;
 in
 {
   options = {
-    jovian = {
+    jovian.devices.steamdeck = {
       enableEarlyModesetting = lib.mkOption {
-        default = true;
+        default = cfg.enable;
         type = lib.types.bool;
       };
       enableDRMRotationParam = lib.mkOption {
-        default = !config.jovian.hasKernelPatches;
+        default = !cfg.hasKernelPatches;
         type = lib.types.bool;
       };
       enableXorgRotation = lib.mkOption {
-        default = true;
+        default = cfg.enable;
         type = lib.types.bool;
       };
     };
   };
 
-  config = lib.mkMerge [
+  config = mkMerge [
     (mkIf cfg.enableEarlyModesetting {
       boot.initrd.kernelModules = [
         "amdgpu"

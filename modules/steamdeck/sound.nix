@@ -1,16 +1,19 @@
 { config, lib, pkgs, ... }:
 
+let
+  cfg = config.jovian.devices.steamdeck;
+in
 {
   options = {
-    jovian = {
+    jovian.devices.steamdeck = {
       enableSoundSupport = lib.mkOption {
-        default = true;
+        default = cfg.enable;
         type = lib.types.bool;
       };
     };
   };
 
-  config = lib.mkIf config.jovian.enableSoundSupport (lib.mkMerge [
+  config = lib.mkIf (cfg.enableSoundSupport) (lib.mkMerge [
     {
       hardware.pulseaudio.enable = lib.mkDefault false;
 

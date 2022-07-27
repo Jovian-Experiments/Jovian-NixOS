@@ -9,6 +9,8 @@ let
     types
   ;
 
+  cfg = config.jovian.devices.steamdeck;
+
   kernelBranch = config.boot.kernelPackages.kernel.meta.branch;
 
   # FIXME: Stop hardcoding patch to 5.13
@@ -16,37 +18,45 @@ let
   hasKernelPatches = kernelBranch == "5.13";
   orientationQuirk = {
     name = "Steam Deck orientation quirk";
-    patch = ../patches/kernel/5.13/0001-drm-Added-orientation-quirk-for-Valve-Steam-Deck.patch;
+    patch = ../../patches/kernel/5.13/0001-drm-Added-orientation-quirk-for-Valve-Steam-Deck.patch;
   };
 in
 {
   options = {
-    jovian = {
+    jovian.devices.steamdeck = {
+      enableKernelPatches = mkOption {
+        type = types.bool;
+        default = cfg.enable;
+        description = ''
+          Whether to apply kernel patches if available.
+        '';
+      };
       hasKernelPatches = mkOption {
         type = types.bool;
         internal = true;
+        default = false;
         description = ''
           Interface between modules to describe whether kernel patches are available
         '';
       };
     };
   };
-  config = mkMerge [
+  config = mkIf (cfg.enableKernelPatches) (mkMerge [
     {
       boot.kernelPackages = mkDefault pkgs.linuxPackages_jovian;
-      jovian.hasKernelPatches = hasKernelPatches;
+      jovian.devices.steamdeck.hasKernelPatches = hasKernelPatches;
     }
-    (mkIf hasKernelPatches {
+    (mkIf (cfg.hasKernelPatches) {
       boot.kernelPatches = [
         orientationQuirk
       ];
     })
-    (mkIf (!hasKernelPatches) {
+    (mkIf (!cfg.hasKernelPatches) {
       warnings = [
         ''
           Kernel patches for improved default hardware support missing for kernel branch "${kernelBranch}".
         ''
       ];
     })
-  ];
+  ]);
 }
