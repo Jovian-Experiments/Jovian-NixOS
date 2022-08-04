@@ -15,7 +15,7 @@ in
         type = lib.types.bool;
       };
       enableDRMRotationParam = lib.mkOption {
-        default = !cfg.hasKernelPatches;
+        default = cfg.enable && !cfg.hasKernelPatches;
         type = lib.types.bool;
       };
       enableXorgRotation = lib.mkOption {
