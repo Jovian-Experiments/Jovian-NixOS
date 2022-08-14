@@ -40,4 +40,6 @@ in
       steam-fhsenv = scopeSuper.steam-fhsenv;
     };
   });
+
+  sdgyrodsu = final.callPackage ./pkgs/sdgyrodsu { };
 }
