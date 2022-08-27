@@ -19,9 +19,6 @@ in
       kernelPatches.export-rt-sched-migrate
     ];
   };
-  gamescope = super.callPackage ./pkgs/gamescope {
-    udev = final.systemdMinimal;
-  };
 
   jupiter-fan-control = final.callPackage ./pkgs/jupiter-fan-control { };
 }
