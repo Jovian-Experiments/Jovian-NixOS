@@ -21,4 +21,7 @@ in
   };
 
   jupiter-fan-control = final.callPackage ./pkgs/jupiter-fan-control { };
+
+  jupiter-hw-support = final.callPackage ./pkgs/jupiter-hw-support { };
+  steamdeck-hw-theme = final.callPackage ./pkgs/jupiter-hw-support/theme.nix { };
 }
