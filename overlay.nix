@@ -26,4 +26,10 @@ in
   steamdeck-hw-theme = final.callPackage ./pkgs/jupiter-hw-support/theme.nix { };
 
   steam-session = super.callPackage ./pkgs/steam-session { };
+
+  steamPackages = super.steamPackages.overrideScope (scopeFinal: scopeSuper: {
+    steam = final.callPackage ./pkgs/steam-jupiter-original {
+      steam-original = scopeSuper.steam;
+    };
+  });
 }
