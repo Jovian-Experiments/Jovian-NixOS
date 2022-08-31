@@ -6,6 +6,7 @@ let
     mkIf
     mkMerge
     mkOption
+    mapAttrsToList
     types
   ;
 
@@ -13,7 +14,11 @@ let
     steam
   ;
 
+  cfg = config.jovian.steam;
+
   sessionPath = lib.makeBinPath [ pkgs.mangohud ];
+
+  sessionEnvironmentArgs = builtins.concatStringsSep " " (mapAttrsToList (k: v: "--setenv=\"${k}=${v}\"") config.jovian.steam.environment);
 
   # TODO: provide generic helper (submodule?) to use a similar gamescope setup for other uses (e.g. kodi, retroarch, ppsspp)
 
@@ -114,7 +119,7 @@ let
     PS4=" [steam-session] $ "
     set -x
 
-    systemd-run --user --scope --slice="$SLICE" -- "''${gamescope_incantation[@]}"
+    systemd-run --user --scope --slice="$SLICE" ${sessionEnvironmentArgs} -- "''${gamescope_incantation[@]}"
   '';
 in
 {
@@ -131,11 +136,19 @@ in
             from your Display Manager or by running `steam-session`.
           '';
         };
+
+        environment = mkOption {
+          type = types.attrsOf types.str;
+          default = {};
+          description = ''
+            Environment variables to set for Steam.
+          '';
+        };
       };
     };
   };
-  config = mkMerge [
-    (mkIf config.jovian.steam.enable {
+  config = mkIf cfg.enable (mkMerge [
+    {
       hardware.opengl.driSupport32Bit = true;
       hardware.pulseaudio.support32Bit = true;
 
@@ -148,6 +161,6 @@ in
       services.logind.extraConfig = ''
         HandlePowerKey=ignore
       '';
-    })
-  ];
+    }
+  ]);
 }
