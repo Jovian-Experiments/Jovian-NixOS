@@ -87,6 +87,8 @@ let
       # TODO[Jovian]: verify assertion
       --xwayland-count 2
 
+      -w 1280 -h 800
+
       --fullscreen
 
       # TODO[Jovian]: document why '*' here
