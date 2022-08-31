@@ -191,9 +191,6 @@ in
         QT_IM_MODULE = "steam";
         GTK_IM_MODULE = "Steam";
 
-        # Enable dynamic backlight, we have the kernel patch to disable events
-        STEAM_ENABLE_DYNAMIC_BACKLIGHT = "1";
-
         # Enable volume key management via steam for this session
         STEAM_ENABLE_VOLUME_HANDLER = "1";
 
@@ -242,6 +239,9 @@ in
     })
     (mkIf cfg.useStockSteamDeckEnvironment {
       jovian.steam.environment = {
+        # Enable dynamic backlight, we have the kernel patch to disable events
+        STEAM_ENABLE_DYNAMIC_BACKLIGHT = "1";
+
         # Let's try this across the board to see if it breaks anything
         # Helps performance in HZD, Cyberpunk, at least
         # Expose 8 physical cores, instead of 4c/8t
