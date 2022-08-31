@@ -13,12 +13,16 @@ let
     steam
   ;
 
+  sessionPath = lib.makeBinPath [ pkgs.mangohud ];
+
   # TODO: provide generic helper (submodule?) to use a similar gamescope setup for other uses (e.g. kodi, retroarch, ppsspp)
 
   # TODO: add all environment variables affecting steam here
   # TODO: systemd-run with `--property=Restart=always` for power-button helper and mangoapp
   # Shim that runs steam and associated services.
   steam-shim = pkgs.writeShellScript "steam-shim" ''
+    export PATH=${sessionPath}:$PATH
+
     export STEAM_USE_MANGOAPP=1
     export MANGOHUD_CONFIGFILE=$(mktemp $XDG_RUNTIME_DIR/mangohud.XXXXXXXX)
     export MANGOAPP=1
