@@ -75,9 +75,9 @@ let
     mkfifo -- "$GAMESCOPE_STATS"
 
     # To play nice with the short term callback-based limiter for now
-    export GAMESCOPE_LIMITER_FILE=$(mktemp /tmp/gamescope-limiter.XXXXXXXX)
+    export GAMESCOPE_LIMITER_FILE=$(mktemp $runtime_dir/gamescope-limiter.XXXXXXXX)
 
-    export RADV_FORCE_VRS_CONFIG_FILE=$(mktemp /tmp/radv_vrs.XXXXXXXX)
+    export RADV_FORCE_VRS_CONFIG_FILE=$(mktemp $runtime_dir/radv_vrs.XXXXXXXX)
 
     gamescope_incantation=(
       "${gamescope-shim}"
