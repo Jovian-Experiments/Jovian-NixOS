@@ -32,6 +32,8 @@ let
     export MANGOHUD_CONFIGFILE=$(mktemp $XDG_RUNTIME_DIR/mangohud.XXXXXXXX)
     export MANGOAPP=1
 
+    env
+
     # Initially write no_display to our config file
     # so we don't get mangoapp showing up before Steam initializes
     # on OOBE and stuff.
@@ -71,6 +73,11 @@ let
     export GAMESCOPE_STATS="$runtime_dir/stats.pipe"
     rm -f "$GAMESCOPE_STATS"
     mkfifo -- "$GAMESCOPE_STATS"
+
+    # To play nice with the short term callback-based limiter for now
+    export GAMESCOPE_LIMITER_FILE=$(mktemp /tmp/gamescope-limiter.XXXXXXXX)
+
+    export RADV_FORCE_VRS_CONFIG_FILE=$(mktemp /tmp/radv_vrs.XXXXXXXX)
 
     gamescope_incantation=(
       "${gamescope-shim}"
@@ -210,6 +217,8 @@ in
 
         # Set refresh rate range and enable refresh rate switching
         STEAM_DISPLAY_REFRESH_LIMITS = "40,60";
+
+        STEAM_USE_DYNAMIC_VRS = "1";
 
         STEAM_UPDATEUI_PNG_BACKGROUND = "${pkgs.steamdeck-hw-theme}/share/steamos/steamos.png";
 
