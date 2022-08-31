@@ -144,6 +144,22 @@ in
             Environment variables to set for Steam.
           '';
         };
+
+        useStockEnvironment = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Whether to use the stock environment variables from gamescope-session.
+          '';
+        };
+
+        useStockSteamDeckEnvironment = mkOption {
+          type = types.bool;
+          default = config.jovian.devices.steamdeck.enable;
+          description = ''
+            Whether to use the Steam Deck-specific environment variables from stock gamescope-session.
+          '';
+        };
       };
     };
   };
@@ -162,5 +178,66 @@ in
         HandlePowerKey=ignore
       '';
     }
+    (mkIf cfg.useStockEnvironment {
+      jovian.steam.environment = {
+        # Set input method modules for Qt/GTK that will show the Steam keyboard
+        QT_IM_MODULE = "steam";
+        GTK_IM_MODULE = "Steam";
+
+        # Enable dynamic backlight, we have the kernel patch to disable events
+        STEAM_ENABLE_DYNAMIC_BACKLIGHT = "1";
+
+        # Enable volume key management via steam for this session
+        STEAM_ENABLE_VOLUME_HANDLER = "1";
+
+        # Have SteamRT's xdg-open send http:// and https:// URLs to Steam
+        SRT_URLOPEN_PREFER_STEAM = "1";
+
+        # Disable automatic audio device switching in steam, now handled by wireplumber
+        STEAM_DISABLE_AUDIO_DEVICE_SWITCHING = "1";
+
+        # Enable support for xwayland isolation per-game in Steam
+        STEAM_MULTIPLE_XWAYLANDS = "1";
+
+        # We have the Mesa integration for the fifo-based dynamic fps-limiter
+        STEAM_GAMESCOPE_DYNAMIC_FPSLIMITER = "1";
+
+        # We have gamma/degamma exponent support
+        STEAM_GAMESCOPE_COLOR_TOYS = "1";
+
+        # We have NIS support
+        STEAM_GAMESCOPE_NIS_SUPPORTED = "1";
+
+        # Set refresh rate range and enable refresh rate switching
+        STEAM_DISPLAY_REFRESH_LIMITS = "40,60";
+
+        STEAM_UPDATEUI_PNG_BACKGROUND = "${pkgs.steamdeck-hw-theme}/share/steamos/steamos.png";
+
+        # Don't wait for buffers to idle on the client side before sending them to gamescope
+        vk_xwayland_wait_ready = "false";
+
+        # There is no way to set a color space for an NV12
+        # buffer in Wayland. And the color management protocol that is
+        # meant to let this happen is missing the color range...
+        # So just workaround this with an ENV var that Remote Play Together
+        # and Gamescope will use for now.
+        GAMESCOPE_NV12_COLORSPACE = "k_EStreamColorspace_BT601";
+
+        # To expose vram info from radv's patch we're including
+        WINEDLLOVERRIDES = "dxgi=n";
+
+        XCURSOR_THEME = "steam";
+
+        SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS = "0";
+      };
+    })
+    (mkIf cfg.useStockSteamDeckEnvironment {
+      jovian.steam.environment = {
+        # Let's try this across the board to see if it breaks anything
+        # Helps performance in HZD, Cyberpunk, at least
+        # Expose 8 physical cores, instead of 4c/8t
+        WINE_CPU_TOPOLOGY = "8:0,1,2,3,4,5,6,7";
+      };
+    })
   ]);
 }
