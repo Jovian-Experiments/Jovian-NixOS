@@ -1,17 +1,16 @@
+# A wrapped version of Steam with shims to satisfy the SteamOS-only
+# dependencies of the Steam Deck UI
+
 { lib
 , runCommand
-, steam
-, gamescope
-, mangohud
-, jupiter-hw-support
-, steamdeck-hw-theme
 , writeShellScriptBin
-}:
-
-# TODO: Integrate this into modules/steam.nix. steam-session can be run on an
-# existing desktop, in which case gamescope will be started in nested mode.
+, steam-fhsenv
+, ...
+} @ args:
 
 let
+  extraArgs = builtins.removeAttrs args [ "lib" "runCommand" "writeShellScriptBin" "steam-fhsenv" ];
+
   # The sudo wrapper doesn't work in FHS environments. For our purposes
   # we add a passthrough sudo command that does not actually escalate
   # privileges.
@@ -71,26 +70,21 @@ let
     fi
   '';
 
-  wrappedSteam = steam.override {
-    extraPkgs = pkgs: [
+  wrappedSteam = steam-fhsenv.override (extraArgs // {
+    extraPkgs = pkgs: (if args ? extraPkgs then args.extraPkgs pkgs else []) ++ [
       nullOsUpdater nullBiosUpdater
       sessionSwitcher
     ];
-    extraProfile = ''
+    extraProfile = (args.extraProfile or "") + ''
       export PATH=${passthroughSudo}/bin:$PATH
     '';
-  };
 
-  binPath = lib.makeBinPath [ wrappedSteam wrappedSteam.run gamescope mangohud ];
-in runCommand "steam-session" {
-  passthru.steam = wrappedSteam;
-  passthru.providedSessions = [ "steam-wayland" ];
-} ''
-  mkdir -p $out/bin
-  path=${binPath} hwsupport=${jupiter-hw-support} theme=${steamdeck-hw-theme}\
-    substituteAll ${./steam-session} $out/bin/steam-session
-  chmod +x $out/bin/steam-session
-
-  mkdir -p $out/share/wayland-sessions
-  substituteAll ${./steam-wayland.desktop.in} $out/share/wayland-sessions/steam-wayland.desktop
-''
+    # https://github.com/NixOS/nixpkgs/pull/182641
+    #
+    # We need to add this flag when Steam is started directly (e.g., desktop mode)
+    # so we have the correct client version. This is important even for desktop
+    # use because only the Steam Deck branch of the client has the new on-screen
+    # keyboard that's summoned with STEAM + X.
+    #extraArgs = "-steamdeck";
+  });
+in wrappedSteam
