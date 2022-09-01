@@ -65,7 +65,7 @@ let
   # TODO: pass down unhandled arguments
   # TODO: add environment variables affecting gamescope here
   # Script that launches the gamescope shim within a systemd scope.
-  jovian-steam-session = pkgs.writeShellScriptBin "steam-session" ''
+  steam-session = pkgs.writeShellScriptBin "steam-session" ''
     SLICE="steam-session"
 
     runtime_dir="$XDG_RUNTIME_DIR/$SLICE.run"
@@ -133,6 +133,22 @@ let
 
     systemd-run --user --scope --slice="$SLICE" ${sessionEnvironmentArgs} -- "''${gamescope_incantation[@]}"
   '';
+
+  steam-session-desktop = (pkgs.writeTextFile {
+    name = "steam-session-desktop";
+    destination = "/share/wayland-sessions/steam-wayland.desktop";
+    text = ''
+      [Desktop Entry]
+      Encoding=UTF-8
+      Name=Gaming Mode
+      Exec=${steam-session}/bin/steam-session
+      Icon=steamicon.png
+      Type=Application
+      DesktopNames=gamescope
+    '';
+  }) // {
+    providedSessions = [ "steam-wayland" ];
+  };
 in
 {
   options = {
@@ -180,10 +196,9 @@ in
       hardware.opengl.driSupport32Bit = true;
       hardware.pulseaudio.support32Bit = true;
 
-      environment.systemPackages = [ jovian-steam-session ];
+      environment.systemPackages = [ steam-session ];
 
-      # FIXME: pack back into a proper session package
-      #services.xserver.displayManager.sessionPackages = [ pkgs.steam-session ];
+      services.xserver.displayManager.sessionPackages = [ steam-session-desktop ];
 
       # Conflicts with power-button-handler
       services.logind.extraConfig = ''
