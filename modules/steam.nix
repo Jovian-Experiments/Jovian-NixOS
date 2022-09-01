@@ -77,7 +77,10 @@ let
     # To play nice with the short term callback-based limiter for now
     export GAMESCOPE_LIMITER_FILE=$(mktemp $runtime_dir/gamescope-limiter.XXXXXXXX)
 
+    # Prepare our initial VRS config file
+    # for dynamic VRS in Mesa.
     export RADV_FORCE_VRS_CONFIG_FILE=$(mktemp $runtime_dir/radv_vrs.XXXXXXXX)
+    echo "1x1" > "$RADV_FORCE_VRS_CONFIG_FILE"
 
     gamescope_incantation=(
       "${gamescope-shim}"
