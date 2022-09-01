@@ -10,9 +10,8 @@ let
     types
   ;
 
-  inherit (pkgs.steam-session)
-    steam
-  ;
+  # Note that we override Steam in our overlay
+  inherit (pkgs) steam;
 
   cfg = config.jovian.steam;
 
