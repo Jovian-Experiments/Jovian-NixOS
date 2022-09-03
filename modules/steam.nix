@@ -35,7 +35,7 @@ let
     steam.run
   ];
 
-  sessionEnvironmentArgs = builtins.concatStringsSep " " (mapAttrsToList (k: v: "--setenv=\"${k}=${v}\"") config.jovian.steam.environment);
+  sessionEnvironment = builtins.concatStringsSep " " (mapAttrsToList (k: v: "${k}=${v}") config.jovian.steam.environment);
 
   # Shim that runs steam and associated services.
   steam-shim = writeShellScript "steam-shim" ''
@@ -170,7 +170,7 @@ let
     PS4=" [steam-session] $ "
     set -x
 
-    systemd-run --user --scope --slice="$SLICE" ${sessionEnvironmentArgs} -- "''${gamescope_incantation[@]}"
+    ${sessionEnvironment} "''${gamescope_incantation[@]}"
   '';
 
   steam-session-desktop = (writeTextFile {
