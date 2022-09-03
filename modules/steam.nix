@@ -19,10 +19,6 @@ let
 
   sessionEnvironmentArgs = builtins.concatStringsSep " " (mapAttrsToList (k: v: "--setenv=\"${k}=${v}\"") config.jovian.steam.environment);
 
-  # TODO: provide generic helper (submodule?) to use a similar gamescope setup for other uses (e.g. kodi, retroarch, ppsspp)
-
-  # TODO: add all environment variables affecting steam here
-  # TODO: systemd-run with `--property=Restart=always` for power-button helper and mangoapp
   # Shim that runs steam and associated services.
   steam-shim = pkgs.writeShellScript "steam-shim" ''
     export PATH=${sessionPath}:$PATH
@@ -62,7 +58,6 @@ let
   # TODO: consume width/height script input params
   # TODO: consume script input param to disable fullscreening
   # TODO: pass down unhandled arguments
-  # TODO: add environment variables affecting gamescope here
   # Script that launches the gamescope shim within a systemd scope.
   steam-session = pkgs.writeShellScriptBin "steam-session" ''
     SLICE="steam-session"
