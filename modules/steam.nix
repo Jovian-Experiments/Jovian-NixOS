@@ -20,6 +20,10 @@ let
     jupiter-hw-support
     steam
     steamdeck-hw-theme
+
+    writeTextFile
+    writeShellScript
+    writeShellScriptBin
   ;
 
   cfg = config.jovian.steam;
@@ -34,7 +38,7 @@ let
   sessionEnvironmentArgs = builtins.concatStringsSep " " (mapAttrsToList (k: v: "--setenv=\"${k}=${v}\"") config.jovian.steam.environment);
 
   # Shim that runs steam and associated services.
-  steam-shim = pkgs.writeShellScript "steam-shim" ''
+  steam-shim = writeShellScript "steam-shim" ''
     export PATH=${sessionPath}:$PATH
 
     export STEAM_USE_MANGOAPP=1
@@ -85,7 +89,7 @@ let
 
   # Shim that runs gamescope, with a specific environment.
   # NOTE: This is only used to provide gamescope_pid.
-  gamescope-shim = pkgs.writeShellScript "gamescope-shim" ''
+  gamescope-shim = writeShellScript "gamescope-shim" ''
     # We will `exec` and thus replace the current process with
     # gamescope, which will in turn have the current PID.
     export gamescope_pid="''$$"
@@ -93,14 +97,14 @@ let
     # TODO[Jovian]: Explore other ways to stop the session?
     #               -> `systemctl --user stop steam-session.slice`?
 
-    exec ${pkgs.gamescope}/bin/gamescope "$@"
+    exec ${gamescope}/bin/gamescope "$@"
   '';
 
   # TODO: consume width/height script input params
   # TODO: consume script input param to disable fullscreening
   # TODO: pass down unhandled arguments
   # Script that launches the gamescope shim within a systemd scope.
-  steam-session = pkgs.writeShellScriptBin "steam-session" ''
+  steam-session = writeShellScriptBin "steam-session" ''
     SLICE="steam-session"
 
     runtime_dir="$XDG_RUNTIME_DIR/$SLICE.run"
@@ -140,7 +144,7 @@ let
       --fade-out-duration 200
       # TODO[Jovian]: Provide our own cursor for FOSS steam-less gamescope
       #               -> adwaita or similar
-      --cursor ${pkgs.steamdeck-hw-theme}/share/steamos/steamos-cursor.png
+      --cursor ${steamdeck-hw-theme}/share/steamos/steamos-cursor.png
       --cursor-hotspot 5,3
 
       # TODO[Jovian]: only add when running steam
@@ -169,7 +173,7 @@ let
     systemd-run --user --scope --slice="$SLICE" ${sessionEnvironmentArgs} -- "''${gamescope_incantation[@]}"
   '';
 
-  steam-session-desktop = (pkgs.writeTextFile {
+  steam-session-desktop = (writeTextFile {
     name = "steam-session-desktop";
     destination = "/share/wayland-sessions/steam-wayland.desktop";
     text = ''
@@ -272,7 +276,7 @@ in
 
         STEAM_USE_DYNAMIC_VRS = "1";
 
-        STEAM_UPDATEUI_PNG_BACKGROUND = "${pkgs.steamdeck-hw-theme}/share/steamos/steamos.png";
+        STEAM_UPDATEUI_PNG_BACKGROUND = "${steamdeck-hw-theme}/share/steamos/steamos.png";
 
         # Don't wait for buffers to idle on the client side before sending them to gamescope
         vk_xwayland_wait_ready = "false";
