@@ -78,13 +78,5 @@ let
     extraProfile = (args.extraProfile or "") + ''
       export PATH=${passthroughSudo}/bin:$PATH
     '';
-
-    # https://github.com/NixOS/nixpkgs/pull/182641
-    #
-    # We need to add this flag when Steam is started directly (e.g., desktop mode)
-    # so we have the correct client version. This is important even for desktop
-    # use because only the Steam Deck branch of the client has the new on-screen
-    # keyboard that's summoned with STEAM + X.
-    #extraArgs = "-steamdeck";
   });
 in wrappedSteam
