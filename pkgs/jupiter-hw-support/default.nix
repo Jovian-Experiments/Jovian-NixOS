@@ -30,6 +30,17 @@ stdenv.mkDerivation {
     mkdir -p $out/share
     cp -r usr/share/alsa $out/share
 
+    cat > $out/share/alsa/ucm2/ucm.conf <<EOF
+    Syntax 3
+
+    UseCasePath {
+        legacy {
+            Directory "conf.d/acp5x"
+            File "acp5x.conf"
+        }
+    }
+    EOF
+
     # ALSA lib main.c:844:(execute_sequence) exec 'echo Main Verb Config EnableSequence' failed (exit code -8)
     # ALSA lib main.c:2573:(set_verb_user) error: failed to initialize new use case: HiFi
     # alsaucm: error failed to set _verb=HiFi: Exec format error
