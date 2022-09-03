@@ -77,7 +77,7 @@ let
       echo ""
       echo "================================================================================"
       echo "[steam-session] WARNING: Power button device not readable by your user."
-      echo "                         Add $USER to the input group to have complete support
+      echo "                         Add $USER to the input group to have complete support"
       echo "                         for the Steam Deck's power menu."
       echo "================================================================================"
       echo ""
