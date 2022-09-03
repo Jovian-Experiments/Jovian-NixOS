@@ -2,6 +2,7 @@
 
 let
   inherit (lib)
+    makeBinPath
     mkDefault
     mkIf
     mkMerge
@@ -11,11 +12,24 @@ let
   ;
 
   # Note that we override Steam in our overlay
-  inherit (pkgs) steam;
+  inherit (pkgs)
+    gamescope
+    mangohud
+    systemd
+
+    jupiter-hw-support
+    steam
+    steamdeck-hw-theme
+  ;
 
   cfg = config.jovian.steam;
 
-  sessionPath = lib.makeBinPath [ pkgs.mangohud ];
+  sessionPath = makeBinPath [
+    mangohud
+    systemd
+    steam
+    steam.run
+  ];
 
   sessionEnvironmentArgs = builtins.concatStringsSep " " (mapAttrsToList (k: v: "--setenv=\"${k}=${v}\"") config.jovian.steam.environment);
 
@@ -27,7 +41,7 @@ let
     export MANGOHUD_CONFIGFILE=$(mktemp $XDG_RUNTIME_DIR/mangohud.XXXXXXXX)
     export MANGOAPP=1
 
-    env
+    powerbuttonPath="/dev/input/by-path/platform-i8042-serio-0-event-kbd"
 
     # Initially write no_display to our config file
     # so we don't get mangoapp showing up before Steam initializes
@@ -36,10 +50,37 @@ let
     echo "no_display" > "$MANGOHUD_CONFIGFILE"
 
     # These additional services will be culled when the main service quits too.
-    mangoapp &
-    ${steam.run}/bin/steam-run ${pkgs.jupiter-hw-support}/lib/hwsupport/power-button-handler.py &
+    # This is done by re-using the same slice name.
 
-    exec ${steam}/bin/steam -steamos3 -steampal -steamdeck -gamepadui "$@"
+    systemd-run --user \
+      --slice="steam-session" \
+      --unit=steam-session.mangoapp \
+      --property=Restart=always \
+      --setenv=DISPLAY \
+      --setenv=MANGOHUD_CONFIGFILE \
+      -- \
+      mangoapp
+
+    if test -r "$powerbuttonPath"; then
+      systemd-run --user \
+        --slice="steam-session" \
+        --unit=steam-session.power-button-handler \
+        --property=Restart=always \
+        -- \
+        steam-run ${jupiter-hw-support}/lib/hwsupport/power-button-handler.py
+    else
+      echo ""
+      echo ""
+      echo "================================================================================"
+      echo "[steam-session] WARNING: Power button device not readable by your user."
+      echo "                         Add $USER to the input group to have complete support
+      echo "                         for the Steam Deck's power menu."
+      echo "================================================================================"
+      echo ""
+      echo ""
+    fi
+
+    exec steam -steamos3 -steampal -steamdeck -gamepadui "$@"
   '';
 
   # Shim that runs gamescope, with a specific environment.
