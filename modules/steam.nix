@@ -159,6 +159,12 @@ let
 
       --
 
+      systemd-run --user
+        --scope
+        --slice="$SLICE"
+
+      -- 
+
       "${steam-shim}" "$@"
     )
 
