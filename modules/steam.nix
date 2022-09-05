@@ -107,6 +107,9 @@ let
   # TODO: pass down unhandled arguments
   # Script that launches the gamescope shim within a systemd scope.
   steam-session = writeShellScriptBin "steam-session" ''
+    GAMESCOPE_WIDTH=''${GAMESCOPE_WIDTH:-1280}
+    GAMESCOPE_HEIGHT=''${GAMESCOPE_HEIGHT:-800}
+
     SLICE="steam-session"
 
     runtime_dir="$XDG_RUNTIME_DIR/$SLICE.run"
@@ -131,7 +134,7 @@ let
       # TODO[Jovian]: verify assertion
       --xwayland-count 2
 
-      -w 1280 -h 800
+      -w $GAMESCOPE_WIDTH -h $GAMESCOPE_HEIGHT
 
       --fullscreen
 
