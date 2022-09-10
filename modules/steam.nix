@@ -259,6 +259,18 @@ in
       services.logind.extraConfig = ''
         HandlePowerKey=ignore
       '';
+
+      # HACK: This is a temporary workaround to allow Steam to suspend the
+      # system while running inside a transient slice.
+      security.polkit.extraConfig = ''
+        // Jovian-NixOS/steam: Allow users to suspend the system
+        polkit.addRule(function(action, subject) {
+          if (action.id == "org.freedesktop.login1.suspend" &&
+            subject.isInGroup("users")) {
+            return polkit.Result.YES;
+          }
+        });
+      '';
     }
     (mkIf cfg.useStockEnvironment {
       jovian.steam.environment = {
