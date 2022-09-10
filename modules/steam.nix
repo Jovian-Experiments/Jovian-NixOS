@@ -260,13 +260,18 @@ in
         HandlePowerKey=ignore
       '';
 
-      # HACK: This is a temporary workaround to allow Steam to suspend the
-      # system while running inside a transient slice.
+      # HACK: This is a temporary workaround to allow Steam to perform
+      # power actions (suspend, reboot, poweroff) while running inside
+      # a transient slice.
       security.polkit.extraConfig = ''
-        // Jovian-NixOS/steam: Allow users to suspend the system
+        // Jovian-NixOS/steam: Allow users to perform power actions
         polkit.addRule(function(action, subject) {
-          if (action.id == "org.freedesktop.login1.suspend" &&
-            subject.isInGroup("users")) {
+          if ((action.id == "org.freedesktop.login1.suspend" ||
+               action.id == "org.freedesktop.login1.reboot" ||
+               action.id == "org.freedesktop.login1.reboot-multiple-sessions" ||
+               action.id == "org.freedesktop.login1.power-off" ||
+               action.id == "org.freedesktop.login1.power-off-multiple-sessions") &&
+               subject.isInGroup("users")) {
             return polkit.Result.YES;
           }
         });
