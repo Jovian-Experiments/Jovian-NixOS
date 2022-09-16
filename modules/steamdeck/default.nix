@@ -17,6 +17,7 @@ in
     ./graphical.nix
     ./hw-support.nix
     ./kernel.nix
+    ./mesa.nix
     ./perf-control.nix
     ./sound.nix
   ];
