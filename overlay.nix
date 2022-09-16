@@ -20,5 +20,7 @@ in
     ];
   };
 
+  mesa-jupiter = final.callPackage ./pkgs/mesa-jupiter { };
+
   jupiter-fan-control = final.callPackage ./pkgs/jupiter-fan-control { };
 }
