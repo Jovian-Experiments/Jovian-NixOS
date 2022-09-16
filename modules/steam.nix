@@ -43,7 +43,6 @@ let
 
     export STEAM_USE_MANGOAPP=1
     export MANGOHUD_CONFIGFILE=$(mktemp $XDG_RUNTIME_DIR/mangohud.XXXXXXXX)
-    export MANGOAPP=1
 
     powerbuttonPath="/dev/input/by-path/platform-i8042-serio-0-event-kbd"
 
