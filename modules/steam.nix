@@ -303,6 +303,9 @@ in
         # We have NIS support
         STEAM_GAMESCOPE_NIS_SUPPORTED = "1";
 
+        # Support for gamescope tearing with GAMESCOPE_ALLOW_TEARING atom (3.11.44+)
+        STEAM_GAMESCOPE_HAS_TEARING_SUPPORT = "1";
+
         # Set refresh rate range and enable refresh rate switching
         STEAM_DISPLAY_REFRESH_LIMITS = "40,60";
 
