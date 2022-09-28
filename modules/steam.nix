@@ -120,9 +120,12 @@ let
     # To play nice with the short term callback-based limiter for now
     export GAMESCOPE_LIMITER_FILE=$(mktemp $runtime_dir/gamescope-limiter.XXXXXXXX)
 
-    # Prepare our initial VRS config file
-    # for dynamic VRS in Mesa.
-    export RADV_FORCE_VRS_CONFIG_FILE=$(mktemp $runtime_dir/radv_vrs.XXXXXXXX)
+    # Prepare our initial VRS config file for dynamic VRS in Mesa.
+    #
+    # With pressure-vessel, only certain subpaths of $XDG_RUNTIME_DIR
+    # are bind-mounted into the sandbox. As a result, we use --tmpdir here
+    # instead of $runtime_dir.
+    export RADV_FORCE_VRS_CONFIG_FILE=$(mktemp --tmpdir radv_vrs.XXXXXXXX)
     echo "1x1" > "$RADV_FORCE_VRS_CONFIG_FILE"
 
     # Prepare gamescope mode save file (3.1.44+)
