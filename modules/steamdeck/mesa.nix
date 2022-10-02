@@ -21,5 +21,7 @@ in
       package = pkgs.mesa-jupiter.drivers;
       package32 = pkgs.pkgsi686Linux.mesa-jupiter.drivers;
     };
+
+    environment.etc."drirc".source = pkgs.mesa-jupiter + "/share/drirc.d/00-radv-defaults.conf";
   };
 }
