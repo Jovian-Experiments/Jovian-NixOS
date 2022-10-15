@@ -9,13 +9,21 @@ let
   ;
 
   kernelVersion = "5.13.0";
-  vendorVersion = "valve24";
+  vendorVersion = "valve25";
 in
 buildLinux (args // rec {
   version = "${kernelVersion}-${vendorVersion}";
 
   # branchVersion needs to be x.y
   extraMeta.branch = versions.majorMinor version;
+
+  kernelPatches = [
+    # Valve forgot to update EXTRAVERSION - Remove for valve26
+    {
+      name = "valve25-extraversion";
+      patch = ./valve25-extraversion.patch;
+    }
+  ];
 
   structuredExtraConfig = with lib.kernel; {
     #
@@ -66,6 +74,6 @@ buildLinux (args // rec {
     owner = "Jovian-Experiments";
     repo = "linux";
     rev = version;
-    hash = "sha256-zTc6qmKImrn/ChtK1Fu3VhaKaeiGMLHakgIahKddTMs=";
+    hash = "sha256-GKAZffSTbKGdjO5vHPVRKeVlXnw2w9jLDIaK6e3sqw8=";
   };
 } // (args.argsOverride or { }))

@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 0e5b8ecdd39e..bbc63783fcb4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@
+ VERSION = 5
+ PATCHLEVEL = 13
+ SUBLEVEL = 0
+-EXTRAVERSION =-valve24
++EXTRAVERSION =-valve25
+ NAME = Opossums on Parade
+ 
+ # *DOCUMENTATION*
