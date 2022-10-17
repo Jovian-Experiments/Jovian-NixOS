@@ -1,9 +1,9 @@
-{ runCommandNoCC }:
+{ runCommand }:
 
 let
   version = "jupiter-20220310.1000";
 in
-runCommandNoCC "acp5x-ucm-${version}" {
+runCommand "acp5x-ucm-${version}" {
   passthru = {
     inherit version;
   };
