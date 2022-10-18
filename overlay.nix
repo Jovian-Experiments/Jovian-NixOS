@@ -21,4 +21,18 @@ in
   };
 
   jupiter-fan-control = final.callPackage ./pkgs/jupiter-fan-control { };
+
+  jupiter-hw-support = final.callPackage ./pkgs/jupiter-hw-support { };
+  steamdeck-hw-theme = final.callPackage ./pkgs/jupiter-hw-support/theme.nix { };
+
+  steam-session = super.callPackage ./pkgs/steam-session { };
+
+  steamPackages = super.steamPackages.overrideScope (scopeFinal: scopeSuper: {
+    steam = final.callPackage ./pkgs/steam-jupiter/unwrapped.nix {
+      steam-original = scopeSuper.steam;
+    };
+    steam-fhsenv = final.callPackage ./pkgs/steam-jupiter/fhsenv.nix {
+      steam-fhsenv = scopeSuper.steam-fhsenv;
+    };
+  });
 }
