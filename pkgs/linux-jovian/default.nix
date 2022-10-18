@@ -17,7 +17,7 @@ buildLinux (args // rec {
   # branchVersion needs to be x.y
   extraMeta.branch = versions.majorMinor version;
 
-  kernelPatches = [
+  kernelPatches = (args.kernelPatches or []) ++ [
     # Valve forgot to update EXTRAVERSION - Remove for valve26
     {
       name = "valve25-extraversion";
