@@ -26,6 +26,7 @@ in
   steamdeck-hw-theme = final.callPackage ./pkgs/jupiter-hw-support/theme.nix { };
   steamdeck-firmware = final.callPackage ./pkgs/jupiter-hw-support/firmware.nix { };
   steamdeck-bios-fwupd = final.callPackage ./pkgs/jupiter-hw-support/bios-fwupd.nix { };
+  jupiter-dock-updater-bin = final.callPackage ./pkgs/jupiter-dock-updater-bin { };
 
   steam-session = super.callPackage ./pkgs/steam-session { };
 
