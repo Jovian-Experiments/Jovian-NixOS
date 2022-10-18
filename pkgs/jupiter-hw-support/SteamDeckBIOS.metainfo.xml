@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="firmware">
+  <id>value.Jupiter.BIOS.firmware</id>
+  <name>Steam Deck</name>
+  <provides>
+    <firmware type="flashed">bbb1cf06-f7b9-4466-adcc-6b8815bd99e6</firmware>
+  </provides>
+  <custom>
+    <value key="LVFS::UpdateProtocol">org.uefi.capsule</value>
+  </custom>
+  <releases>
+    <release version="@versionNumber@" date="@releaseDate@" urgency="high">
+      <checksum type="sha1" filename="@filename@" target="content">@sha1@</checksum>
+      <checksum type="sha256" filename="@filename@" target="content">@sha256@</checksum>
+      <artifacts>
+        <artifact type="binary">
+          <filename>@filename@</filename>
+          <checksum type="sha1">@sha1@</checksum>
+          <checksum type="sha256">@sha256@</checksum>
+        </artifact>
+      </artifacts>
+    </release>
+  </releases>
+</component>
