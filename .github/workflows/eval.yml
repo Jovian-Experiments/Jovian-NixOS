@@ -1,0 +1,16 @@
+name: Evaluate
+on:
+  pull_request:
+  push:
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.0.2
+
+      - uses: cachix/install-nix-action@v17
+        with:
+          install_url: https://releases.nixos.org/nix/nix-2.11.1/install
+
+      - name: Evaluate overlay packages
+        run: nix-instantiate .ci/instantiate-overlay.nix
