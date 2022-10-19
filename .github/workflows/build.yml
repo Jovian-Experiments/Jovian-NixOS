@@ -1,0 +1,37 @@
+name: Build
+on:
+  pull_request:
+  push:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.0.2
+
+      - uses: cachix/install-nix-action@v17
+        with:
+          install_url: https://releases.nixos.org/nix/nix-2.11.1/install
+          extra_nix_config: |
+            experimental-features = nix-command
+
+      - name: Enable Binary Cache
+        uses: cachix/cachix-action@v11
+        if: github.repository_owner == 'Jovian-Experiments'
+        with:
+          name: jovian-nixos
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
+      - name: Enable Binary Cache (Read Only)
+        uses: cachix/cachix-action@v11
+        if: github.repository_owner != 'Jovian-Experiments'
+        with:
+          name: jovian-nixos
+          skipPush: true
+
+      - name: Install nix-build-uncached
+        # Save evaluation time by pulling directly from cache.nixos.org
+        # nixpkgs rev 104e8082de1b20f9d0e1f05b1028795ed0e0e4bc
+        run: nix-env -i /nix/store/zl1krzl6rm321ss84riayyhyn0scr3xi-nix-build-uncached-1.1.1
+
+      - name: Build overlay packages
+        run: nix-build-uncached .ci/instantiate-overlay.nix
