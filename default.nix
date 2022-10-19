@@ -10,8 +10,11 @@ let
         inherit nixpkgsPath;
       };
       modules= [
-          ./modules
-          configuration
+        ./modules
+        configuration
+        {
+          jovian.devices.steamdeck.enable = true;
+        }
       ];
     }
   ;
