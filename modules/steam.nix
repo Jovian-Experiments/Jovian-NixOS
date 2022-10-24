@@ -320,8 +320,23 @@ in
         # Support for gamescope tearing with GAMESCOPE_ALLOW_TEARING atom (3.11.44+)
         STEAM_GAMESCOPE_HAS_TEARING_SUPPORT = "1";
 
+        # Enable tearing controls in steam
+        STEAM_GAMESCOPE_TEARING_SUPPORTED = "1";
+
+        # When set to 1, a toggle will show up in the steamui to control whether dynamic refresh rate is applied to the steamui
+        STEAM_GAMESCOPE_DYNAMIC_REFRESH_IN_STEAM_SUPPORTED = "0";
+
+        # Enable VRR controls in steam
+        STEAM_GAMESCOPE_VRR_SUPPORTED = "1";
+
         # Set refresh rate range and enable refresh rate switching
         STEAM_DISPLAY_REFRESH_LIMITS = "40,60";
+
+        # We no longer need to set GAMESCOPE_EXTERNAL_OVERLAY from steam, mangoapp now does it itself
+        STEAM_DISABLE_MANGOAPP_ATOM_WORKAROUND = "1";
+
+        # Enable horizontal mangoapp bar
+        STEAM_MANGOAPP_HORIZONTAL_SUPPORTED = "1";
 
         STEAM_USE_DYNAMIC_VRS = "1";
 
