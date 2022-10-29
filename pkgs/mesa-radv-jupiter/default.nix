@@ -1,3 +1,6 @@
+# Corresponds to the `vulkan-radeon` package (source package `mesa-radv`)
+# in SteamOS 3. Only the radv driver is provided by this package.
+
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildPackages
 , meson, pkg-config, ninja
 , intltool, bison, flex, file, python3Packages, wayland-scanner
@@ -6,13 +9,8 @@
 , libelf, libvdpau
 , libglvnd, libunwind
 , vulkan-loader, glslang
-, galliumDrivers ? ["auto"]
-, vulkanDrivers ? ["auto"]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
 , withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !valgrind-light.meta.broken, valgrind-light
-, enableGalliumNine ? stdenv.isLinux
-, enableOSMesa ? stdenv.isLinux
-, enableOpenCL ? stdenv.isLinux && stdenv.isx86_64
 , libclc
 , jdupes
 }:
@@ -35,7 +33,7 @@ let
   jupiterVersion = "jupiter-22.3.2";
 
 self = stdenv.mkDerivation {
-  pname = "mesa-jupiter";
+  pname = "mesa-radv-jupiter";
   version = "${version}.${jupiterVersion}";
 
   src = fetchFromGitHub {
@@ -49,10 +47,6 @@ self = stdenv.mkDerivation {
   #  revive ./dricore-gallium.patch when it gets ported (from Ubuntu), as it saved
   #  ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
   patches = [
-    # fixes pkgsMusl.mesa build
-    ./musl.patch
-
-    ./opencl.patch
     ./disk_cache-include-dri-driver-path-in-cache-key.patch
   ];
 
@@ -69,9 +63,7 @@ self = stdenv.mkDerivation {
   '';
 
   outputs = [ "out" "dev" "drivers" ]
-    ++ lib.optional enableOSMesa "osmesa"
-    ++ lib.optional stdenv.isLinux "driversdev"
-    ++ lib.optional enableOpenCL "opencl";
+    ++ lib.optional stdenv.isLinux "driversdev";
 
   preConfigure = ''
     PATH=${llvmPackages.libllvm.dev}/bin:$PATH
@@ -89,27 +81,31 @@ self = stdenv.mkDerivation {
     "-Ddisk-cache-key=${placeholder "drivers"}"
     "-Ddri-search-path=${libglvnd.driverLink}/lib/dri"
 
-    "-Dplatforms=${concatStringsSep "," eglPlatforms}"
-    "-Dgallium-drivers=${concatStringsSep "," galliumDrivers}"
-    "-Dvulkan-drivers=${concatStringsSep "," vulkanDrivers}"
-
     "-Ddri-drivers-path=${placeholder "drivers"}/lib/dri"
     "-Dvdpau-libs-path=${placeholder "drivers"}/lib/vdpau"
     "-Dxvmc-libs-path=${placeholder "drivers"}/lib"
     "-Domx-libs-path=${placeholder "drivers"}/lib/bellagio"
     "-Dva-libs-path=${placeholder "drivers"}/lib/dri"
     "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
-    "-Dgallium-nine=${boolToString enableGalliumNine}" # Direct3D in Wine
-    "-Dosmesa=${boolToString enableOSMesa}" # used by wine
-    "-Dmicrosoft-clc=disabled" # Only relevant on Windows (OpenCL 1.2 API on top of D3D12)
 
-    # To enable non-mesa gbm backends to be found (e.g. Nvidia)
-    "-Dgbm-backends-path=${libglvnd.driverLink}/lib/gbm:${placeholder "out"}/lib/gbm"
-  ] ++ optionals stdenv.isLinux [
-    "-Dglvnd=true"
-  ] ++ optionals enableOpenCL [
-    "-Dgallium-opencl=icd" # Enable the gallium OpenCL frontend
-    "-Dclang-libdir=${llvmPackages.clang-unwrapped.lib}/lib"
+    # mesa-radv configs
+    "-Dplatforms=${concatStringsSep "," eglPlatforms}"
+    "-Ddri-drivers="
+    "-Dgallium-drivers="
+    "-Dvulkan-drivers=amd"
+    "-Dvulkan-layers="
+    "-Ddri3=enabled"
+    "-Degl=disabled"
+    "-Dgbm=disabled"
+    "-Dgles1=disabled"
+    "-Dgles2=disabled"
+    "-Dglvnd=false"
+    "-Dglx=disabled"
+    "-Dosmesa=false"
+    "-Dmicrosoft-clc=disabled"
+
+    "-Dgallium-nine=false"
+    "-Dgallium-opencl=disabled"
   ];
 
   buildInputs = with xorg; [
@@ -120,10 +116,7 @@ self = stdenv.mkDerivation {
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
     ++ lib.optionals stdenv.isDarwin [ libunwind ]
-    ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped ]
-    ++ lib.optional withValgrind valgrind-light
-    # Mesa will not build zink when gallium-drivers=auto
-    ++ lib.optional (elem "zink" galliumDrivers) vulkan-loader;
+    ++ lib.optional withValgrind valgrind-light;
 
   depsBuildBuild = [ pkg-config ];
 
@@ -170,26 +163,9 @@ self = stdenv.mkDerivation {
     for js in $drivers/share/vulkan/icd.d/*.json; do
       substituteInPlace "$js" --replace "$out" "$drivers"
     done
-  '' + optionalString enableOpenCL ''
-    # Move OpenCL stuff
-    mkdir -p $opencl/lib
-    mv -t "$opencl/lib/"     \
-      $out/lib/gallium-pipe   \
-      $out/lib/libMesaOpenCL*
-
-    # We construct our own .icd file that contains an absolute path.
-    rm -r $out/etc/OpenCL
-    mkdir -p $opencl/etc/OpenCL/vendors/
-    echo $opencl/lib/libMesaOpenCL.so > $opencl/etc/OpenCL/vendors/mesa.icd
-  '' + lib.optionalString enableOSMesa ''
-    # move libOSMesa to $osmesa, as it's relatively big
-    mkdir -p $osmesa/lib
-    mv -t $osmesa/lib/ $out/lib/libOSMesa*
   '';
 
   postFixup = optionalString stdenv.isLinux ''
-    # set the default search path for DRI drivers; used e.g. by X server
-    substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace "$drivers" "${libglvnd.driverLink}"
     [ -f "$dev/lib/pkgconfig/d3d.pc" ] && substituteInPlace "$dev/lib/pkgconfig/d3d.pc" --replace "$drivers" "${libglvnd.driverLink}"
 
     # remove pkgconfig files for GL/EGL; they are provided by libGL.
@@ -218,10 +194,7 @@ self = stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = optionals stdenv.isDarwin [ "-fno-common" ] ++ lib.optionals enableOpenCL [
-    "-UPIPE_SEARCH_DIR"
-    "-DPIPE_SEARCH_DIR=\"${placeholder "opencl"}/lib/gallium-pipe\""
-  ];
+  NIX_CFLAGS_COMPILE = optionals stdenv.isDarwin [ "-fno-common" ];
 
   passthru = {
     inherit libdrm;
@@ -240,7 +213,7 @@ self = stdenv.mkDerivation {
   };
 
   meta = {
-    description = "An open source 3D graphics library";
+    description = "An open source 3D graphics library (RADV only)";
     longDescription = ''
       The Mesa project began as an open-source implementation of the OpenGL
       specification - a system for rendering interactive 3D graphics. Over the
@@ -255,6 +228,8 @@ self = stdenv.mkDerivation {
     license = licenses.mit; # X11 variant, in most files
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ primeos vcunat ]; # Help is welcome :)
+
+    priority = -10;
   };
 };
 

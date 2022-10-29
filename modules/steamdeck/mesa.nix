@@ -6,22 +6,22 @@ in
 {
   options = {
     jovian.devices.steamdeck = {
-      enableVendorMesa = lib.mkOption {
+      enableVendorRadv = lib.mkOption {
         type = lib.types.bool;
         default = cfg.enable;
         description = ''
-          Whether to enable the vendor branch of Mesa.
+          Whether to enable the vendor branch of Mesa RADV.
         '';
       };
     };
   };
 
-  config = lib.mkIf cfg.enableVendorMesa {
+  config = lib.mkIf cfg.enableVendorRadv {
     hardware.opengl = {
-      package = pkgs.mesa-jupiter.drivers;
-      package32 = pkgs.pkgsi686Linux.mesa-jupiter.drivers;
+      extraPackages = [ pkgs.mesa-radv-jupiter.drivers ];
+      extraPackages32 = [ pkgs.pkgsi686Linux.mesa-radv-jupiter.drivers ];
     };
 
-    environment.etc."drirc".source = pkgs.mesa-jupiter + "/share/drirc.d/00-radv-defaults.conf";
+    environment.etc."drirc".source = pkgs.mesa-radv-jupiter + "/share/drirc.d/00-radv-defaults.conf";
   };
 }
