@@ -38,8 +38,8 @@ in
       ACTION=="add", SUBSYSTEM=="pci", DRIVER=="amdgpu", RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/%p/power_dpm_force_performance_level /sys/%p/pp_od_clk_voltage"
 
       # Enables manual TDP limiter in Steam
-      # - /sys/class/hwmon/hwmon0/power{1,2}_cap
-      ACTION=="add", SUBSYSTEM=="hwmon", DEVPATH=="*/hwmon0", RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/%p/power1_cap /sys/%p/power2_cap"
+      # - /sys/class/hwmon/hwmon*/power{1,2}_cap
+      ACTION=="add", SUBSYSTEM=="hwmon", ATTR{name}=="amdgpu", RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/%p/power1_cap /sys/%p/power2_cap"
     '';
   };
 }
