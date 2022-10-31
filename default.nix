@@ -12,9 +12,14 @@ let
       modules= [
         ./modules
         configuration
-        {
+        ({ lib, config, ... }: {
           jovian.devices.steamdeck.enable = true;
-        }
+
+          # Override config in installation-cd-graphical-base.nix
+          hardware.pulseaudio.enable = lib.mkIf
+            (config.jovian.devices.steamdeck.enableSoundSupport && config.services.pipewire.enable)
+            (lib.mkForce false);
+        })
       ];
     }
   ;
