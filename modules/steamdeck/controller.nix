@@ -29,6 +29,9 @@ in
     (mkIf (cfg.enableControllerUdevRules) {
       # Necessary for the controller parts to work correctly.
       services.udev.extraRules = ''
+        # This rule is needed to expose the hiddev devices for other applications
+        SUBSYSTEM=="usbmisc", ATTRS{idVendor}=="28de", MODE="0660", TAG+="uaccess"
+      '' + lib.optionalString (!config.hardware.steam-hardware.enable) ''
         # This rule is necessary for gamepad emulation.
         KERNEL=="uinput", SUBSYSTEM=="misc", TAG+="uaccess", OPTIONS+="static_node=uinput"
 
