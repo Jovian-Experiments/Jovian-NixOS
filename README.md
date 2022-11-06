@@ -40,8 +40,6 @@ Then you can start the UI using one of the following methods:
 - Select "Gaming Mode" in the Display Manager or run `steam-session` in a VT.
 - Launch `steam-session` within an existing desktop session. This will run [gamescope](https://github.com/Plagman/gamescope) in nested mode which results in higher latency.
 
-If you find power button not working in `steam-session`, add "input" to your [users.users.\<name\>.extraGroups](https://nixos.org/manual/nixos/stable/options.html#opt-users.users._name_.extraGroups).
-
 Firmware Updates
 ----------------
 
