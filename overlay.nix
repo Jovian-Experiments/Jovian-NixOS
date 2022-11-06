@@ -30,6 +30,8 @@ in
   steamdeck-bios-fwupd = final.callPackage ./pkgs/jupiter-hw-support/bios-fwupd.nix { };
   jupiter-dock-updater-bin = final.callPackage ./pkgs/jupiter-dock-updater-bin { };
 
+  opensd = super.callPackage ./pkgs/opensd { };
+
   steamPackages = super.steamPackages.overrideScope (scopeFinal: scopeSuper: {
     steam = final.callPackage ./pkgs/steam-jupiter/unwrapped.nix {
       steam-original = scopeSuper.steam;
