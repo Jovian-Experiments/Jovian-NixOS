@@ -23,11 +23,11 @@ in
         alsa.enable = lib.mkDefault true;
       };
 
-      # TODO: overlay on top of the vanilla alsa-lib using environment.pathsToLink
-      # Currently this does not work due to some weird path concatenation behavior in alsa-lib:
-      #
-      #     openat(AT_FDCWD, "/run/current-system/sw/share/alsa/ucm2/conf.d/acp5x//nix/store/hxm24krvwjyys9zfirn203sf3ncm44gs-acp5x-ucm-jupiter-20220310.1000/share/alsa/ucm2/conf.d/acp5x/HiFi.conf", O_RDONLY) = -1 ENOENT (No such file or directory)
-      environment.variables.ALSA_CONFIG_UCM2 = "${pkgs.jupiter-hw-support}/share/alsa/ucm2";
+      environment = {
+        pathsToLink = [ "share/alsa/ucm2" ];
+        variables.ALSA_CONFIG_UCM2 = "/run/current-system/sw/share/alsa/ucm2";
+        systemPackages = [ pkgs.jupiter-hw-support ];
+      };
     }
 
     # Pulseaudio
