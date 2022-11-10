@@ -1,4 +1,6 @@
-{ lib, stdenv, python3, fetchFromGitHub }:
+{ lib, stdenv, python3, fetchFromGitHub
+, useNewHwmonName ? false # Use "steamdeck_hwmon" as the hwmon name instead of "jupiter"
+}:
 
 stdenv.mkDerivation rec {
   pname = "jupiter-fan-control";
@@ -28,6 +30,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share
     cp -r usr/share/jupiter-fan-control $out/share
     sed -i "s|/usr/share/|$out/share/|g" $out/share/jupiter-fan-control/fancontrol.py
+
+    ${lib.optionalString useNewHwmonName ''
+    sed -i "s|fan_hwmon_name: jupiter|fan_hwmon_name: steamdeck_hwmon|g" $out/share/jupiter-fan-control/jupiter-fan-control-config.yaml
+    ''}
 
     runHook postInstall
   '';
