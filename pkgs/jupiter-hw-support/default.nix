@@ -30,6 +30,11 @@ stdenv.mkDerivation {
     mkdir -p $out/share
     cp -r usr/share/alsa $out/share
 
+    # ALSA lib main.c:844:(execute_sequence) exec 'echo Main Verb Config EnableSequence' failed (exit code -8)
+    # ALSA lib main.c:2573:(set_verb_user) error: failed to initialize new use case: HiFi
+    # alsaucm: error failed to set _verb=HiFi: Exec format error
+    sed -i 's|exec "echo|#exec "echo|g' $out/share/alsa/ucm2/conf.d/acp5x/HiFi*.conf
+
     runHook postInstall
   '';
 
