@@ -7,7 +7,6 @@ let
   ;
 in
 {
-  acp5x-ucm = final.callPackage ./pkgs/acp5x-ucm { };
   linux-firmware = final.callPackage ./pkgs/linux-firmware {
     linux-firmware = super.linux-firmware;
   };
