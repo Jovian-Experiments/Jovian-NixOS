@@ -9,7 +9,7 @@ let
   ;
 
   kernelVersion = "5.13.0";
-  vendorVersion = "valve31";
+  vendorVersion = "valve35";
 in
 buildLinux (args // rec {
   version = "${kernelVersion}-${vendorVersion}";
@@ -51,6 +51,9 @@ buildLinux (args // rec {
     # Works around issues with the touchscreen driver
     PINCTRL_AMD = yes;
 
+    # Steam Deck force feedback support
+    STEAM_FF = yes;
+
     JUPITER = module;
     SND_SOC_CS35L41 = module;
     SND_SOC_CS35L41_SPI = module;
@@ -81,6 +84,6 @@ buildLinux (args // rec {
     owner = "Jovian-Experiments";
     repo = "linux";
     rev = version;
-    hash = "sha256-5ePYztH8sJ4x9vhVu72OPE4WAvZZK3xHl2xzdcZ8FvI=";
+    hash = "sha256-Giinyo3DbX50UfHOZE4zEZwHB5UBnYxce9qeGh59XDY=";
   };
 } // (args.argsOverride or { }))
