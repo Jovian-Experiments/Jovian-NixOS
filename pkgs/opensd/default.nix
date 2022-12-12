@@ -5,13 +5,13 @@
 }:
 stdenv.mkDerivation {
   pname = "opensd";
-  version = "unstable-2022-10-28";
+  version = "unstable-2022-12-08";
 
   src = fetchFromGitLab {
     owner = "open-sd";
     repo = "opensd";
-    rev = "e00bc74e516769dbb4adeebde3102657f8a486eb";
-    sha256 = "sha256-Jl04pXpE5Rk4MSnezIvvbN6/W29L3NgfcP/Fd5kn2uQ=";
+    rev = "6c937c9daf20bba17ca97ba5a2332dcce2d4f310";
+    sha256 = "sha256-d3qZN+N8Z+aC/UPbiUEkQIWPNFBNJazje3GCi/ESi1E=";
   };
 
   nativeBuildInputs = [ cmake ];
