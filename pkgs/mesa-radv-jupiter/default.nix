@@ -30,7 +30,7 @@ with lib;
 
 let
   version = "22.2.0";
-  jupiterVersion = "jupiter-22.3.3";
+  jupiterVersion = "jupiter-22.3.4";
 
 self = stdenv.mkDerivation {
   pname = "mesa-radv-jupiter";
@@ -40,7 +40,7 @@ self = stdenv.mkDerivation {
     owner = "Jovian-Experiments";
     repo = "mesa";
     rev = jupiterVersion;
-    hash = "sha256-KyRh8CSJfHGg3vtjfvNxUN0WwIbdX34KkbwHNx1URcM=";
+    hash = "sha256-dlkhuX4+/iJDiFw1P7kmul0rxGjygO2IKBhrGc3ufhc=";
   };
 
   # TODO:
