@@ -49,12 +49,13 @@ buildLinux (args // rec {
     # STEAMDECK modules are implicitly enabled (m)
 
     HYPERVISOR_GUEST = lib.mkForce no;
-    KVM_GUEST = lib.mkForce (option no);
 
     #
     # Fallout from the vendor-set options
     # -----------------------------------
     #
+    KVM_GUEST = lib.mkForce (option no);
+    DRM_HYPERV = lib.mkForce (option no);
     MOUSE_PS2_VMMOUSE = lib.mkForce (option no);
   };
 
