@@ -78,6 +78,13 @@ buildLinux (args // rec {
     #
     KVM_GUEST = lib.mkForce (option no);
     MOUSE_PS2_VMMOUSE = lib.mkForce (option no);
+
+    # Workaround for regression with AMD SEV configs enabled
+    # https://github.com/NixOS/nixpkgs/pull/203908#issuecomment-1360956830
+    CRYPTO_DEV_CCP = lib.mkForce no;
+    AMD_MEM_ENCRYPT = lib.mkForce no;
+    KVM_AMD_SEV = lib.mkForce (option no);
+    SEV_GUEST = lib.mkForce (option no);
   };
 
   src = fetchFromGitHub {
