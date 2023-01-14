@@ -31,6 +31,10 @@ in
   };
 
   config = mkMerge [
+    (mkIf (cfg.enable) {
+      # Firmware is required in stage-1 for early KMS.
+      hardware.enableRedistributableFirmware = true;
+    })
     (mkIf (cfg.enableDefaultStage1Modules) {
       boot.initrd.kernelModules = [
         "hid-generic"
