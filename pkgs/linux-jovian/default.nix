@@ -8,8 +8,8 @@ let
     versions
   ;
 
-  kernelVersion = "5.13.0";
-  vendorVersion = "valve37";
+  kernelVersion = "6.1.9";
+  vendorVersion = "valve2";
 in
 buildLinux (args // rec {
   version = "${kernelVersion}-${vendorVersion}";
@@ -18,18 +18,6 @@ buildLinux (args // rec {
   extraMeta.branch = versions.majorMinor version;
 
   kernelPatches = (args.kernelPatches or []) ++ [
-    # Valve improperly fixed the issue.
-    {
-      name = "revert-pahole-workarounds";
-      patch = ./0001-revert-pahole-workarounds.patch;
-    }
-    # Instead we're backporting the changes from upstream.
-    #  - https://lore.kernel.org/all/20210712060952.148978306@linuxfoundation.org/
-    #  - https://lore.kernel.org/all/20220904131901.13025-1-jolsa@kernel.org/
-    {
-      name = "backport-5.15-pahole-fixes";
-      patch = ./0002-backport-5.15-pahole-fixes.patch;
-    }
   ];
 
   structuredExtraConfig = with lib.kernel; {
@@ -91,6 +79,6 @@ buildLinux (args // rec {
     owner = "Jovian-Experiments";
     repo = "linux";
     rev = version;
-    hash = "sha256-5HcqDZz7LL8ocxz5mlAQphhSGpnwuMGPWOZu9qbi4Mw=";
+    hash = "sha256-Z0mmbl+rdPk59RZpIMQ11Xu3yFDokDsYnBkRLDgYhu4=";
   };
 } // (args.argsOverride or { }))
