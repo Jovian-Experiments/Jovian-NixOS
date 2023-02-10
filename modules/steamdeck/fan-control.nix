@@ -11,10 +11,6 @@ let
     types
   ;
   cfg = config.jovian.devices.steamdeck;
-
-  jupiter-fan-control = pkgs.jupiter-fan-control.override {
-    useNewHwmonName = config.boot.kernelPackages.kernelAtLeast "6.0";
-  };
 in
 {
   options = {
@@ -36,8 +32,8 @@ in
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.dmidecode ];
       serviceConfig = {
-        ExecStart = "${jupiter-fan-control}/share/jupiter-fan-control/fancontrol.py --run";
-        ExecStopPost = "${jupiter-fan-control}/share/jupiter-fan-control/fancontrol.py --stop";
+        ExecStart = "${pkgs.jupiter-fan-control}/share/jupiter-fan-control/fancontrol.py --run";
+        ExecStopPost = "${pkgs.jupiter-fan-control}/share/jupiter-fan-control/fancontrol.py --stop";
         OOMScoreAdjust = -1000;
         Restart = "on-failure";
 
