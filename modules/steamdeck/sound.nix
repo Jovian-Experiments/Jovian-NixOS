@@ -2,6 +2,17 @@
 
 let
   cfg = config.jovian.devices.steamdeck;
+
+  alsa-ucm-conf' = pkgs.alsa-ucm-conf.overrideAttrs (prev: {
+    # This dumb import breaks all the audio on the Deck itself.
+    # Best sources as to why I could find:
+    # https://github.com/alsa-project/alsa-ucm-conf/issues/104
+    # see comments: https://github.com/alsa-project/alsa-ucm-conf/commit/1e6297b650114cb2e043be4c677118f971e31eb7
+    postInstall = ''
+      ${pkgs.gnused}/bin/sed -i /Include.libgen.File/d $out/share/alsa/ucm2/ucm.conf
+    '';
+    meta.priority = -10;
+  });
 in
 {
   options = {
@@ -26,7 +37,7 @@ in
       environment = {
         pathsToLink = [ "share/alsa/ucm2" ];
         variables.ALSA_CONFIG_UCM2 = "/run/current-system/sw/share/alsa/ucm2";
-        systemPackages = [ pkgs.jupiter-hw-support ];
+        systemPackages = [ pkgs.jupiter-hw-support alsa-ucm-conf' ];
       };
     }
 
