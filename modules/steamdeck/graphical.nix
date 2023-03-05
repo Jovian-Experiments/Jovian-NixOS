@@ -14,10 +14,6 @@ in
         default = cfg.enable;
         type = lib.types.bool;
       };
-      enableDRMRotationParam = lib.mkOption {
-        default = cfg.enable && !cfg.hasKernelPatches;
-        type = lib.types.bool;
-      };
       enableXorgRotation = lib.mkOption {
         default = cfg.enable;
         type = lib.types.bool;
@@ -29,11 +25,6 @@ in
     (mkIf cfg.enableEarlyModesetting {
       boot.initrd.kernelModules = [
         "amdgpu"
-      ];
-    })
-    (mkIf cfg.enableDRMRotationParam {
-      boot.kernelParams = [
-        "video=eDP-1:panel_orientation=right_side_up"
       ];
     })
     (mkIf cfg.enableXorgRotation {
