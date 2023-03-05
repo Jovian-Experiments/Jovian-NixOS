@@ -1,8 +1,8 @@
 # Arbitrary known-good revision for default use.
 let
-  revision = "0591d6b57bfeb55dfeec99a671843337bc2c3323";
+  revision = "3c5319ad3aa51551182ac82ea17ab1c6b0f0df89";
 in
 import (builtins.fetchTarball {
   url = "https://github.com/NixOS/nixpkgs/archive/${revision}.tar.gz";
-  sha256 = "sha256:14b02qjbcb8cgfy7hldk45zd8agsqvfccfhs4bq0yk1rqd0ixd2d";
+  sha256 = "sha256:0s6vyyfmhcyqrgln304c1490spb2hqhh5bzfi0y2hnk5i5sph07q";
 })
