@@ -5,7 +5,7 @@
 , meson, pkg-config, ninja
 , intltool, bison, flex, file, python3Packages, wayland-scanner
 , expat, libdrm, xorg, wayland, wayland-protocols, openssl
-, llvmPackages, libffi, libomxil-bellagio, libva-minimal
+, llvmPackages_15, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau
 , libglvnd, libunwind
 , vulkan-loader, glslang
@@ -13,6 +13,7 @@
 , withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !valgrind-light.meta.broken, valgrind-light
 , libclc
 , jdupes
+, zstd
 }:
 
 /** Packaging design:
@@ -29,8 +30,10 @@
 with lib;
 
 let
-  version = "22.2.0";
-  jupiterVersion = "jupiter-22.3.4";
+  version = "23.1.0";
+  jupiterVersion = "steamos-3.5.1";
+
+  llvmPackages = llvmPackages_15;
 
 self = stdenv.mkDerivation {
   pname = "mesa-radv-jupiter";
@@ -40,7 +43,7 @@ self = stdenv.mkDerivation {
     owner = "Jovian-Experiments";
     repo = "mesa";
     rev = jupiterVersion;
-    hash = "sha256-dlkhuX4+/iJDiFw1P7kmul0rxGjygO2IKBhrGc3ufhc=";
+    hash = "sha256-9qC4RRLizj3FF8rdZVPk0VfZczICfXM23PIcr8NsmqQ=";
   };
 
   # TODO:
@@ -83,15 +86,17 @@ self = stdenv.mkDerivation {
 
     "-Ddri-drivers-path=${placeholder "drivers"}/lib/dri"
     "-Dvdpau-libs-path=${placeholder "drivers"}/lib/vdpau"
-    "-Dxvmc-libs-path=${placeholder "drivers"}/lib"
     "-Domx-libs-path=${placeholder "drivers"}/lib/bellagio"
     "-Dva-libs-path=${placeholder "drivers"}/lib/dri"
     "-Dd3d-drivers-path=${placeholder "drivers"}/lib/d3d"
 
     # mesa-radv configs
     "-Dplatforms=${concatStringsSep "," eglPlatforms}"
-    "-Ddri-drivers="
     "-Dgallium-drivers="
+    "-Dgallium-vdpau=disabled"
+    "-Dgallium-va=disabled"
+    "-Dgallium-xa=disabled"
+    "-Dandroid-libbacktrace=disabled"
     "-Dvulkan-drivers=amd"
     "-Dvulkan-layers="
     "-Ddri3=enabled"
@@ -101,6 +106,8 @@ self = stdenv.mkDerivation {
     "-Dgles2=disabled"
     "-Dglvnd=false"
     "-Dglx=disabled"
+    "-Dlibunwind=enabled"
+    "-Dlmsensors=disabled"
     "-Dosmesa=false"
     "-Dmicrosoft-clc=disabled"
 
@@ -113,9 +120,10 @@ self = stdenv.mkDerivation {
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
+    libunwind
+    zstd
   ] ++ lib.optionals (elem "wayland" eglPlatforms) [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
-    ++ lib.optionals stdenv.isDarwin [ libunwind ]
     ++ lib.optional withValgrind valgrind-light;
 
   depsBuildBuild = [ pkg-config ];
