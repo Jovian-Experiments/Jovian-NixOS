@@ -5,15 +5,23 @@ let
 
   cfg = config.jovian.devices.steamdeck;
 
-  mesaVersion = pkgs.mesa.version;
-  hasMesaPatches = lib.hasPrefix "22.2." mesaVersion;
-  patchMesa = mesa: mesa.overrideAttrs (old: {
-    patches = (old.patches or []) ++ [
+  mesaPatches = {
+    "22.2" = [
       (pkgs.fetchpatch {
         url = "https://github.com/Mesa3D/mesa/compare/mesa-22.2.0...Jovian-Experiments:mesa:radeonsi-3.4.0.diff";
         hash = "sha256-civjqKlTiVjcb/MI5v9AEon52YSvw7iDRLm1tji9pKo=";
       })
     ];
+    "22.3" = [
+      (pkgs.fetchpatch {
+        url = "https://github.com/Jovian-Experiments/mesa/commit/787d60ad89a733157919366e8ecaee9aa1d5d554.patch";
+        hash = "sha256-zjb9DAAC+Qg+CeSkdcjgSarHeUJwuArHL/VMy+Fik6g=";
+      })
+    ];
+  };
+  mesaBranchOf = mesa: lib.versions.majorMinor mesa.version;
+  patchMesa = mesa: mesa.overrideAttrs (old: {
+    patches = (old.patches or []) ++ mesaPatches.${mesaBranchOf mesa};
   });
 in
 {
@@ -50,7 +58,7 @@ in
   config = lib.mkMerge [
     # Mesa gamescope patches
     {
-      jovian.devices.steamdeck.hasMesaPatches = hasMesaPatches;
+      jovian.devices.steamdeck.hasMesaPatches = lib.hasAttr (mesaBranchOf pkgs.mesa) mesaPatches;
     }
     (lib.mkIf (cfg.enableMesaPatches && cfg.hasMesaPatches) {
       hardware.opengl.package = (patchMesa pkgs.mesa).drivers;
@@ -59,7 +67,7 @@ in
     (lib.mkIf (cfg.enableMesaPatches && !cfg.hasMesaPatches) {
       warnings = [
         ''
-          Mesa patches for improved gamescope integration missing for Mesa version "${mesaVersion}"
+          Mesa patches for improved gamescope integration missing for Mesa version "${pkgs.mesa.version}"
         ''
       ];
     })
