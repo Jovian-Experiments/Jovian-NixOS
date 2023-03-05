@@ -2,6 +2,17 @@
 
 let
   cfg = config.jovian.devices.steamdeck;
+
+  alsa-ucm-conf' = pkgs.alsa-ucm-conf.overrideAttrs (prev: {
+    # This dumb import breaks all the audio on the Deck itself.
+    # Best sources as to why I could find:
+    # https://github.com/alsa-project/alsa-ucm-conf/issues/104
+    # see comments: https://github.com/alsa-project/alsa-ucm-conf/commit/1e6297b650114cb2e043be4c677118f971e31eb7
+    postInstall = ''
+      ${pkgs.gnused}/bin/sed -i /Include.libgen.File/d $out/share/alsa/ucm2/ucm.conf
+    '';
+    meta.priority = -10;
+  });
 in
 {
   options = {
@@ -23,11 +34,11 @@ in
         alsa.enable = lib.mkDefault true;
       };
 
-      # TODO: overlay on top of the vanilla alsa-lib using environment.pathsToLink
-      # Currently this does not work due to some weird path concatenation behavior in alsa-lib:
-      #
-      #     openat(AT_FDCWD, "/run/current-system/sw/share/alsa/ucm2/conf.d/acp5x//nix/store/hxm24krvwjyys9zfirn203sf3ncm44gs-acp5x-ucm-jupiter-20220310.1000/share/alsa/ucm2/conf.d/acp5x/HiFi.conf", O_RDONLY) = -1 ENOENT (No such file or directory)
-      environment.variables.ALSA_CONFIG_UCM2 = "${pkgs.acp5x-ucm}/share/alsa/ucm2";
+      environment = {
+        pathsToLink = [ "share/alsa/ucm2" ];
+        variables.ALSA_CONFIG_UCM2 = "/run/current-system/sw/share/alsa/ucm2";
+        systemPackages = [ pkgs.jupiter-hw-support alsa-ucm-conf' ];
+      };
     }
 
     # Pulseaudio
