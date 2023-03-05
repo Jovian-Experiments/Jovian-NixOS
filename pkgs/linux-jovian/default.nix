@@ -99,6 +99,10 @@ buildLinux (args // rec {
     # https://twitter.com/Plagman2/status/1623024896887631875
     X86_AMD_PSTATE = lib.mkForce no;
     X86_AMD_PSTATE_UT = lib.mkForce (option no);
+
+    # Temporary workaround pending pahole fixes
+    # https://aur.archlinux.org/packages/linux-mainline-git#comment-903098
+    DEBUG_INFO_BTF = lib.mkForce no;
   };
 
   src = fetchFromGitHub {
