@@ -15,16 +15,26 @@ let
   inherit (pkgs)
     gamescope
     mangohud
+    bubblewrap
     systemd
 
     jupiter-hw-support
-    steam
     steamdeck-hw-theme
 
     writeTextFile
     writeShellScript
     writeShellScriptBin
   ;
+
+  # For optimal performance, Gamescope needs to Renice itself at
+  # launch, it therefore needs the CAP_SYS_NICE capability. Bubblewrap
+  # can't run a binary with such a capability without being Setuid
+  # itself.
+  steam = pkgs.steam.override {
+    buildFHSUserEnv = pkgs.buildFHSUserEnvBubblewrap.override {
+      bubblewrap = "${config.security.wrapperDir}/..";
+    };
+  };
 
   cfg = config.jovian.steam;
 
@@ -98,7 +108,7 @@ let
     # TODO[Jovian]: Explore other ways to stop the session?
     #               -> `systemctl --user stop steam-session.slice`?
 
-    exec ${gamescope}/bin/gamescope "$@"
+    exec ${config.security.wrapperDir}/gamescope "$@"
   '';
 
   # TODO: consume width/height script input params
@@ -256,6 +266,22 @@ in
     };
   };
   config = mkIf cfg.enable (mkMerge [
+    {
+      security.wrappers.gamescope = {
+        owner = "root";
+        group = "root";
+        source = "${gamescope}/bin/gamescope";
+        capabilities = "cap_sys_nice+pie";
+      };
+    }
+    {
+      security.wrappers.bwrap = {
+        owner = "root";
+        group = "root";
+        source = "${bubblewrap}/bin/bwrap";
+        setuid = true;
+      };
+    }
     {
       warnings = []
         ++ lib.optional (!config.networking.networkmanager.enable)
