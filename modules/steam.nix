@@ -30,11 +30,19 @@ let
   # launch, it therefore needs the CAP_SYS_NICE capability. Bubblewrap
   # can't run a binary with such a capability without being Setuid
   # itself.
-  steam = pkgs.steam.override {
-    buildFHSUserEnv = pkgs.buildFHSUserEnvBubblewrap.override {
-      bubblewrap = "${config.security.wrapperDir}/..";
+  steam =
+  if pkgs ? "buildFHSEnv" then
+    pkgs.steam.override {
+      buildFHSEnv = pkgs.buildFHSEnv.override {
+        bubblewrap = "${config.security.wrapperDir}/..";
+      };
+    }
+  else
+    pkgs.steam.override {
+      buildFHSUserEnv = pkgs.buildFHSUserEnvBubblewrap.override {
+        bubblewrap = "${config.security.wrapperDir}/..";
+      };
     };
-  };
 
   cfg = config.jovian.steam;
 
