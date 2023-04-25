@@ -6,7 +6,7 @@ let
     linuxPackagesFor
   ;
 in
-{
+rec {
   linux-firmware = final.callPackage ./pkgs/linux-firmware {
     linux-firmware = super.linux-firmware;
   };
@@ -20,7 +20,9 @@ in
   };
 
   mangohud = final.callPackage ./pkgs/mangohud {
-    inherit (super) mangohud;
+    libXNVCtrl = linuxPackages_jovian.nvidia_x11.settings.libXNVCtrl;
+    mangohud32 = final.pkgsi686Linux.mangohud;
+    inherit (final.python3Packages) mako;
   };
 
   mesa-radv-jupiter = final.callPackage ./pkgs/mesa-radv-jupiter { };
