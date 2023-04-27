@@ -109,6 +109,19 @@ buildLinux (args // rec {
     owner = "Jovian-Experiments";
     repo = "linux";
     rev = version;
-    hash = "sha256-TlHJcYClenMHBNsS+HiHmTfS3JZpHJ00AdroCFzrDhc=";
+    hash = "sha256-nwog+yXv9v1vENLELwJrtizRv2w7PVWivc+NvAL+Gn0=";
+
+    # Sometimes the vendor doesn't update the EXTRAVERSION tag.
+    # Let's fix it up in post.
+    # ¯\_(ツ)_/¯
+    # Also, `postPatch` on the kernel doesn't compose in `buildLinux`.
+    # ¯\_(ツ)_/¯
+    postFetch = ''
+      (
+      echo ":: Fixing-up EXTRAVERSION with actual tag"
+      cd $out
+      sed -i -e 's/^EXTRAVERSION =.*/EXTRAVERSION = -${vendorVersion}/g' Makefile
+      )
+    '';
   };
 } // (args.argsOverride or { }))
