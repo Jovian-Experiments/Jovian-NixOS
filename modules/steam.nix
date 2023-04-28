@@ -373,6 +373,9 @@ in
         # Enable horizontal mangoapp bar
         STEAM_MANGOAPP_HORIZONTAL_SUPPORTED = "1";
 
+        # Enable mangoapp overlay presets
+        STEAM_MANGOAPP_PRESETS_SUPPORTED = "1";
+
         STEAM_USE_DYNAMIC_VRS = "1";
 
         STEAM_UPDATEUI_PNG_BACKGROUND = "${steamdeck-hw-theme}/share/steamos/steamos.png";
