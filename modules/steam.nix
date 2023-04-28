@@ -367,6 +367,15 @@ in
         # Enable VRR controls in steam
         STEAM_GAMESCOPE_VRR_SUPPORTED = "1";
 
+        # Scaling support
+        STEAM_GAMESCOPE_FANCY_SCALING_SUPPORT = "1";
+
+        # Color management support
+        STEAM_GAMESCOPE_COLOR_MANAGED = "1";
+
+        # Enable HDR support in steam
+        STEAM_GAMESCOPE_HDR_SUPPORTED = "1";
+
         # Set refresh rate range and enable refresh rate switching
         STEAM_DISPLAY_REFRESH_LIMITS = "40,60";
 
