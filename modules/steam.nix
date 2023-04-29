@@ -247,6 +247,17 @@ in
           '';
         };
 
+        user = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            The user to run Steam with.
+
+            This user must be in the `networkmanager` group to be able to
+            complete the OOBE (Out-of-Box Experience).
+          '';
+        };
+
         environment = mkOption {
           type = types.attrsOf types.str;
           default = {};
