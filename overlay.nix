@@ -45,4 +45,6 @@ rec {
       steam-fhsenv = scopeSuper.steam-fhsenv;
     };
   });
+
+  tinydm-jovian = final.callPackage ./pkgs/tinydm-jovian { };
 }
