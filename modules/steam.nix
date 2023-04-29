@@ -247,6 +247,16 @@ in
           '';
         };
 
+        autoStart = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Whether to automatically launch the Steam Deck UI on boot.
+
+            No Display Managers may be enabled in conjunction with this option.
+          '';
+        };
+
         user = mkOption {
           type = types.nullOr types.str;
           default = null;
@@ -255,6 +265,14 @@ in
 
             This user must be in the `networkmanager` group to be able to
             complete the OOBE (Out-of-Box Experience).
+          '';
+        };
+
+        desktopSession = mkOption {
+          type = types.str;
+          example = "plasma";
+          description = ''
+            The session to launch for Desktop Mode.
           '';
         };
 
@@ -418,6 +436,72 @@ in
         # Helps performance in HZD, Cyberpunk, at least
         # Expose 8 physical cores, instead of 4c/8t
         WINE_CPU_TOPOLOGY = "8:0,1,2,3,4,5,6,7";
+      };
+    })
+    (mkIf cfg.autoStart {
+      assertions = [
+        {
+          assertion = !config.systemd.services.display-manager.enable;
+          message = "No Display Managers must be enabled when jovian.steam.autoStart is used";
+        }
+      ];
+
+      services.xserver = {
+        enable = true;
+        displayManager.lightdm.enable = false;
+        displayManager.startx.enable = true;
+      };
+
+      systemd.services.gamescope-switcher = {
+        wantedBy = [ "graphical.target" ];
+        serviceConfig = {
+          User = cfg.user;
+          PAMName = "login";
+          WorkingDirectory = "~";
+
+          TTYPath = "/dev/tty7";
+          TTYReset = "yes";
+          TTYVHangup = "yes";
+          TTYVTDisallocate = "yes";
+
+          StandardInput = "tty-fail";
+          StandardOutput = "journal";
+          StandardError = "journal";
+
+          UtmpIdentifier = "tty7";
+          UtmpMode = "user";
+
+          Restart = "always";
+        };
+
+        script = ''
+          set-session () {
+            mkdir -p ~/.local/state
+            >~/.local/state/steamos-session-select echo "$1"
+          }
+
+          consume-session () {
+            if [[ -e ~/.local/state/steamos-session-select ]]; then
+              cat ~/.local/state/steamos-session-select
+              rm ~/.local/state/steamos-session-select
+            else
+              echo "gamescope"
+            fi
+          }
+
+          while :; do
+            session=$(consume-session)
+            >&2 echo "Starting $session..."
+            case "$session" in
+              plasma)
+                JOVIAN_PREFERRED_SESSION=${cfg.desktopSession} ${pkgs.tinydm-jovian}/bin/tinydm-run-session
+                ;;
+              gamescope)
+                steam-session
+                ;;
+            esac
+          done
+        '';
       };
     })
   ]);
