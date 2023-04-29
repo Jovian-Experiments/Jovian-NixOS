@@ -116,6 +116,10 @@ let
     # TODO[Jovian]: Explore other ways to stop the session?
     #               -> `systemctl --user stop steam-session.slice`?
 
+    # Plop GAMESCOPE_MODE_SAVE_FILE into $XDG_CONFIG_HOME (defaults to ~/.config).
+    export GAMESCOPE_MODE_SAVE_FILE="''${XDG_CONFIG_HOME:-$HOME/.config}/gamescope/modes.cfg"
+    export GAMESCOPE_PATCHED_EDID_FILE="''${XDG_CONFIG_HOME:-$HOME/.config}/gamescope/edid.bin"
+
     exec ${config.security.wrapperDir}/gamescope "$@"
   '';
 
