@@ -19,6 +19,10 @@ rec {
     ];
   };
 
+  gamescope = final.callPackage ./pkgs/gamescope {
+    gamescope' = super.gamescope;
+  };
+
   mangohud = final.callPackage ./pkgs/mangohud {
     libXNVCtrl = linuxPackages_jovian.nvidia_x11.settings.libXNVCtrl;
     mangohud32 = final.pkgsi686Linux.mangohud;
