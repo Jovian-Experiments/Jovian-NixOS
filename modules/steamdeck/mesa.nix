@@ -18,6 +18,12 @@ let
         hash = "sha256-zjb9DAAC+Qg+CeSkdcjgSarHeUJwuArHL/VMy+Fik6g=";
       })
     ];
+    "23.0" = [
+      (pkgs.fetchpatch {
+        url = "https://github.com/Jovian-Experiments/mesa/commit/de07ed63dc9e41f3ab5a3324f7cca712107ee6a5.patch";
+        hash = "sha256-X+Lvl35DOyT+nGurqmi8zYOPAzP+zZsvDV6CyNqh8Os=";
+      })
+    ];
   };
   mesaBranchOf = mesa: lib.versions.majorMinor mesa.version;
   patchMesa = mesa: mesa.overrideAttrs (old: {
