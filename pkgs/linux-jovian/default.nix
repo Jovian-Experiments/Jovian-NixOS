@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildLinux, ... } @ args:
+{ lib, fetchFromGitHub, fetchpatch, buildLinux, ... } @ args:
 
 let
   inherit (lib)
@@ -18,6 +18,13 @@ buildLinux (args // rec {
   extraMeta.branch = versions.majorMinor version;
 
   kernelPatches = (args.kernelPatches or []) ++ [
+    {
+      name = "0001-Input-xpad-Fix-NULL-deref-on-unitialized-dev.patch";
+      patch = (fetchpatch {
+        url = "https://github.com/samueldr/linux/commit/f3c15b9f79dba009711e683e7f3b4636a30a7749.patch";
+        sha256 = "sha256-UOpTLSoyrfL4eG8HiCYPegVXY5tRFv6JiP9LZuzeFXs=";
+      });
+    }
   ];
 
   structuredExtraConfig = with lib.kernel; {
