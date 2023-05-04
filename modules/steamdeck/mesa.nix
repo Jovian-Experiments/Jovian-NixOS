@@ -5,6 +5,17 @@ let
 
   cfg = config.jovian.devices.steamdeck;
 
+  #
+  # NOTE: to test the patch works, you can `strace` something using mesa.
+  # It will need to know about a limiter file path though. A bogus path is fine.
+  #
+  # ```
+  #  $ GAMESCOPE_LIMITER_FILE=/limiter/is/working strace -P /limiter/is/working glxgears
+  # openat(AT_FDCWD, "/gamescope/is/working", O_RDONLY) = -1 ENOENT (No such file or directory)
+  # ```
+  #
+  # By using `-P` we can limit the logs to access to that (bogus) path only.
+  #
   mesaPatches = {
     "22.2" = [
       (pkgs.fetchpatch {
@@ -16,6 +27,12 @@ let
       (pkgs.fetchpatch {
         url = "https://github.com/Jovian-Experiments/mesa/commit/787d60ad89a733157919366e8ecaee9aa1d5d554.patch";
         hash = "sha256-zjb9DAAC+Qg+CeSkdcjgSarHeUJwuArHL/VMy+Fik6g=";
+      })
+    ];
+    "23.0" = [
+      (pkgs.fetchpatch {
+        url = "https://github.com/Jovian-Experiments/mesa/commit/de07ed63dc9e41f3ab5a3324f7cca712107ee6a5.patch";
+        hash = "sha256-X+Lvl35DOyT+nGurqmi8zYOPAzP+zZsvDV6CyNqh8Os=";
       })
     ];
   };
