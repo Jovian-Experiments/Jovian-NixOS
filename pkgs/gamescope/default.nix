@@ -2,6 +2,7 @@
 , fetchpatch
 , fetchFromGitHub
 , glm
+, gbenchmark
 }:
 
 # NOTE: vendoring gamescope for the time being since we want to match the
@@ -9,8 +10,8 @@
 #       version coherent with the version as shipped by the vendor.
 
 let
-  version = "3.12.0-beta2";
-  hash = "sha256-EVR9MOwbwVxe278LOtfAZxq39E2J+3CIvxIkH535Oi0=";
+  version = "3.12.0-beta5";
+  hash = "sha256-KN4WsXrZSps6UQMKsqOV35mwFaJMHitaAlNYKW8Snm8=";
 in
 gamescope'.overrideAttrs({ buildInputs, ... }: {
   name = "gamescope-${version}";
@@ -30,6 +31,7 @@ gamescope'.overrideAttrs({ buildInputs, ... }: {
   ];
 
   buildInputs = buildInputs ++ [
+    gbenchmark
     glm
   ];
 })
