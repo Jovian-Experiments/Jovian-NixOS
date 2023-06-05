@@ -56,15 +56,11 @@ in
     # Pipewire
     (lib.mkIf (config.services.pipewire.enable) (let
       systemWide = config.services.pipewire.systemWide;
-      sessionManager =
-        if config.services.pipewire.wireplumber.enable then "wireplumber"
-        else if config.services.pipewire.media-session.enable then "pipewire-media-session"
-        else throw "Either wireplumber or pipewire-media-session must be enabled"; # unreachable
     in {
-      systemd.services.${sessionManager} = lib.mkIf systemWide {
+      systemd.services.pipewire = lib.mkIf systemWide {
         environment.ALSA_CONFIG_UCM2 = config.environment.variables.ALSA_CONFIG_UCM2;
       };
-      systemd.user.services.${sessionManager} = lib.mkIf (!systemWide) {
+      systemd.user.services.pipewire = lib.mkIf (!systemWide) {
         environment.ALSA_CONFIG_UCM2 = config.environment.variables.ALSA_CONFIG_UCM2;
       };
     }))
