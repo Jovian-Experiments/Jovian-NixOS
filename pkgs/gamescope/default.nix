@@ -6,8 +6,7 @@
 }:
 
 # NOTE: vendoring gamescope for the time being since we want to match the
-#       version shipped by the vendor, which does not work without the kernel
-#       version coherent with the version as shipped by the vendor.
+#       version shipped by the vendor, ensuring feature level is equivalent.
 
 let
   version = "3.12.0-beta8";
