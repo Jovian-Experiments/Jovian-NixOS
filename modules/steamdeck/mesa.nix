@@ -35,6 +35,12 @@ let
         hash = "sha256-X+Lvl35DOyT+nGurqmi8zYOPAzP+zZsvDV6CyNqh8Os=";
       })
     ];
+    "23.1" = [
+      (pkgs.fetchpatch {
+        url = "https://github.com/Mesa3D/mesa/compare/fae5b32981bb50cb5bf879cab3c36bc099a7cf5a...Jovian-Experiments:mesa:radeonsi-3.5.0.diff";
+        hash = "sha256-/dlJSpM7xmJPAw0LgO91g9BnNuGrUROs9koluC9Yzwc=";
+      })
+    ];
   };
   mesaBranchOf = mesa: lib.versions.majorMinor mesa.version;
   patchMesa = mesa: mesa.overrideAttrs (old: {
