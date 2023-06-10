@@ -116,6 +116,10 @@ let
     # TODO[Jovian]: Explore other ways to stop the session?
     #               -> `systemctl --user stop steam-session.slice`?
 
+    # Plop GAMESCOPE_MODE_SAVE_FILE into $XDG_CONFIG_HOME (defaults to ~/.config).
+    export GAMESCOPE_MODE_SAVE_FILE="''${XDG_CONFIG_HOME:-$HOME/.config}/gamescope/modes.cfg"
+    export GAMESCOPE_PATCHED_EDID_FILE="''${XDG_CONFIG_HOME:-$HOME/.config}/gamescope/edid.bin"
+
     exec ${config.security.wrapperDir}/gamescope "$@"
   '';
 
@@ -157,6 +161,14 @@ let
     export GAMESCOPE_MODE_SAVE_FILE="$gamescope_config_dir/modes.cfg"
     touch "$GAMESCOPE_MODE_SAVE_FILE"
 
+    # Ensure we don't strand users without a "joshcolor" kernel while
+    # color management is in beta from the vendor.
+    # https://github.com/Jovian-Experiments/Jovian-NixOS/issues/91
+    colorManagementHack=""
+    if [[ $(uname -r) =~ 6\.1\.[0-9]+-valve[0-9]+ ]]; then
+      colorManagementHack="--disable-color-management"
+    fi
+
     gamescope_incantation=(
       "${gamescope-shim}"
 
@@ -182,6 +194,8 @@ let
       #               -> adwaita or similar
       --cursor ${steamdeck-hw-theme}/share/steamos/steamos-cursor.png
       --cursor-hotspot 5,3
+
+      $colorManagementHack
 
       # TODO[Jovian]: only add when running steam
       --steam
@@ -340,6 +354,9 @@ in
         # Disable automatic audio device switching in steam, now handled by wireplumber
         STEAM_DISABLE_AUDIO_DEVICE_SWITCHING = "1";
 
+        # Let steam know it can unmount drives without superuser privileges
+        STEAM_ALLOW_DRIVE_UNMOUNT = "1";
+
         # Enable support for xwayland isolation per-game in Steam
         STEAM_MULTIPLE_XWAYLANDS = "1";
 
@@ -363,6 +380,15 @@ in
 
         # Enable VRR controls in steam
         STEAM_GAMESCOPE_VRR_SUPPORTED = "1";
+
+        # Scaling support
+        STEAM_GAMESCOPE_FANCY_SCALING_SUPPORT = "1";
+
+        # Color management support
+        STEAM_GAMESCOPE_COLOR_MANAGED = "1";
+
+        # Enable HDR support in steam
+        STEAM_GAMESCOPE_HDR_SUPPORTED = "1";
 
         # Set refresh rate range and enable refresh rate switching
         STEAM_DISPLAY_REFRESH_LIMITS = "40,60";
@@ -402,6 +428,9 @@ in
       jovian.steam.environment = {
         # Enable dynamic backlight, we have the kernel patch to disable events
         STEAM_ENABLE_DYNAMIC_BACKLIGHT = "1";
+
+        # Enabled fan control toggle in steam
+        STEAM_ENABLE_FAN_CONTROL = "1";
 
         # Let's try this across the board to see if it breaks anything
         # Helps performance in HZD, Cyberpunk, at least
