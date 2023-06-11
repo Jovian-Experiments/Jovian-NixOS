@@ -9,8 +9,8 @@
 #       version shipped by the vendor, ensuring feature level is equivalent.
 
 let
-  version = "3.12.0-beta8";
-  hash = "sha256-/9NGlM1FaDfdFkyIjbbJ39GB5JkkIFeZXQwtCvFUuX4=";
+  version = "3.12.0-beta9";
+  hash = "sha256-nPFHMRp3uq2CIxY3EdaoTltqyb5z0kFwXw5U9ajbrfo=";
 in
 gamescope'.overrideAttrs({ buildInputs, ... }: {
   name = "gamescope-${version}";
