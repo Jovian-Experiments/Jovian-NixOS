@@ -37,8 +37,8 @@ let
     ];
     "23.1" = [
       (pkgs.fetchpatch {
-        url = "https://github.com/Mesa3D/mesa/compare/fae5b32981bb50cb5bf879cab3c36bc099a7cf5a...Jovian-Experiments:mesa:radeonsi-3.5.0.diff";
-        hash = "sha256-/dlJSpM7xmJPAw0LgO91g9BnNuGrUROs9koluC9Yzwc=";
+        url = "https://github.com/Jovian-Experiments/mesa/commit/d75fe6a435ff780694668a582b0ddb594ba052c0.patch";
+        hash = "sha256-KZNud0rlg/qRbbVb3+x2+eroHUcIegOJPct2yfR5NPo=";
       })
     ];
   };
