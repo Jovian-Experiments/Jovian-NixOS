@@ -68,3 +68,23 @@ I don't know *exactly* what it's the codename for.
 It is either the codename for the Steam Deck, or the codename for the new Steam OS for the Steam Deck.
 Things get awfully murky when you realize that *Neptune*'s also a thing, and it's unclear really from the outside, and quick searches don't provide *conclusive* evidence.
 But to the best of my knowledge, Jupiter is the OS for us.
+
+Known issues
+----
+
+### Some DisplayManagers are wrongly rotated
+
+This happens, becuase the screen is shown in it's natural designed position and needs to be rotated.
+
+Assuming that the Display Manager is using X11, then it can be done through:
+
+```nix
+  services.xserver.extraConfig = ''
+    Section "Monitor"
+      Identifier     "eDP-1"
+      Option		"Rotate"	"right"
+    EndSection
+  '';
+```
+
+Issue observed in SDDM and LightDM.
