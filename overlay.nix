@@ -48,5 +48,8 @@ rec {
     steam-fhsenv = final.callPackage ./pkgs/steam-jupiter/fhsenv.nix {
       steam-fhsenv = scopeSuper.steam-fhsenv;
     };
+    steam-fhsenv-small = final.callPackage ./pkgs/steam-jupiter/fhsenv.nix {
+      steam-fhsenv = scopeSuper.steam-fhsenv-small;
+    };
   });
 }
