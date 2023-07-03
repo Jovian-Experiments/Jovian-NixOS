@@ -8,8 +8,8 @@ let
     versions
   ;
 
-  kernelVersion = "6.1.21";
-  vendorVersion = "saml";
+  kernelVersion = "6.1.29";
+  vendorVersion = "valve4";
 in
 buildLinux (args // rec {
   version = "${kernelVersion}-${vendorVersion}";
@@ -18,13 +18,6 @@ buildLinux (args // rec {
   extraMeta.branch = versions.majorMinor version;
 
   kernelPatches = (args.kernelPatches or []) ++ [
-    {
-      name = "0001-Input-xpad-Fix-NULL-deref-on-unitialized-dev.patch";
-      patch = (fetchpatch {
-        url = "https://github.com/samueldr/linux/commit/f3c15b9f79dba009711e683e7f3b4636a30a7749.patch";
-        sha256 = "sha256-UOpTLSoyrfL4eG8HiCYPegVXY5tRFv6JiP9LZuzeFXs=";
-      });
-    }
   ];
 
   structuredExtraConfig = with lib.kernel; {
@@ -91,7 +84,10 @@ buildLinux (args // rec {
     # -----------------------------------
     #
     DRM_AMD_DC_SI = lib.mkForce (option no);
+    DRM_AMD_DC_DCN = lib.mkForce (option no);
+    DRM_AMD_DC_HDCP = lib.mkForce (option no);
     DRM_HYPERV = lib.mkForce (option no);
+    DRM_VMWGFX_FBCON = lib.mkForce (option no);
     KVM_GUEST = lib.mkForce (option no);
     MOUSE_PS2_VMMOUSE = lib.mkForce (option no);
 
@@ -116,7 +112,7 @@ buildLinux (args // rec {
     owner = "Jovian-Experiments";
     repo = "linux";
     rev = version;
-    hash = "sha256-S3McbOkG9OANehr3xO0wxXGlSR1NyAtgtRIQKbq6k4M=";
+    hash = "sha256-a2OxAfbv9idLhklpIeswGtBXPkk1sn/q/fdYB49RLOc=";
 
     # Sometimes the vendor doesn't update the EXTRAVERSION tag.
     # Let's fix it up in post.
