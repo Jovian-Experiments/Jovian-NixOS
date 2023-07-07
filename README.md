@@ -67,6 +67,12 @@ It is either the codename for the Steam Deck, or the codename for the new Steam 
 Things get awfully murky when you realize that *Neptune*'s also a thing, and it's unclear really from the outside, and quick searches don't provide *conclusive* evidence.
 But to the best of my knowledge, Jupiter is the OS for us.
 
+> What channels are supported?
+
+Truthfully, no channel is *supported*, but the older the stable release was cut, the more likely the additions from Jovian NixOS won't work as expected.
+
+Thus, it is preferrable to use `nixos-unstable`. The latest update *should* work fine, and when it doesn't, it'll be handled soon enough.
+
 * * *
 
 Importing the modules in your configuration
