@@ -270,9 +270,13 @@ in
 
         desktopSession = mkOption {
           type = types.str;
+          default = "steam-wayland";
           example = "plasma";
           description = ''
             The session to launch for Desktop Mode.
+
+            By default, attempting to switch to the desktop will launch
+            Gaming Mode again.
           '';
         };
 
