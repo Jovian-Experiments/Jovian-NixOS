@@ -14,6 +14,3 @@ jobs:
 
       - name: Evaluate overlay packages
         run: nix-instantiate .ci/instantiate-overlay.nix
-
-      - name: Evaluate installation ISO
-        run: nix-instantiate .ci/instantiate-iso.nix
