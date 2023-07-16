@@ -474,6 +474,8 @@ in
           Restart = "always";
         };
 
+        path = [ pkgs.tinydm-jovian pkgs.dbus ];
+
         script = ''
           set-session () {
             mkdir -p ~/.local/state
@@ -485,21 +487,20 @@ in
               cat ~/.local/state/steamos-session-select
               rm ~/.local/state/steamos-session-select
             else
-              echo "gamescope"
+              echo "steam-wayland"
             fi
           }
 
           while :; do
             session=$(consume-session)
+
+            if [[ "$session" == "plasma" ]]; then
+              # The "plasma" session is set by Steam when switching to desktop.
+              # We use whichever preferred session chosen by the user.
+              session="${cfg.desktopSession}"
+            fi
             >&2 echo "Starting $session..."
-            case "$session" in
-              plasma)
-                JOVIAN_PREFERRED_SESSION=${cfg.desktopSession} ${pkgs.tinydm-jovian}/bin/tinydm-run-session
-                ;;
-              gamescope)
-                steam-session
-                ;;
-            esac
+            JOVIAN_PREFERRED_SESSION=$session tinydm-run-session
           done
         '';
       };
