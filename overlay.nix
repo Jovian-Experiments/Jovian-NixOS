@@ -29,7 +29,11 @@ rec {
     inherit (final.python3Packages) mako;
   };
 
-  mesa-radv-jupiter = final.callPackage ./pkgs/mesa-radv-jupiter { };
+  mesa-radv-jupiter = final.callPackage ./pkgs/mesa-radv-jupiter {
+    # Compat with the inputs from Nixpkgs; those are for Darwin.
+    OpenGL = null;
+    Xplugin = null;
+  };
 
   jupiter-fan-control = final.callPackage ./pkgs/jupiter-fan-control { };
 
