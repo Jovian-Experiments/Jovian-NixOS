@@ -478,8 +478,6 @@ in
           Restart = "always";
         };
 
-        path = [ pkgs.tinydm-jovian pkgs.dbus ];
-
         script = ''
           set-session () {
             mkdir -p ~/.local/state
@@ -495,6 +493,7 @@ in
             fi
           }
 
+          export PATH=${lib.makeBinPath [ pkgs.tinydm-jovian pkgs.dbus ]}:$PATH
           while :; do
             session=$(consume-session)
 
