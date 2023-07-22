@@ -492,11 +492,15 @@ in
         '';
       };
 
+      environment = {
+        systemPackages = [ pkgs.jovian-greeter.helper ];
+        pathsToLink = [ "lib/jovian-greeter" ];
+      };
       security.polkit.extraConfig = ''
         polkit.addRule(function(action, subject) {
           if (
             action.id == "org.freedesktop.policykit.exec" &&
-            action.lookup("program") == "${pkgs.jovian-greeter}/libexec/consume-session" &&
+            action.lookup("program") == "/run/current-system/sw/lib/jovian-greeter/consume-session" &&
             subject.user == "jovian-greeter"
           ) {
             return polkit.Result.YES;
