@@ -37,7 +37,7 @@ rec {
 
   opensd = super.callPackage ./pkgs/opensd { };
 
-  jovian-run-session = super.callPackage ./pkgs/jovian-run-session { };
+  jovian-greeter = super.callPackage ./pkgs/jovian-greeter { };
 
   steamPackages = super.steamPackages.overrideScope (scopeFinal: scopeSuper: {
     steam = final.callPackage ./pkgs/steam-jupiter/unwrapped.nix {

@@ -231,34 +231,6 @@ let
   }) // {
     providedSessions = [ "steam-wayland" ];
   };
-
-  gamescope-switcher = pkgs.writeShellScript "gamescope-switcher" ''
-    set-session () {
-      mkdir -p ~/.local/state
-      >~/.local/state/steamos-session-select echo "$1"
-    }
-
-    consume-session () {
-      if [[ -e ~/.local/state/steamos-session-select ]]; then
-        cat ~/.local/state/steamos-session-select
-        rm ~/.local/state/steamos-session-select
-      else
-        echo "steam-wayland"
-      fi
-    }
-
-    while :; do
-      session=$(consume-session)
-
-      if [[ "$session" == "plasma" ]]; then
-        # The "plasma" session is set by Steam when switching to desktop.
-        # We use whichever preferred session chosen by the user.
-        session="${cfg.desktopSession}"
-      fi
-      >&2 echo "Starting $session..."
-      ${pkgs.jovian-run-session}/bin/jovian-run-session "$session"
-    done
-  '';
 in
 {
   options = {
@@ -489,9 +461,31 @@ in
         settings = {
           default_session = {
             user = cfg.user;
-            command = gamescope-switcher;
+            command = "${pkgs.jovian-greeter}/bin/jovian-greeter";
+            service = "jovian-greeter";
           };
         };
+      };
+
+      security.pam.services = {
+        # Use a separate service to not result in a logind session for
+        # the greeter itself
+        jovian-greeter = {};
+
+        greetd.text = ''
+          auth      requisite     pam_nologin.so
+          auth      required      pam_succeed_if.so user = ${cfg.user} quiet_success
+          auth      required      pam_permit.so
+
+          account   required      pam_succeed_if.so user = ${cfg.user} quiet_success
+          account   sufficient    pam_unix.so
+
+          password  required      pam_deny.so
+
+          session   required      pam_succeed_if.so user = ${cfg.user} quiet_success
+          session   optional      pam_keyinit.so revoke
+          session   include       login
+        '';
       };
     })
   ]);
