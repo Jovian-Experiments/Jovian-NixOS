@@ -269,8 +269,8 @@ in
         };
 
         desktopSession = mkOption {
-          type = types.str;
-          default = "steam-wayland";
+          type = types.nullOr types.str;
+          default = null;
           example = "plasma";
           description = ''
             The session to launch for Desktop Mode.
@@ -450,6 +450,14 @@ in
         }
       ];
 
+      warnings = lib.optional (cfg.desktopSession == null) ''
+        jovian.steam.desktopSession is unset and using the Switch to Desktop function
+        in Gaming Mode will relaunch Gaming Mode.
+
+        Set jovian.steam.desktopSession to the name of a desktop session, or "steam-wayland"
+        to keep this behavior.
+      '';
+
       services.xserver = {
         enable = true;
         displayManager.lightdm.enable = false;
@@ -459,9 +467,11 @@ in
       services.greetd = {
         enable = true;
         settings = {
-          default_session = {
+          default_session = let
+            desktopSession = if cfg.desktopSession != null then cfg.desktopSession else "steam-wayland";
+          in {
             user = "jovian-greeter";
-            command = "${pkgs.jovian-greeter}/bin/jovian-greeter ${cfg.user} ${cfg.desktopSession}";
+            command = "${pkgs.jovian-greeter}/bin/jovian-greeter ${cfg.user} ${desktopSession}";
           };
         };
       };
