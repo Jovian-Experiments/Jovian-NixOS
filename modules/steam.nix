@@ -262,9 +262,6 @@ in
           default = null;
           description = ''
             The user to run Steam with.
-
-            This user must be in the `networkmanager` group to be able to
-            complete the OOBE (Out-of-Box Experience).
           '';
         };
 
@@ -324,10 +321,6 @@ in
       };
     }
     {
-      warnings = []
-        ++ lib.optional (!config.networking.networkmanager.enable)
-          "The Steam Deck UI integrates with NetworkManager (networking.networkmanager.enable) which is not enabled. NetworkManager is required to complete the first-time setup process.";
-
       hardware.opengl.driSupport32Bit = true;
       hardware.pulseaudio.support32Bit = true;
       hardware.steam-hardware.enable = mkDefault true;
@@ -341,19 +334,20 @@ in
         HandlePowerKey=ignore
       '';
 
-      # HACK: This is a temporary workaround to allow Steam to perform
-      # power actions (suspend, reboot, poweroff) while running inside
-      # a transient slice.
+      # This rule allows the user to configure Wi-Fi in Deck UI.
+      #
+      # Steam modifies the system network configs via
+      # `org.freedesktop.NetworkManager.settings.modify.system`,
+      # which normally requires being in the `networkmanager` group.
       security.polkit.extraConfig = ''
-        // Jovian-NixOS/steam: Allow users to perform power actions
+        // Jovian-NixOS/steam: Allow users to configure Wi-Fi in Deck UI
         polkit.addRule(function(action, subject) {
-          if ((action.id == "org.freedesktop.login1.suspend" ||
-               action.id == "org.freedesktop.login1.reboot" ||
-               action.id == "org.freedesktop.login1.reboot-multiple-sessions" ||
-               action.id == "org.freedesktop.login1.power-off" ||
-               action.id == "org.freedesktop.login1.power-off-multiple-sessions" ||
-               action.id.indexOf("org.freedesktop.NetworkManager") == 0) &&
-               subject.isInGroup("users")) {
+          if (
+            action.id.indexOf("org.freedesktop.NetworkManager") == 0 &&
+            subject.isInGroup("users") &&
+            subject.local &&
+            subject.active
+          ) {
             return polkit.Result.YES;
           }
         });
