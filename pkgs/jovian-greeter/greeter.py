@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any, Optional, Iterable, Mapping, List
 
 DEFAULT_SESSION = 'steam-wayland'
+DEFAULT_DESKTOP = 'plasma'
 
 class Session:
     TYPE = 'Unknown'
@@ -106,14 +107,20 @@ class GreetdClient:
         return json.loads(payload)
 
 class Context:
-    def __init__(self, home: Path):
+    def __init__(self, home: Path, desktop_session: str):
         self.home = home
+        self.desktop_session = desktop_session
         self.xdg_data_dirs = os.environ.get('XDG_DATA_DIRS', '').split(':')
 
     def next_session(self) -> Optional[Session]:
         sessions = [ DEFAULT_SESSION ]
 
         if next_session := self._consume_session():
+            # "plasma" is hardcoded by Deck UI as the Desktop
+            # We let the user choose their preferred desktop session
+            if next_session == 'plasma':
+                next_session = self.desktop_session
+
             sessions = [ next_session ] + sessions
 
         return self._find_sessions(sessions)
@@ -150,12 +157,13 @@ class Context:
         return None
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        logging.error("Usage: jovian-greeter <user>")
+    if len(sys.argv) not in [2, 3]:
+        logging.error("Usage: jovian-greeter <user> [desktop session]")
         sys.exit(1)
 
     user = sys.argv[1]
     home = os.path.expanduser(f'~{user}/')
+    desktop_session = sys.argv[2] if len(sys.argv) == 3 else DEFAULT_DESKTOP
     socket_path = os.environ.get('GREETD_SOCK')
 
     if not home:
@@ -166,7 +174,7 @@ if __name__ == '__main__':
         logging.error("GREETD_SOCK must be set")
         sys.exit(1)
 
-    ctx = Context(Path(home))
+    ctx = Context(Path(home), desktop_session)
 
     client = GreetdClient(Path(socket_path))
     client.create_session(user)
