@@ -461,7 +461,7 @@ in
         settings = {
           default_session = {
             user = cfg.user;
-            command = "${pkgs.jovian-greeter}/bin/jovian-greeter ${cfg.user}";
+            command = "${pkgs.jovian-greeter}/bin/jovian-greeter ${cfg.user} ${cfg.desktopSession}";
             service = "jovian-greeter";
           };
         };
