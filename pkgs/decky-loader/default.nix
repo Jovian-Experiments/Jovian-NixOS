@@ -102,6 +102,7 @@ let
 
       mkdir -p $out/lib
       cp -r backend $out/lib/decky-loader
+      cp -r plugin $out/lib/decky-loader/
 
       ln -s ${frontend} $out/lib/decky-loader/static
 
