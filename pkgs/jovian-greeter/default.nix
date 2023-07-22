@@ -1,14 +1,22 @@
-{ stdenv, python3, coreutils, makeWrapper }:
+{ stdenv, python3, shellcheck, nodePackages, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "jovian-greeter";
 
   src = ./.;
 
-  buildInputs = [ python3 makeWrapper ];
+  buildInputs = [ python3 shellcheck nodePackages.pyright makeWrapper ];
 
   dontConfigure = true;
-  dontBuild = true;
+
+  buildPhase = ''
+    runHook preBuild
+
+    shellcheck ./consume-session
+    pyright *.py
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall

@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # A minimal greetd greeter that runs a user's preferred session
 # in $HOME/.local/state/steamos-session-select
 
