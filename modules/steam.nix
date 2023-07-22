@@ -460,12 +460,18 @@ in
         enable = true;
         settings = {
           default_session = {
-            user = cfg.user;
+            user = "jovian-greeter";
             command = "${pkgs.jovian-greeter}/bin/jovian-greeter ${cfg.user} ${cfg.desktopSession}";
             service = "jovian-greeter";
           };
         };
       };
+
+      users.users.jovian-greeter = {
+        isSystemUser = true;
+        group = "jovian-greeter";
+      };
+      users.groups.jovian-greeter = {};
 
       security.pam.services = {
         # Use a separate service to not result in a logind session for
@@ -474,19 +480,29 @@ in
 
         greetd.text = ''
           auth      requisite     pam_nologin.so
-          auth      required      pam_succeed_if.so user = ${cfg.user} quiet_success
-          auth      required      pam_permit.so
+          auth      sufficient    pam_succeed_if.so user = ${cfg.user} quiet_success
+          auth      required      pam_unix.so
 
-          account   required      pam_succeed_if.so user = ${cfg.user} quiet_success
           account   sufficient    pam_unix.so
 
           password  required      pam_deny.so
 
-          session   required      pam_succeed_if.so user = ${cfg.user} quiet_success
           session   optional      pam_keyinit.so revoke
           session   include       login
         '';
       };
+
+      security.polkit.extraConfig = ''
+        polkit.addRule(function(action, subject) {
+          if (
+            action.id == "org.freedesktop.policykit.exec" &&
+            action.lookup("program") == "${pkgs.jovian-greeter}/libexec/consume-session" &&
+            subject.user == "jovian-greeter"
+          ) {
+            return polkit.Result.YES;
+          }
+        });
+      '';
     })
   ]);
 }
