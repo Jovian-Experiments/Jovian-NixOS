@@ -9,6 +9,7 @@ import os
 import re
 import socket
 import struct
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any, Optional, Iterable, Mapping, List
@@ -107,7 +108,8 @@ class GreetdClient:
         return json.loads(payload)
 
 class Context:
-    def __init__(self, home: Path, desktop_session: str):
+    def __init__(self, user: str, home: Path, desktop_session: str):
+        self.user = user
         self.home = home
         self.desktop_session = desktop_session
         self.xdg_data_dirs = os.environ.get('XDG_DATA_DIRS', '').split(':')
@@ -126,6 +128,22 @@ class Context:
         return self._find_sessions(sessions)
 
     def _consume_session(self) -> Optional[str]:
+        if helper := os.environ.get('CONSUME_SESSION_HELPER'):
+            logging.debug('Using pkexec helper')
+            res = subprocess.run(
+                ['/run/wrappers/bin/pkexec', helper, self.user],
+                stdin=subprocess.DEVNULL,
+                capture_output=True,
+                check=True,
+                env={'SHELL': '/bin/sh'}
+            )
+            next_session = res.stdout.decode('utf-8').strip()
+
+            if not next_session:
+                return None
+
+            return next_session
+
         next_session_file = self.home.joinpath(".local/state/steamos-session-select")
         if not next_session_file.exists():
             return None
@@ -174,7 +192,7 @@ if __name__ == '__main__':
         logging.error("GREETD_SOCK must be set")
         sys.exit(1)
 
-    ctx = Context(Path(home), desktop_session)
+    ctx = Context(user, Path(home), desktop_session)
 
     client = GreetdClient(Path(socket_path))
     client.create_session(user)

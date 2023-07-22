@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ "$#" != "1" ]]; then
+	>&2 echo "Usage: $0 <user>"
+	exit 1
+fi
+
+user="$1"
+uid=$(id -u "$user")
+if [[ "$uid" -lt "1000" ]]; then
+	>&2 echo "UID $uid is too low"
+	exit 1
+fi
+
+home=$(eval echo ~$(printf %q "$user"))
+if ! [[ "$home" =~ "/"* ]]; then
+	>&2 echo "Invalid home directory"
+	exit 1
+fi
+
+if [[ -e "$home/.local/state/steamos-session-select" ]]; then
+  cat "$home/.local/state/steamos-session-select"
+  rm "$home/.local/state/steamos-session-select"
+fi
