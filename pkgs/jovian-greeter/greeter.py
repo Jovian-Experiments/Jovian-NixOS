@@ -150,16 +150,16 @@ class Context:
         return None
 
 if __name__ == '__main__':
-    user = os.environ.get('USER')
-    home = os.environ.get('HOME')
-    socket_path = os.environ.get('GREETD_SOCK')
-
-    if not user:
-        logging.error("USER must be set")
+    if len(sys.argv) != 2:
+        logging.error("Usage: jovian-greeter <user>")
         sys.exit(1)
 
+    user = sys.argv[1]
+    home = os.path.expanduser(f'~{user}/')
+    socket_path = os.environ.get('GREETD_SOCK')
+
     if not home:
-        logging.error("HOME must be set")
+        logging.error(f'Home directory for {user} not found')
         sys.exit(1)
 
     if not socket_path:
