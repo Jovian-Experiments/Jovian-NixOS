@@ -14,6 +14,7 @@ from typing import Any, Optional, Iterable, Mapping, List
 
 DEFAULT_SESSION = 'steam-wayland'
 DEFAULT_DESKTOP = 'plasma'
+HELPER_PREFIX = Path('/run/current-system/sw/lib/jovian-greeter')
 
 class Session:
     TYPE = 'Unknown'
@@ -126,7 +127,8 @@ class Context:
         return self._find_sessions(sessions)
 
     def _consume_session(self) -> Optional[str]:
-        if helper := os.environ.get('CONSUME_SESSION_HELPER'):
+        helper = HELPER_PREFIX.joinpath('consume-session')
+        if helper.exists():
             logging.debug('Using pkexec helper')
             res = subprocess.run(
                 ['/run/wrappers/bin/pkexec', helper, self.user],

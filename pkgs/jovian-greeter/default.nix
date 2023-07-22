@@ -3,6 +3,8 @@
 stdenv.mkDerivation {
   name = "jovian-greeter";
 
+  outputs = [ "out" "helper" ];
+
   src = ./.;
 
   buildInputs = [ python3 shellcheck nodePackages.pyright makeWrapper ];
@@ -21,13 +23,13 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,libexec,share/jovian-greeter}
-
-    cp ./consume-session $out/libexec
-    cp *.py $out/share/jovian-greeter
+    mkdir -p $out/{bin,lib/jovian-greeter}
+    cp *.py $out/lib/jovian-greeter
     makeWrapper ${python3}/bin/python $out/bin/jovian-greeter \
-      --add-flags "$out/share/jovian-greeter/greeter.py" \
-      --set CONSUME_SESSION_HELPER "$out/libexec/consume-session"
+      --add-flags "$out/lib/jovian-greeter/greeter.py"
+
+    mkdir -p $helper/lib/jovian-greeter
+    cp ./consume-session $helper/lib/jovian-greeter
 
     runHook postInstall
   '';
