@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildLinux, ... } @ args:
+{ lib, fetchFromGitHub, fetchpatch, buildLinux, ... } @ args:
 
 let
   inherit (lib)
@@ -8,8 +8,8 @@ let
     versions
   ;
 
-  kernelVersion = "6.1.21";
-  vendorVersion = "valve1";
+  kernelVersion = "6.1.29";
+  vendorVersion = "valve4";
 in
 buildLinux (args // rec {
   version = "${kernelVersion}-${vendorVersion}";
@@ -84,7 +84,10 @@ buildLinux (args // rec {
     # -----------------------------------
     #
     DRM_AMD_DC_SI = lib.mkForce (option no);
+    DRM_AMD_DC_DCN = lib.mkForce (option no);
+    DRM_AMD_DC_HDCP = lib.mkForce (option no);
     DRM_HYPERV = lib.mkForce (option no);
+    DRM_VMWGFX_FBCON = lib.mkForce (option no);
     KVM_GUEST = lib.mkForce (option no);
     MOUSE_PS2_VMMOUSE = lib.mkForce (option no);
 
@@ -109,6 +112,19 @@ buildLinux (args // rec {
     owner = "Jovian-Experiments";
     repo = "linux";
     rev = version;
-    hash = "sha256-ypYhz1kD+enIl31yhjlzqDnd3RqQcyc+7Udlw1Y5iSM=";
+    hash = "sha256-a2OxAfbv9idLhklpIeswGtBXPkk1sn/q/fdYB49RLOc=";
+
+    # Sometimes the vendor doesn't update the EXTRAVERSION tag.
+    # Let's fix it up in post.
+    # ¯\_(ツ)_/¯
+    # Also, `postPatch` on the kernel doesn't compose in `buildLinux`.
+    # ¯\_(ツ)_/¯
+    postFetch = ''
+      (
+      echo ":: Fixing-up EXTRAVERSION with actual tag"
+      cd $out
+      sed -i -e 's/^EXTRAVERSION =.*/EXTRAVERSION = -${vendorVersion}/g' Makefile
+      )
+    '';
   };
 } // (args.argsOverride or { }))

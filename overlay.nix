@@ -19,13 +19,21 @@ rec {
     ];
   };
 
+  gamescope = final.callPackage ./pkgs/gamescope {
+    gamescope' = super.gamescope;
+  };
+
   mangohud = final.callPackage ./pkgs/mangohud {
     libXNVCtrl = linuxPackages_jovian.nvidia_x11.settings.libXNVCtrl;
     mangohud32 = final.pkgsi686Linux.mangohud;
     inherit (final.python3Packages) mako;
   };
 
-  mesa-radv-jupiter = final.callPackage ./pkgs/mesa-radv-jupiter { };
+  mesa-radv-jupiter = final.callPackage ./pkgs/mesa-radv-jupiter {
+    # Compat with the inputs from Nixpkgs; those are for Darwin.
+    OpenGL = null;
+    Xplugin = null;
+  };
 
   jupiter-fan-control = final.callPackage ./pkgs/jupiter-fan-control { };
 
@@ -45,6 +53,9 @@ rec {
     };
     steam-fhsenv = final.callPackage ./pkgs/steam-jupiter/fhsenv.nix {
       steam-fhsenv = scopeSuper.steam-fhsenv;
+    };
+    steam-fhsenv-small = final.callPackage ./pkgs/steam-jupiter/fhsenv.nix {
+      steam-fhsenv = scopeSuper.steam-fhsenv-small;
     };
   });
 }
