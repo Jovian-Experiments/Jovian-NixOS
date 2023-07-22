@@ -231,6 +231,34 @@ let
   }) // {
     providedSessions = [ "steam-wayland" ];
   };
+
+  gamescope-switcher = pkgs.writeShellScript "gamescope-switcher" ''
+    set-session () {
+      mkdir -p ~/.local/state
+      >~/.local/state/steamos-session-select echo "$1"
+    }
+
+    consume-session () {
+      if [[ -e ~/.local/state/steamos-session-select ]]; then
+        cat ~/.local/state/steamos-session-select
+        rm ~/.local/state/steamos-session-select
+      else
+        echo "steam-wayland"
+      fi
+    }
+
+    while :; do
+      session=$(consume-session)
+
+      if [[ "$session" == "plasma" ]]; then
+        # The "plasma" session is set by Steam when switching to desktop.
+        # We use whichever preferred session chosen by the user.
+        session="${cfg.desktopSession}"
+      fi
+      >&2 echo "Starting $session..."
+      ${pkgs.jovian-run-session}/bin/jovian-run-session "$session"
+    done
+  '';
 in
 {
   options = {
@@ -456,56 +484,14 @@ in
         displayManager.startx.enable = true;
       };
 
-      systemd.services.gamescope-switcher = {
-        wantedBy = [ "graphical.target" ];
-        serviceConfig = {
-          User = cfg.user;
-          PAMName = "login";
-          WorkingDirectory = "~";
-
-          TTYPath = "/dev/tty7";
-          TTYReset = "yes";
-          TTYVHangup = "yes";
-          TTYVTDisallocate = "yes";
-
-          StandardInput = "tty-fail";
-          StandardOutput = "journal";
-          StandardError = "journal";
-
-          UtmpIdentifier = "tty7";
-          UtmpMode = "user";
-
-          Restart = "always";
+      services.greetd = {
+        enable = true;
+        settings = {
+          default_session = {
+            user = cfg.user;
+            command = gamescope-switcher;
+          };
         };
-
-        script = ''
-          set-session () {
-            mkdir -p ~/.local/state
-            >~/.local/state/steamos-session-select echo "$1"
-          }
-
-          consume-session () {
-            if [[ -e ~/.local/state/steamos-session-select ]]; then
-              cat ~/.local/state/steamos-session-select
-              rm ~/.local/state/steamos-session-select
-            else
-              echo "steam-wayland"
-            fi
-          }
-
-          export PATH=${lib.makeBinPath [ pkgs.tinydm-jovian pkgs.dbus ]}:$PATH
-          while :; do
-            session=$(consume-session)
-
-            if [[ "$session" == "plasma" ]]; then
-              # The "plasma" session is set by Steam when switching to desktop.
-              # We use whichever preferred session chosen by the user.
-              session="${cfg.desktopSession}"
-            fi
-            >&2 echo "Starting $session..."
-            JOVIAN_PREFERRED_SESSION=$session tinydm-run-session
-          done
-        '';
       };
     })
   ]);
