@@ -335,6 +335,10 @@ in
       };
     }
     {
+      warnings = []
+        ++ lib.optional (!config.networking.networkmanager.enable)
+          "The Steam Deck UI integrates with NetworkManager (networking.networkmanager.enable) which is not enabled. NetworkManager is required to complete the first-time setup process.";
+
       hardware.opengl.driSupport32Bit = true;
       hardware.pulseaudio.support32Bit = true;
       hardware.steam-hardware.enable = mkDefault true;
