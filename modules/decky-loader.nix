@@ -39,6 +39,15 @@ in
           '';
         };
 
+        extraPythonPackages = mkOption {
+          type = types.functionTo (types.listOf types.package);
+          example = lib.literalExpression "pythonPackages: with pythonPackages; [ hid ]";
+          default = pythonPackages: with pythonPackages; [];
+          description = ''
+            Extra Python packages to add to the PYTHONPATH of the loader.
+          '';
+        };
+
         stateDir = mkOption {
           type = types.path;
           default = "/var/lib/decky-loader";
@@ -78,10 +87,13 @@ in
 
         wantedBy = [ "multi-user.target" ];
 
-        environment = {
+        environment = let
+          inherit (cfg.package.passthru) python;
+        in {
           UNPRIVILEGED_USER = cfg.user;
           UNPRIVILEGED_PATH = cfg.stateDir;
           PLUGIN_PATH = "${cfg.stateDir}/plugins";
+          PYTHONPATH = "${python.withPackages cfg.extraPythonPackages}/${python.sitePackages}";
         };
 
         path = with pkgs; [ coreutils gawk ] ++ cfg.extraPackages;

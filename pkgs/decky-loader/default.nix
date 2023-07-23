@@ -121,6 +121,7 @@ let
 
     passthru = {
       inherit frontendDeps;
+      python = python3;
     };
 
     meta = with lib; {
