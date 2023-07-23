@@ -253,7 +253,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Whether to enable the Steam Deck UI.
 
             When enabled, you can either launch the Steam Deck UI
@@ -264,7 +264,7 @@ in
         autoStart = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Whether to automatically launch the Steam Deck UI on boot.
 
             No Display Managers may be enabled in conjunction with this option.
@@ -274,7 +274,7 @@ in
         user = mkOption {
           type = types.nullOr types.str;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             The user to run Steam with.
           '';
         };
@@ -283,7 +283,7 @@ in
           type = types.nullOr types.str;
           default = null;
           example = "plasma";
-          description = ''
+          description = lib.mdDoc ''
             The session to launch for Desktop Mode.
 
             By default, attempting to switch to the desktop will launch
@@ -294,7 +294,7 @@ in
         environment = mkOption {
           type = types.attrsOf types.str;
           default = {};
-          description = ''
+          description = lib.mdDoc ''
             Environment variables to set for Steam.
           '';
         };
@@ -302,7 +302,7 @@ in
         useStockEnvironment = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether to use the stock environment variables from gamescope-session.
           '';
         };
@@ -310,7 +310,8 @@ in
         useStockSteamDeckEnvironment = mkOption {
           type = types.bool;
           default = config.jovian.devices.steamdeck.enable;
-          description = ''
+          defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
+          description = lib.mdDoc ''
             Whether to use the Steam Deck-specific environment variables from stock gamescope-session.
           '';
         };
