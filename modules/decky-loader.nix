@@ -22,6 +22,14 @@ in
           '';
         };
 
+        package = mkOption {
+          type = types.package;
+          default = pkgs.decky-loader;
+          description = ''
+            The loader package to use.
+          '';
+        };
+
         extraPackages = mkOption {
           type = types.listOf types.package;
           example = lib.literalExpression "[ pkgs.curl pkgs.unzip ]";
@@ -84,7 +92,7 @@ in
         '';
 
         serviceConfig = {
-          ExecStart = "${pkgs.decky-loader}/bin/decky-loader";
+          ExecStart = "${cfg.package}/bin/decky-loader";
           KillSignal = "SIGINT";
         };
       };
