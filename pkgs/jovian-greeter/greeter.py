@@ -17,7 +17,7 @@ DEFAULT_DESKTOP = 'plasma'
 HELPER_PREFIX = Path('/run/current-system/sw/lib/jovian-greeter')
 
 class Session:
-    TYPE = 'Unknown'
+    TYPE = 'tty'
 
     def __init__(self, name: str, path: Path):
         self.name = name
@@ -31,7 +31,10 @@ class Session:
         return None
 
     def get_environment(self) -> List[str]:
-        envs = [ f'XDG_SESSION_DESKTOP={self.name}' ]
+        envs = [
+            f'XDG_SESSION_TYPE={self.TYPE}',
+            f'XDG_SESSION_DESKTOP={self.name}',
+        ]
 
         if desktop_names := self._get_property('DesktopNames'):
             envs.append(f'XDG_CURRENT_DESKTOP={desktop_names}')
@@ -45,7 +48,7 @@ class Session:
         return None
 
 class WaylandSession(Session):
-    TYPE = 'Wayland'
+    TYPE = 'wayland'
 
 class XSession(Session):
     TYPE = 'X11'
