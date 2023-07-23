@@ -86,6 +86,8 @@ let
     aiohttp-cors
     watchdog
     certifi
+
+    click # shotty
   ]);
 
   loader = stdenv.mkDerivation {
