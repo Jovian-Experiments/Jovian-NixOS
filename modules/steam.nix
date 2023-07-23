@@ -493,14 +493,17 @@ in
         displayManager.startx.enable = true;
       };
 
+      jovian.steam.environment = {
+        JOVIAN_DESKTOP_SESSION = if cfg.desktopSession != null then cfg.desktopSession else "steam-wayland";
+      };
+
       services.greetd = {
         enable = true;
         settings = {
           default_session = let
-            desktopSession = if cfg.desktopSession != null then cfg.desktopSession else "steam-wayland";
           in {
             user = "jovian-greeter";
-            command = "${pkgs.jovian-greeter}/bin/jovian-greeter ${cfg.user} ${desktopSession}";
+            command = "${pkgs.jovian-greeter}/bin/jovian-greeter ${cfg.user}";
           };
         };
       };
