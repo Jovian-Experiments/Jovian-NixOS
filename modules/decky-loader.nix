@@ -17,7 +17,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Whether to enable the Steam Deck Plugin Loader.
           '';
         };
@@ -25,7 +25,8 @@ in
         package = mkOption {
           type = types.package;
           default = pkgs.decky-loader;
-          description = ''
+          defaultText = lib.literalExpression "pkgs.decky-loader";
+          description = lib.mdDoc ''
             The loader package to use.
           '';
         };
@@ -34,7 +35,7 @@ in
           type = types.listOf types.package;
           example = lib.literalExpression "[ pkgs.curl pkgs.unzip ]";
           default = [];
-          description = ''
+          description = lib.mdDoc ''
             Extra packages to add to the service PATH.
           '';
         };
@@ -43,7 +44,8 @@ in
           type = types.functionTo (types.listOf types.package);
           example = lib.literalExpression "pythonPackages: with pythonPackages; [ hid ]";
           default = pythonPackages: with pythonPackages; [];
-          description = ''
+          defaultText = lib.literalExpression "pythonPackages: with pythonPackages; []";
+          description = lib.mdDoc ''
             Extra Python packages to add to the PYTHONPATH of the loader.
           '';
         };
@@ -51,7 +53,7 @@ in
         stateDir = mkOption {
           type = types.path;
           default = "/var/lib/decky-loader";
-          description = ''
+          description = lib.mdDoc ''
             Directory to store plugins and data.
           '';
         };
@@ -59,7 +61,7 @@ in
         user = mkOption {
           type = types.str;
           default = "decky";
-          description = ''
+          description = lib.mdDoc ''
             The user Decky Loader should run plugins as.
           '';
         };
