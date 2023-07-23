@@ -83,9 +83,12 @@ class GreetdClient:
         raise RuntimeError('Bad response', response)
 
     def start_session(self, command: List[str], environment: List[str]):
+        # greetd before 0.9.0 doesn't support env
+        command_with_env = [ '/usr/bin/env' ] + environment + command
+
         self._send({
             'type': 'start_session',
-            'cmd': command,
+            'cmd': command_with_env,
             'env': environment,
         })
         response = self._recv()
