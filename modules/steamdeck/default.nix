@@ -20,6 +20,7 @@ in
     ./kernel.nix
     ./mesa.nix
     ./perf-control.nix
+    ./sdgyrodsu.nix
     ./sound.nix
   ];
 
