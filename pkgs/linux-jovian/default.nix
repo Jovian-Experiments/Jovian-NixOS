@@ -37,15 +37,6 @@ buildLinux (args // rec {
     DRM_AMDGPU_SI = lib.mkForce no;
     DRM_RADEON = no;
 
-    # Jovian-NixOS: nah, let's use NixOS defaults here.
-    # #
-    # # Use xz instead of zstd to save space
-    # #
-    # KERNEL_XZ = yes;
-    # KERNEL_ZSTD = no;
-    # MODULE_COMPRESS_XZ = yes;
-    # MODULE_COMPRESS_ZSTD = no;
-
     # Doesn't build on latest tag, not used in neptune hardware (?)
     SND_SOC_CS35L36 = no;
     # Update this to =y to workaround initialization issues and deadlocks when loaded as module
@@ -72,6 +63,9 @@ buildLinux (args // rec {
     EXTCON_STEAMDECK = module;
     LEDS_STEAMDECK = module;
     SENSORS_STEAMDECK = module;
+
+    # Enable support for AMDGPU color calibration features
+    DRM_AMD_COLOR_STEAMDECK = yes;
 
     # PARAVIRT options have overhead, even on bare metal boots. They can cause
     # spinlocks to not be inlined as well. Either way, we don't intend to run this
