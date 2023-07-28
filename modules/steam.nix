@@ -103,6 +103,23 @@ let
       echo ""
     fi
 
+    if [[ -z "$XDG_SESSION_TYPE" ]]; then
+      # See start-gamescope-session in the gamescope package for SteamOS
+      echo ""
+      echo "NOTE: Assuming this is running embedded (directly in a VT)"
+      echo ""
+      for var in DISPLAY XAUTHORITY; do
+        unset "$var"
+        export -n "$var"
+        export XDG_SESSION_TYPE=x11
+        export XDG_DESKTOP_PORTAL_DIR=""
+      done
+    else
+      echo ""
+      echo "NOTE: Assuming this is running nested (within a wayland or X11 session)"
+      echo ""
+    fi
+
     exec steam -steamos3 -steampal -steamdeck -gamepadui "$@"
   '';
 
