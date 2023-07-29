@@ -3,9 +3,13 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nix-github-actions = {
+      url = "github:zhaofengli/nix-github-actions/matrix-name";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs }: let
+  outputs = { self, nixpkgs, nix-github-actions }: let
     inherit (nixpkgs) lib;
 
     supportedSystems = [ "x86_64-linux" ];
@@ -39,5 +43,9 @@
         builtins.listToAttrs
       ];
     in jobs);
+
+    githubActions = nix-github-actions.lib.mkGithubMatrix {
+      inherit (self) checks;
+    };
   };
 }

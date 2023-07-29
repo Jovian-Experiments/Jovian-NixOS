@@ -3,8 +3,29 @@ on:
   pull_request:
   push:
 jobs:
-  build:
+  matrix:
+    name: Generate matrix
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v3.5.3
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v4
+
+      - name: Generate matrix
+        id: set-matrix
+        run: |
+          set -Eeu
+          echo "matrix=$(nix eval --json '.#githubActions.matrix')" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: matrix
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix: ${{fromJSON(needs.matrix.outputs.matrix)}}
     steps:
       # Why are we doing this?
       #
@@ -56,5 +77,4 @@ jobs:
         # nixpkgs rev 12303c652b881435065a98729eb7278313041e49
         run: nix-env -i /nix/store/npzpwxjbxlgbi0kfji2x44nssksxk4zw-nix-build-uncached-1.1.2
 
-      - name: Build overlay packages
-        run: nix-build-uncached .ci/instantiate-overlay.nix
+      - run: nix-build-uncached .ci/get-flake.nix -A "${{ matrix.attr }}"
