@@ -53,8 +53,8 @@ jobs:
 
       - name: Install nix-build-uncached
         # Save evaluation time by pulling directly from cache.nixos.org
-        # nixpkgs rev 104e8082de1b20f9d0e1f05b1028795ed0e0e4bc
-        run: nix-env -i /nix/store/zl1krzl6rm321ss84riayyhyn0scr3xi-nix-build-uncached-1.1.1
+        # nixpkgs rev 12303c652b881435065a98729eb7278313041e49
+        run: nix-env -i /nix/store/npzpwxjbxlgbi0kfji2x44nssksxk4zw-nix-build-uncached-1.1.2
 
       - name: Build overlay packages
         run: nix-build-uncached .ci/instantiate-overlay.nix
