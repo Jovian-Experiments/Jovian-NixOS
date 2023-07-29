@@ -6,6 +6,8 @@
   };
 
   outputs = { self, nixpkgs }: let
+    inherit (nixpkgs) lib;
+
     supportedSystems = [ "x86_64-linux" ];
     eachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: let
       pkgs = import nixpkgs {
@@ -27,5 +29,15 @@
       default = jovian;
       jovian = final: prev: import ./overlay.nix final prev;
     };
+
+    checks = eachSupportedSystem (pkgs: let
+      overlayContents = builtins.attrNames (import ./overlay.nix {} {})
+        ++ [ "steam" ];
+      jobs = lib.foldl (ret: f: f ret) overlayContents [
+        (map (attr: lib.nameValuePair attr pkgs.${attr}))
+        (builtins.filter (job: lib.isDerivation job.value))
+        builtins.listToAttrs
+      ];
+    in jobs);
   };
 }
