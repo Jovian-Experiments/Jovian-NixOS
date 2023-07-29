@@ -51,7 +51,7 @@ let
   sessionSwitcher = writeShellScriptBin "steamos-session-select" ''
     session="''${1:-gamescope}"
 
-    >>~/gamescope.log echo "steamos-session-select: switching to $session"
+    echo "steamos-session-select: switching to $session"
 
     if [[ "$session" != "plasma" ]]; then
       >&2 echo "!! Unsupported session '$session'"
