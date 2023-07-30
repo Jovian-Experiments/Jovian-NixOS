@@ -3,35 +3,78 @@ on:
   pull_request:
   push:
 jobs:
-  build:
+  matrix:
+    name: Generate matrix
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v3.0.2
+      - uses: actions/checkout@v3.5.3
 
-      - uses: cachix/install-nix-action@v17
-        with:
-          install_url: https://releases.nixos.org/nix/nix-2.11.1/install
-          extra_nix_config: |
-            experimental-features = nix-command
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v4
 
-      - name: Enable Binary Cache
-        uses: cachix/cachix-action@v11
-        if: github.repository_owner == 'Jovian-Experiments'
-        with:
-          name: jovian-nixos
-          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+      - name: Generate matrix
+        id: set-matrix
+        run: |
+          set -Eeu
+          echo "matrix=$(nix eval --json '.#githubActions.matrix')" >> "$GITHUB_OUTPUT"
 
-      - name: Enable Binary Cache (Read Only)
-        uses: cachix/cachix-action@v11
-        if: github.repository_owner != 'Jovian-Experiments'
+  build:
+    needs: matrix
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix: ${{fromJSON(needs.matrix.outputs.matrix)}}
+    steps:
+      # Why are we doing this?
+      #
+      # The hosted GitHub runners have free disk space split
+      # between the root partition and a temporary partition,
+      # leaving limited space for builds. We work around this
+      # with easimon/maximize-build-space which creates a LVM
+      # volume to combine the free space in both.
+      #
+      # We mount this new volume at /nix, and set TMPDIR so
+      # all builds happen inside the volume.
+      - name: Create mount point for Nix store
+        run: |
+          sudo mkdir /nix
+
+      - name: Maximize disk space for builds
+        uses: easimon/maximize-build-space@v7
         with:
-          name: jovian-nixos
-          skipPush: true
+          build-mount-path: /nix
+
+      - name: Set Nix store ownership
+        run: |
+          sudo chown root:root /nix
+
+      - uses: actions/checkout@v3.5.3
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v4
+
+      - name: Override nix-daemon build directory
+        run: |
+          sudo mkdir -p /nix/tmp
+          sudo chmod ug=rwx,o=rwxt /nix/tmp
+
+          sudo mkdir -p /etc/systemd/system/nix-daemon.service.d
+          sudo tee /etc/systemd/system/nix-daemon.service.d/override.conf >/dev/null <<EOF
+          [Service]
+          Environment=TMPDIR=/nix/tmp
+          EOF
+
+          sudo systemctl daemon-reload
+          sudo systemctl restart nix-daemon
+
+      - name: Setup automatic caching
+        uses: DeterminateSystems/magic-nix-cache-action@v2
 
       - name: Install nix-build-uncached
         # Save evaluation time by pulling directly from cache.nixos.org
-        # nixpkgs rev 104e8082de1b20f9d0e1f05b1028795ed0e0e4bc
-        run: nix-env -i /nix/store/zl1krzl6rm321ss84riayyhyn0scr3xi-nix-build-uncached-1.1.1
+        # nixpkgs rev 12303c652b881435065a98729eb7278313041e49
+        run: nix-env -i /nix/store/npzpwxjbxlgbi0kfji2x44nssksxk4zw-nix-build-uncached-1.1.2
 
-      - name: Build overlay packages
-        run: nix-build-uncached .ci/instantiate-overlay.nix
+      - run: nix-build-uncached .ci/get-flake.nix -A "${{ matrix.attr }}"

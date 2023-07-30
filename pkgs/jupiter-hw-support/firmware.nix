@@ -5,7 +5,7 @@
 , makeWrapper
 , writeShellScript
 , python3
-, util-linux
+, util-linuxMinimal
 
 # jupiter-biosupdate
 , libkrb5
@@ -45,7 +45,7 @@ let
         exit 1
       fi
 
-      ${util-linux}/bin/mountpoint "$esp" >/dev/null
+      ${util-linuxMinimal}/bin/mountpoint "$esp" >/dev/null
 
       mkdir -p "$targetDir"
       mv "$source" "$targetDir"
