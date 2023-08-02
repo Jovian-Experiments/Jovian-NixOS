@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jupiter-dock-updater-bin";
-  version = "20221026.01";
+  version = "20230714.01";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "jupiter-dock-updater-bin";
     rev = "jupiter-${version}";
-    hash = "sha256-Iu9oAy9wVIMowD+wOABIbLjA0Vgr7xndlz0/jhuDuVg=";
+    hash = "sha256-tfMPBC1x4YE3Sv3GbVkQJ12CYODeHjK1cBEaw9jBZpY=";
   };
 
   buildInputs = [
