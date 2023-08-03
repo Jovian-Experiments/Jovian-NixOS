@@ -178,14 +178,6 @@ let
     export GAMESCOPE_MODE_SAVE_FILE="$gamescope_config_dir/modes.cfg"
     touch "$GAMESCOPE_MODE_SAVE_FILE"
 
-    # Ensure we don't strand users without a "joshcolor" kernel while
-    # color management is in beta from the vendor.
-    # https://github.com/Jovian-Experiments/Jovian-NixOS/issues/91
-    colorManagementHack=""
-    if [[ $(uname -r) =~ 6\.1\.[0-9]+-valve[0-9]+ ]]; then
-      colorManagementHack="--disable-color-management"
-    fi
-
     gamescope_incantation=(
       "${gamescope-shim}"
 
@@ -211,8 +203,6 @@ let
       #               -> adwaita or similar
       --cursor ${steamdeck-hw-theme}/share/steamos/steamos-cursor.png
       --cursor-hotspot 5,3
-
-      $colorManagementHack
 
       # TODO[Jovian]: only add when running steam
       --steam
