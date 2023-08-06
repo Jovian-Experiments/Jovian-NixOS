@@ -267,7 +267,7 @@ in
           description = lib.mdDoc ''
             Whether to automatically launch the Steam Deck UI on boot.
 
-            No Display Managers may be enabled in conjunction with this option.
+            Traditional Display Managers cannot be enabled in conjunction with this option.
           '';
         };
 
@@ -475,13 +475,19 @@ in
       assertions = [
         {
           assertion = !config.systemd.services.display-manager.enable;
-          message = "No Display Managers must be enabled when jovian.steam.autoStart is used";
+          message = ''
+            Traditional Display Managers cannot be enabled when jovian.steam.autoStart is used
+
+            Hint: check `services.xserver.displaymanager.*.enable` options in your configuration.
+          '';
         }
       ];
 
       warnings = lib.optional (cfg.desktopSession == null) ''
-        jovian.steam.desktopSession is unset and using the Switch to Desktop function
-        in Gaming Mode will relaunch Gaming Mode.
+        jovian.steam.desktopSession is unset.
+
+        This means that using the Switch to Desktop function in Gaming Mode will
+        relaunch Gaming Mode.
 
         Set jovian.steam.desktopSession to the name of a desktop session, or "steam-wayland"
         to keep this behavior.
