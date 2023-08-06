@@ -50,7 +50,7 @@ class WaylandSession(Session):
     TYPE = 'wayland'
 
 class XSession(Session):
-    TYPE = 'X11'
+    TYPE = 'x11'
 
     def get_command(self) -> Optional[List[str]]:
         if command := super().get_command():
