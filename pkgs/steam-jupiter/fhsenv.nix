@@ -59,6 +59,11 @@ let
       exit 1
     fi
 
+    if [[ -n "$JOVIAN_DESKTOP_SESSION" ]]; then
+      session="$JOVIAN_DESKTOP_SESSION"
+      >&2 echo "Using preferred session '$session'"
+    fi
+
     mkdir -p ~/.local/state
     >~/.local/state/steamos-session-select echo "$session"
 
