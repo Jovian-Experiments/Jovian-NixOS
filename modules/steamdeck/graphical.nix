@@ -13,10 +13,16 @@ in
       enableEarlyModesetting = lib.mkOption {
         default = cfg.enable;
         type = lib.types.bool;
+        description = ''
+          Whether to enable early kernel modesetting.
+        '';
       };
       enableXorgRotation = lib.mkOption {
         default = cfg.enable;
         type = lib.types.bool;
+        description = ''
+          Whether to rotate the display panel in X11.
+        '';
       };
     };
   };

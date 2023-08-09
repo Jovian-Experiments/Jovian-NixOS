@@ -18,14 +18,23 @@ in
       enableDefaultSysctlConfig = mkOption {
         default = cfg.enable;
         type = types.bool;
+        description = ''
+          Whether to enable stock sysctl configs.
+        '';
       };
       enableDefaultCmdlineConfig = mkOption {
         default = cfg.enable;
         type = types.bool;
+        description = ''
+          Whether to enable stock kernel command line flags.
+        '';
       };
       enableDefaultStage1Modules = mkOption {
         default = cfg.enable;
         type = types.bool;
+        description = ''
+          Whether to enable essential kernel modules in initrd.
+        '';
       };
       enableProductSerialAccess = mkOption {
         default = cfg.enable;

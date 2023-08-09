@@ -16,6 +16,9 @@ in
       enableSoundSupport = lib.mkOption {
         default = cfg.enable;
         type = lib.types.bool;
+        description = ''
+          Whether to enable sound support.
+        '';
       };
     };
   };
