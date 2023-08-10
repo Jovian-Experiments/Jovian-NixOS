@@ -47,6 +47,8 @@ rec {
 
   jovian-greeter = super.callPackage ./pkgs/jovian-greeter { };
 
+  jovian-hardware-survey = super.callPackage ./pkgs/jovian-hardware-survey { };
+
   steamPackages = super.steamPackages.overrideScope (scopeFinal: scopeSuper: {
     steam = final.callPackage ./pkgs/steam-jupiter/unwrapped.nix {
       steam-original = scopeSuper.steam;
