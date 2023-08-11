@@ -120,7 +120,35 @@ let
       echo ""
     fi
 
-    exec steam -steamos3 -steampal -steamdeck -gamepadui "$@"
+    # Workaround for steam crashing leaving gamescope hanging around with broken XWaylands.
+    # Implemented as such, since we already need to review the whole gamescopoe startup
+    # process to imitate what Steam now does.
+    cleanup() {
+      (
+      PS4=" ⇒ "
+      echo ":: Cleaning up $1"
+      set -x
+      pkill -9 steam-session
+      )
+    }
+    at_exit() {
+      cleanup "at_exit"
+    }
+    at_sigint() {
+      cleanup "at_sigint"
+    }
+    at_sigterm() {
+      cleanup "at_sigterm"
+    }
+    # NOTE: this is to better track the causes.
+    trap at_exit EXIT
+    trap at_sigint SIGINT
+    trap at_sigterm SIGTERM
+
+    set -e
+
+    steam -steamos3 -steampal -steamdeck -gamepadui "$@" &
+    wait
   '';
 
   # Shim that runs gamescope, with a specific environment.
