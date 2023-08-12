@@ -33,6 +33,7 @@ Configuration
 All available module options along with their descriptions can be found under `modules`.
 
 To use the Steam Deck UI, set `jovian.steam.enable = true;` in your configuration.
+This will only enable the Steam Deck UI tooling. To enable "desktop" steam, enable the usual NixOS options.
 Then you can start the UI using one of the following methods:
 
 - Select "Gaming Mode" in the Display Manager or run `steam-session` in a VT.
