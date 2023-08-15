@@ -8,7 +8,7 @@ let
     versions
   ;
 
-  kernelVersion = "6.1.39";
+  kernelVersion = "6.1.43";
   vendorVersion = "valve1";
 in
 buildLinux (args // rec {
@@ -106,7 +106,7 @@ buildLinux (args // rec {
     owner = "Jovian-Experiments";
     repo = "linux";
     rev = version;
-    hash = "sha256-IXErs8AzcxDLU5qan7exyN6jc4yUxtjbHYRLmlJwup0=";
+    hash = "sha256-ZlV8RMnWrIuygl/CkXalSdrXBzV2+JtNlqYj0mFBh4Y=";
 
     # Sometimes the vendor doesn't update the EXTRAVERSION tag.
     # Let's fix it up in post.
