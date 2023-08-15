@@ -291,8 +291,9 @@ in
           description = lib.mdDoc ''
             Whether to enable the Steam Deck UI.
 
-            When enabled, you can either launch the Steam Deck UI
-            from your Display Manager or by running `steam-session`.
+            When enabled, you can either use the `autoStart` option (preferred),
+            launch the Steam Deck UI from your Display Manager or
+            by running `steam-session`.
           '';
         };
 
