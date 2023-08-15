@@ -279,8 +279,7 @@ in
         };
 
         user = mkOption {
-          type = types.nullOr types.str;
-          default = null;
+          type = types.str;
           description = lib.mdDoc ''
             The user to run Steam with.
           '';
