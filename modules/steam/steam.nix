@@ -3,13 +3,14 @@
 let
   inherit (lib)
     makeBinPath
+    mapAttrsToList
     mkDefault
     mkIf
     mkMerge
     mkOption
-    mapAttrsToList
     types
   ;
+  cfg = config.jovian.steam;
 
   # Note that we override Steam in our overlay
   inherit (pkgs)
@@ -43,8 +44,6 @@ let
         bubblewrap = "${config.security.wrapperDir}/..";
       };
     };
-
-  cfg = config.jovian.steam;
 
   sessionPath = makeBinPath [
     mangohud
@@ -285,46 +284,6 @@ in
   options = {
     jovian = {
       steam = {
-        enable = mkOption {
-          type = types.bool;
-          default = false;
-          description = lib.mdDoc ''
-            Whether to enable the Steam Deck UI.
-
-            When enabled, you can either launch the Steam Deck UI
-            from your Display Manager or by running `steam-session`.
-          '';
-        };
-
-        autoStart = mkOption {
-          type = types.bool;
-          default = false;
-          description = lib.mdDoc ''
-            Whether to automatically launch the Steam Deck UI on boot.
-
-            Traditional Display Managers cannot be enabled in conjunction with this option.
-          '';
-        };
-
-        user = mkOption {
-          type = types.str;
-          description = lib.mdDoc ''
-            The user to run Steam with.
-          '';
-        };
-
-        desktopSession = mkOption {
-          type = types.nullOr types.str;
-          default = null;
-          example = "plasma";
-          description = lib.mdDoc ''
-            The session to launch for Desktop Mode.
-
-            By default, attempting to switch to the desktop will launch
-            Gaming Mode again.
-          '';
-        };
-
         environment = mkOption {
           type = types.attrsOf types.str;
           default = {};
@@ -352,7 +311,13 @@ in
       };
     };
   };
+
   config = mkIf cfg.enable (mkMerge [
+    {
+      warnings = []
+        ++ lib.optional (!config.networking.networkmanager.enable)
+          "The Steam Deck UI integrates with NetworkManager (networking.networkmanager.enable) which is not enabled. NetworkManager is required to complete the first-time setup process.";
+    }
     {
       security.wrappers.gamescope = {
         owner = "root";
@@ -370,10 +335,6 @@ in
       };
     }
     {
-      warnings = []
-        ++ lib.optional (!config.networking.networkmanager.enable)
-          "The Steam Deck UI integrates with NetworkManager (networking.networkmanager.enable) which is not enabled. NetworkManager is required to complete the first-time setup process.";
-
       hardware.opengl.driSupport32Bit = true;
       hardware.pulseaudio.support32Bit = true;
       hardware.steam-hardware.enable = mkDefault true;
@@ -504,86 +465,6 @@ in
         # Expose 8 physical cores, instead of 4c/8t
         WINE_CPU_TOPOLOGY = "8:0,1,2,3,4,5,6,7";
       };
-    })
-    (mkIf cfg.autoStart {
-      assertions = [
-        {
-          assertion = !config.systemd.services.display-manager.enable;
-          message = ''
-            Traditional Display Managers cannot be enabled when jovian.steam.autoStart is used
-
-            Hint: check `services.xserver.displaymanager.*.enable` options in your configuration.
-          '';
-        }
-      ];
-
-      warnings = lib.optional (cfg.desktopSession == null) ''
-        jovian.steam.desktopSession is unset.
-
-        This means that using the Switch to Desktop function in Gaming Mode will
-        relaunch Gaming Mode.
-
-        Set jovian.steam.desktopSession to the name of a desktop session, or "steam-wayland"
-        to keep this behavior.
-      '';
-
-      services.xserver = {
-        enable = true;
-        displayManager.lightdm.enable = false;
-        displayManager.startx.enable = true;
-      };
-
-      jovian.steam.environment = {
-        JOVIAN_DESKTOP_SESSION = if cfg.desktopSession != null then cfg.desktopSession else "steam-wayland";
-      };
-
-      services.greetd = {
-        enable = true;
-        settings = {
-          default_session = let
-          in {
-            user = "jovian-greeter";
-            command = "${pkgs.jovian-greeter}/bin/jovian-greeter ${cfg.user}";
-          };
-        };
-      };
-
-      users.users.jovian-greeter = {
-        isSystemUser = true;
-        group = "jovian-greeter";
-      };
-      users.groups.jovian-greeter = {};
-
-      security.pam.services = {
-        greetd.text = ''
-          auth      requisite     pam_nologin.so
-          auth      sufficient    pam_succeed_if.so user = ${cfg.user} quiet_success
-          auth      required      pam_unix.so
-
-          account   sufficient    pam_unix.so
-
-          password  required      pam_deny.so
-
-          session   optional      pam_keyinit.so revoke
-          session   include       login
-        '';
-      };
-
-      environment = {
-        systemPackages = [ pkgs.jovian-greeter.helper ];
-        pathsToLink = [ "lib/jovian-greeter" ];
-      };
-      security.polkit.extraConfig = ''
-        polkit.addRule(function(action, subject) {
-          if (
-            action.id == "org.freedesktop.policykit.exec" &&
-            action.lookup("program") == "/run/current-system/sw/lib/jovian-greeter/consume-session" &&
-            subject.user == "jovian-greeter"
-          ) {
-            return polkit.Result.YES;
-          }
-        });
-      '';
     })
   ]);
 }

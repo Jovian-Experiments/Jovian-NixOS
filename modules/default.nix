@@ -2,7 +2,7 @@
   imports = [
     ./steamdeck
     ./overlay.nix
-    ./steam.nix
+    ./steam
     ./workarounds.nix
   ];
 }
