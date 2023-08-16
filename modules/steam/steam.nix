@@ -18,6 +18,7 @@ let
     mangohud
     bubblewrap
     systemd
+    networkmanager
 
     jupiter-hw-support
     steamdeck-hw-theme
@@ -48,6 +49,7 @@ let
   sessionPath = makeBinPath [
     mangohud
     systemd
+    networkmanager
     steam
     steam.run
   ];
@@ -145,6 +147,34 @@ let
     trap at_sigterm SIGTERM
 
     set -e
+
+    # OOBE handling.
+    # (See steam-jupiter.sh in steam-jupiter-oobe and steam-jupiter-stable)
+    # On first boot, we need to start whatever steam we have packaged, to
+    # allow the user to connect to the internet. We don't have the luxury
+    # that Steam's OOBE has to be heavy-handed. So instead we'll see if it
+    # looks like the user has never started steam. If it looks that way,
+    # we'll init OOBE, and otherwise undo it.
+    (
+      STEAM_LINKS="$HOME"/.steam
+      STEAM_DIR="$HOME"/.local/share/Steam
+      REGISTRY="$STEAM_LINKS"/registry.vdf
+
+      echo ":: Checking if we're offline, or in OOBE..."
+      if ! test -f "$REGISTRY" || [[ "$(nmcli networking connectivity check)" != full ]]; then
+        echo "   We are!!"
+        echo "   Disabling the updater..."
+        mkdir -pv "$STEAM_DIR"
+        printf '# OOBE Inhibit\nBootStrapperInhibitAll = enable' \
+          > "$STEAM_DIR"/Steam.cfg
+      else
+        echo "   We are not"
+        if grep '^# OOBE Inhibit' "$STEAM_DIR"/Steam.cfg; then
+          echo "   Deleting our own OOBE config."
+          rm -v "$STEAM_DIR"/Steam.cfg
+        fi
+      fi
+    )
 
     steam -steamos3 -steampal -steamdeck -gamepadui "$@" &
     wait
