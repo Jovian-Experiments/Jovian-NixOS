@@ -6,8 +6,8 @@
 , python3
 }:
 let
-  version = "2.10.3";
-  hash = "sha256-cgLnej/mO8ShzUBevGBF+a78VhQhudDvpmdwgRZ4Wm8=";
+  version = "2.10.4";
+  hash = "sha256-uLERXUfAo45kWP4Q4RPiHJaFXlfxmlXA5LoRv/kTItI=";
   npmHash = "sha256-FyrFVHRCJX/PUGilLpiRaQwcDUO9edNWCvN/3ugVejQ=";
 
   src = fetchFromGitHub {
