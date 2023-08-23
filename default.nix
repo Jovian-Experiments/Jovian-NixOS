@@ -17,4 +17,5 @@ let
 in
 {
   inherit (eval) pkgs;
+  documentation = eval.pkgs.jovian-documentation;
 }
