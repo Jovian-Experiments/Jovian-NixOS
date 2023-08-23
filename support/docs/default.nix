@@ -32,7 +32,7 @@ let
       src = documentationPath;
       nativeBuildInputs = [
         cmark-gfm
-        (ruby.withPackages (pkgs: with pkgs; [ nokogiri ]))
+        (ruby.withPackages (pkgs: with pkgs; [ nokogiri rouge ]))
       ];
     } ''
       export LANG="C.UTF-8"

@@ -1,5 +1,6 @@
 require "erb"
 require "nokogiri"
+require "rouge"
 
 class SitePage
   def self.template_location=(value)
@@ -68,6 +69,15 @@ class SitePage
         blockquote.add_class("-#{type}")
         blockquote.prepend_child(%Q{<header>#{type.capitalize()}</header>})
       end
+    end
+
+    # Highlight tagged language codeblocks
+    html.css(%q{pre > code[class*="language-"]}).each do |code|
+      language = code.classes().find { |cls| cls.match(/^language-/) }.sub(/^language-/, "")
+      formatter = Rouge::Formatters::HTML.new()
+      lexer = Rouge::Lexer.find(language)
+      code.inner_html = formatter.format(lexer.lex(code.text()))
+      code.add_class("highlight")
     end
 
     # Since Nokogiri produces a complete document from our fragment, we
