@@ -1,0 +1,118 @@
+// Utility mixins
+// ==============
+
+// Opinionated way to make a *layout* with flexible automatic rows, with
+// consistent spacing between elements.
+// Use this for main *layout* purpose, where you have a wrapper element per
+// "columned" items.
+#flex-flexible-spacing(@size) {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-content: stretch;
+
+  // This is a horrible hack
+  // We shift the whole container left so we can freely add "margins" to
+  // the right of every elements...
+  position: relative;
+  left: -@size;
+
+  body.-debug & > * {
+    outline: 1px solid orange;
+  }
+
+  & > * {
+    // Sane default here
+    flex-grow: 1;
+
+    padding-right: @size;
+    // Since everything is shifted left, don't forget to shift it back
+    // to the right!
+    position: relative;
+    left: @size;
+  }
+}
+
+// Same as the precedent, but less opinionated.
+// This one uses margin as spacing.
+#flex-flexible-margin-between(@size) {
+  display: flex;
+  flex-wrap: wrap;
+
+  // This is a horrible hack
+  // We shift the whole container left so we can freely add "margins" to
+  // the right of every elements...
+  position: relative;
+  margin-left: @size;
+  left: -@size;
+
+  body.-debug & > * {
+    outline: 1px solid green;
+  }
+
+  & > * {
+    margin-right: @size;
+    // Since everything is shifted left, don't forget to shift it back
+    // to the right!
+    position: relative;
+    left: @size;
+  }
+}
+
+// Sets the given @prop to @color modulated by @opacity.
+// Useful to re-use an existing colour variable with a new opacity value.
+#translucent(@prop, @color, @opacity) {
+  @{prop}: rgba(red(@color), green(@color), blue(@color), @opacity);
+}
+
+// Use sparingly.
+#no-select() {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+// Uses a pseudo-element @pseudo (by default :before) to replace the
+// text content (can be empty) with an image.
+//
+// The @image-rules argument is used like this:
+//
+// #text-replacement(
+//     @image-rules {
+//         background-image: ... ; // or...
+//         #svg-some-mixin();
+//     },
+// )
+
+#text-replacement(
+  @pseudo: before,
+  @width: auto,
+  @height: auto,
+  @image-rules: {},
+) {
+  position: relative;
+  text-indent: -9999px;
+  overflow: hidden;
+  width: @width;
+  height: @height;
+
+  &:@{pseudo} {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    display: inline-block;
+    width: @width;
+    height: @height;
+    @image-rules();
+  }
+}

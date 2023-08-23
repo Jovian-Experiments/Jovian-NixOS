@@ -1,0 +1,50 @@
+@import "./assets/svg";
+@import "./common/index";
+@import "./nav";
+@import "./header";
+@import "./footer";
+@import "./base";
+
+.responsive-table {
+	overflow-x: auto;
+}
+
+.for-github {
+	&.-unneeded {
+		display: none;
+	}
+}
+
+//
+// Homepage stuff
+//
+
+.path--index-html .generic-layout > h1 {
+	display: none;
+}
+
+.homepage-title {
+	display: none;
+}
+
+.homepage-hero {
+	background-color: #theme.color[gray-lighter];
+	padding: @gutter;
+	margin-top: @gutter;
+
+	h2 {
+		color: inherit;
+		margin-top: 0;
+		margin-bottom: @gutter;
+	}
+
+	:last-child {
+		margin-bottom: 0;
+	}
+}
+
+// Optimizes usage of the data-uri
+body > footer,
+body > header {
+	background-image: data-uri("assets/jupiter.jpeg");
+}

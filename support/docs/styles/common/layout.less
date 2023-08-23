@@ -1,0 +1,291 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  // Assuming a browser default font size of 16px,
+  // this is equivalent to setting the document size
+  // in pixel-width to what the numerator is.
+  // font-size: (@pixel-equivalent-font-size)px;
+  font-size: (@pixel-equivalent-font-size/16) * 100%;
+  // Doing it like this ensures the whole document scales up
+  // according to the font size preferences of the user agent (the
+  // browser).
+
+  // Purposefully without unit.
+  line-height: @line-height;
+}
+
+body {
+  font-size: 1rem;
+  font-family: #theme.font[primary];
+  font-weight: #theme.font[primary-weight];
+  color: #theme.color[foreground];
+  background-color: #theme.color[background];
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  // For narrow designs, the body handles the gutters.
+  #screen-xs-max({
+    padding-left: @gutter;
+    padding-right: @gutter;
+  });
+}
+
+body > main {
+  flex-grow: 1;
+}
+
+a {
+  text-decoration: none;
+  border-bottom: 1px solid;
+  color: #theme.color[blue];
+}
+
+ul {
+  padding: 0;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: @gutter;
+  margin-left: @gutter;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: @gutter;
+}
+
+thead th {
+  text-align: left;
+}
+
+hr {
+  margin-top: @gutter;
+  margin-bottom: @gutter;
+  border-color: #theme.color[gray];
+}
+
+// Apply the theme's heading rules
+h1 { #theme.h1 }
+h2 { #theme.h2 }
+h3 { #theme.h3 }
+h4 { #theme.h4 }
+h5 { #theme.h5 }
+h6 { #theme.h6 }
+
+b, strong {
+  font-weight: bold;
+}
+
+section {
+    margin-top: 1.5em;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: @gutter;
+}
+
+// Some weirdness with `tt` that is not happening with `code`...
+tt {
+  font-size: 14*@unit;
+  overflow-wrap: break-word;
+}
+
+dt, dd {
+  & > *:first-child {
+    margin-top: 0;
+  }
+  & > *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+pre, code {
+  font-family: #theme.font[monospace];
+}
+
+code, pre {
+  //color: #theme.color[orange-dark];
+  background: #theme.color[gray-lighter];
+  display: inline-block;
+  padding: 0 0.5*@gutter;
+  border: 1px solid #theme.color[gray-light];
+  border-radius: 0.5*@gutter;
+  line-height: @line-height - (0.2); // border should not make line bigger
+}
+
+// Some page generators use that DOM layout.
+pre code {
+	background: initial;
+	display: initial;
+	padding: initial;
+	border: 0;
+	border-radius: 0;
+	line-height: initial;
+}
+
+pre {
+	display: block;
+	padding-top: @gutter/2;
+	padding-bottom: @gutter/2;
+}
+
+// Utility classes
+// ===============
+
+// Inline (floating) images
+// (While it can be seen as unsemantic, it is logically semantic in
+// that it declares the image is inline with the text; not the manner
+// in which it is made inline.)
+img.inline {
+    float: right;
+    margin-left: @gutter;
+    margin-bottom: @gutter;
+}
+
+// Basic layout components
+// =======================
+
+// For pages that don't handle the container layouts themselves.
+// All pages with "flair" will not be in a generic layout, and sections will
+// handle being containers (and be graphically enhanced).
+// (generic-layout is wrapped when a .tt page doesn't define handlesLayout)
+.generic-layout {
+  #container();
+
+  &.lead, & > .lead {
+    font-size: 1.25em;
+    font-weight: bold;
+    color: #theme.color[gray-dark];
+  }
+}
+
+// "Bordered" monospaced text.
+.terminal-console, .file-listing {
+  border-radius: #theme.common[radius];
+  padding: @gutter;
+  overflow: auto;
+}
+
+// The console has a dark background
+.terminal-console {
+  color: #theme.terminal[foreground];
+  background-color: #theme.terminal[background];
+
+  .shell-prompt {
+    font-weight: bold;
+  }
+}
+
+// But the file listing is light!
+.file-listing {
+  background: #theme.file-listing[background];
+  color: #theme.file-listing[foreground];
+  box-shadow: #theme.common[internal-shadow];
+}
+
+// Unsemantic layouts
+// ==================
+// 
+// Used only for making "MVP" pages. Once *actually* designed, they should only
+// use semantic class names, with appropriate styles.
+
+// The "columnar layout" can be of the "-longform" variant.
+// The long form does not split on columns on the "sm" viewport width.
+// This is better for long form content laid-out in two columns.
+.columnar-layout {
+  &.-longform {
+    &.-two {
+      @_cols: 2;
+      #columns(@_cols, @sm: 1);
+      & > .-twice {
+        #screen-md-min({
+          width: 100%/@_cols*2;
+        });
+      }
+    }
+    &.-three {
+      @_cols: 3;
+      #columns(@_cols, @sm: 1);
+      & > .-twice {
+        #screen-md-min({
+          width: 100%/@_cols*2;
+        });
+      }
+    }
+    &.-four {
+      @_cols: 4;
+      #columns(@_cols, @sm: 1);
+      & > .-twice {
+        #screen-md-min({
+          width: 100%/@_cols*2;
+        });
+      }
+    }
+  }
+  &:not(.-longform) {
+    &.-two {
+      @_cols: 2;
+      #columns(@_cols);
+      & > .-twice {
+        #screen-sm-min({
+          width: 100%/@_cols*2;
+        });
+      }
+    }
+    &.-three {
+      @_cols: 3;
+      #columns(@_cols);
+      & > .-twice {
+        #screen-sm-min({
+          width: 100%/@_cols*2;
+        });
+      }
+    }
+    &.-four {
+      @_cols: 4;
+      #columns(@_cols);
+      & > .-twice {
+        #screen-sm-min({
+          width: 100%/@_cols*2;
+        });
+      }
+    }
+  }
+}
+
+.well {
+  background: #theme.file-listing[background];
+  color: #theme.file-listing[foreground];
+
+  &:extend(.notice-box all);
+}
+
+.label {
+  pointer-events: none;
+  #no-select();
+
+  font-family: #theme.font[secondary];
+  font-weight: bold;
+  font-size: 0.8em;
+  vertical-align: text-bottom;
+  border-radius: 0.3em;
+  padding: 0.1em 0.3em;
+
+  &.-info {
+    background-color: #theme.color[blue];
+    color: #theme.color[white];
+  }
+  &.-warn {
+    background-color: #theme.color[orange];
+    color: #theme.color[white];
+  }
+  &.-success {
+    background-color: #theme.color[green];
+    color: #theme.color[white];
+  }
+}

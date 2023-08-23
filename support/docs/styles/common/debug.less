@@ -1,0 +1,16 @@
+// Adds site-width rulers when in debug mode.
+body.-debug {
+  &::before {
+    pointer-events: none;
+    content: "";
+    display: block;
+    z-index: 999999;
+    outline: 1px dashed yellow;
+    #container();
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0
+  }
+}

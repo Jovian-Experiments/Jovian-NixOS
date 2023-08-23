@@ -1,0 +1,161 @@
+// Describe the theme, mainly as variables in a Map.
+// Some namespaces will have variants defined, they have to be
+// configured in the `configuration.less` file.
+#theme() {
+  .layout() {
+  }
+  // The variant will be chosen in the configuration. The variant's
+  // keys will be merged with `#theme.font`.
+  .font() {
+    .variant-A() {
+      monospace: "Fira Mono", monospace;
+      primary: "Roboto", sans-serif;
+      primary-weight: 400;
+      secondary: "Roboto", sans-serif;
+      secondary-weight: 700;
+    }
+  }
+
+  // Common rules shared across elements.
+  .common() {
+    box-shadow: 0 3*@unit 4*@unit 5*@unit rgba(0, 0, 0, 0.2);
+    internal-shadow: 0 0 @gutter 0 rgba(0, 0, 0, 0.1) inset;
+    radius: 20 * @unit;
+  }
+
+  // Palette of colours
+  // Prefer defining another utility scope using the palette instead
+  // of directly using these named colours.
+  .color() {
+    // Implementation detail: color properties that refer to
+    // themselves in this Map (#theme.color()) must be set through
+    // a variable, or else this causes an infinite recursion.
+    @white: #ffffff;
+    @black: #000000;
+
+    white: @white;
+    black: @black;
+    not-black: #3a3a3a;
+    blue: #0A3BCD;
+    green: #0ACD54;
+    yellow: #fffeca;
+    orange-dark: #ff8657;
+    orange: #ffab0d;
+    orange-light: #fff5e1;
+
+    gray: #aaaaaa;
+    gray-dark: #6a6a6a;
+    gray-light: #d8d8d8;
+    gray-lighter: #f4f4f4;
+
+    foreground: @black;
+    background: @white;
+  }
+
+  // Components theming
+  // ==================
+
+  .navbar() {
+    height: 87*@unit;
+
+    .variant-darker() {
+      variant: darker;
+      background: #theme.color[black];
+      foreground: #theme.color[white];
+    }
+
+    .variant-dark() {
+      variant: dark;
+      background: #theme.color[gray-dark];
+      foreground: #theme.color[white];
+    }
+
+    .variant-light() {
+      variant: light;
+      background: #theme.color[background];
+      foreground: #theme.color[foreground];
+    }
+  }
+
+  .footer() {
+    foreground: #theme.color[black];
+    background: #theme.color[gray-lighter];
+  }
+
+  .terminal() {
+    foreground: #theme.color[white];
+    background: #theme.color[not-black];
+  }
+
+  .file-listing() {
+    foreground: #theme.color[foreground];
+    background: #theme.color[gray-lighter];
+  }
+
+  .terminal() {
+    @background: #121314;
+    @foreground: #cccccc;
+    @color-0 : #000000;
+    @color-1 : #dd3c69;
+    @color-2 : #4ebf22;
+    @color-3 : #ddaf3c;
+    @color-4 : #26b0d7;
+    @color-5 : #b954e1;
+    @color-6 : #54e1b9;
+    @color-7 : #d9d9d9;
+    @color-8 : #4d4d4d;
+    @color-9 : #dd3c69;
+    @color-10 : #4ebf22;
+    @color-11 : #ddaf3c;
+    @color-12 : #26b0d7;
+    @color-13 : #b954e1;
+    @color-14 : #54e1b9;
+    @color-15 : #ffffff;
+  }
+}
+
+// This part of the theme adds mixins allowing another part of the
+// design to refer to those settings in a different order, or without
+// actually being `h[1-6]` elements.
+#theme() {
+  .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-weight: #theme.font[secondary-weight];
+    font-family: #theme.font[secondary];
+    line-height: 110%;
+    margin-bottom: @gutter;
+    &:not(:first-child) {
+      margin-top: @gutter;
+    }
+    // To reduce risks of orphaned words, you can wrap a pair of
+    // words with a `<span>` in a title so it prefers to stick
+    // together rather than be split.
+    #screen-sm-min({
+      & > span {
+        white-space: nowrap;
+      }
+    });
+  }
+
+  .h1 {
+    font-size: 250%;
+    margin-bottom: @gutter;
+    color: #theme.color[gray-dark];
+  }
+  .h2 {
+    font-size: 200%;
+    margin-bottom: 10*@unit;
+    color: #theme.color[gray-dark];
+  }
+  .h3 {
+    font-size: 150%;
+    color: #theme.color[gray-dark];
+  }
+  .h4 {
+    font-size: 140%;
+    color: #theme.color[gray-dark];
+  }
+  .h5 {
+    font-size: 130%;
+    color: #theme.color[gray-dark];
+  }
+}
