@@ -54,6 +54,22 @@ class SitePage
       anchor["href"] = anchor["href"].sub(%r{\.md$}, ".html")
     end
 
+    # Convert GFM-style admonitions
+    html.css("blockquote > p:first-child").each do |para|
+      if para.inner_html().match(/^(\[![A-Z]+\])/) then
+        admonition_marker = $1
+        para.inner_html =
+          para.inner_html()
+            .sub(admonition_marker, "")
+            .sub(/^\s*<br>/, "").strip
+        type = admonition_marker.gsub(/[^A-Z]/, "").downcase
+        blockquote = para.parent
+        blockquote.add_class("admonition-box")
+        blockquote.add_class("-#{type}")
+        blockquote.prepend_child(%Q{<header>#{type.capitalize()}</header>})
+      end
+    end
+
     # Since Nokogiri produces a complete document from our fragment, we
     # have to pick only what's in the body; so strip the body added tags and higher-up tags.
     html
