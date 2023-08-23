@@ -15,6 +15,30 @@
 	}
 }
 
+.admonition-box {
+	#_admonition(@color) {
+		header {
+			color: @color;
+		}
+		#translucent(border-left-color, @color, 0.7);
+	};
+	#_admonition(#999);
+
+	header {
+		font-weight: bold;
+	}
+
+	&.-important {
+		#_admonition(rgb(130, 80, 223));
+	}
+	&.-note {
+		#_admonition(rgb(9, 105, 218));
+	}
+	&.-warning {
+		#_admonition(rgb(154, 103, 0));
+	}
+}
+
 //
 // Homepage stuff
 //
