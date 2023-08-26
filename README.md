@@ -79,6 +79,8 @@ Truthfully, no channel is *supported*, but the older the stable release was cut,
 
 Thus, it is preferrable to use `nixos-unstable`. The latest update *should* work fine, and when it doesn't, it'll be handled soon enough.
 
+[FAQ issue](https://github.com/Jovian-Experiments/Jovian-NixOS/issues/151)
+
 * * *
 
 Importing the modules in your configuration
