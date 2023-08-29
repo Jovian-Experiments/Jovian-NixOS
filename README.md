@@ -1,10 +1,30 @@
-<div align="center"><h1>Jovian NixOS</h1></div>
-<div align="center"><strong><em>NixOS on the Steam Deck</em></strong></div>
+<!--
 
-****
+NOTE: This page also serves as the index page of the website!!
+
+Its docs-folder-relative links will be rewritten accordingly.
+
+HTML may be used to hide elements from the main website, be mindful about it.
+
+-->
+<div class="for-github -title homepage-title">
+    <div align="center"><h1>Jovian NixOS</h1></div>
+    <div align="center"><strong><em>NixOS on the Steam Deck</em></strong></div>
+</div>
+<div class="for-github -unneeded">
+<hr />
+</div>
+
+<div class="homepage-hero">
+
+What is Jovian NixOS?
+---------------------
 
 A set of packages and configurations for running NixOS on the [Steam Deck](https://www.steamdeck.com).
-This repo is also useful for obtaining a Deck-like experience on other `x86_64` devices.
+
+This repo is also useful for obtaining a Steam Deck-like experience on other `x86_64` devices.
+
+</div>
 
 Installation
 ------------
