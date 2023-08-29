@@ -41,6 +41,14 @@ let
       (PS4=" $ "; set -x
       cp --no-preserve=mode -r $src src
       chmod -R +w src
+
+      ruby ${./converter}/options.rb \
+        ${./template} ${optionsJSONFile} src/options.md
+
+      ruby ${./converter}/options.rb \
+        --namespace jovian.steam --level 3 \
+        ${./template} ${optionsJSONFile} src/steam.md
+
       ruby ${./converter}/main.rb ${./template} src/ $out/
       cp -r ${styles} $out/styles
       )
