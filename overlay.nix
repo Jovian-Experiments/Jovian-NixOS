@@ -48,6 +48,7 @@ rec {
   jovian-greeter = super.callPackage ./pkgs/jovian-greeter { };
 
   jovian-documentation = final.callPackage ./support/docs {
+    pagefind = final.callPackage ./pkgs/pagefind { };
     documentationPath = final.callPackage (
       { runCommand
       }:
