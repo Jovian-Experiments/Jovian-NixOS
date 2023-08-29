@@ -4,6 +4,7 @@
 , runCommand
 , writeText
 , documentationPath ? ../../docs
+, pagefind
 }:
 
 let
@@ -33,6 +34,7 @@ let
       nativeBuildInputs = [
         cmark-gfm
         (ruby.withPackages (pkgs: with pkgs; [ nokogiri rouge ]))
+        pagefind
       ];
     } ''
       export LANG="C.UTF-8"
@@ -51,6 +53,33 @@ let
 
       ruby ${./converter}/main.rb ${./template} src/ $out/
       cp -r ${styles} $out/styles
+      )
+
+      # Pagefind indexing
+      (PS4=" $ "; set -x
+      cd $out
+
+      OPT_OUT=(
+        sitemap
+        search
+      )
+
+      for p in "''${OPT_OUT[@]}"; do
+        mv -v $p.html $p.xxx
+      done
+
+      # https://pagefind.app/docs/hosting/#hosting-on-github-pages
+      pagefind \
+        --verbose \
+        --bundle-dir !pagefind \
+        --root-selector 'body > main' \
+        --keep-index-url \
+        --source .
+
+      for p in "''${OPT_OUT[@]}"; do
+        mv -v $p.xxx $p.html
+      done
+
       )
     ''
 
