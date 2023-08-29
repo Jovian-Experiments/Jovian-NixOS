@@ -53,6 +53,7 @@ in
       enableVendorRadv = lib.mkOption {
         type = types.bool;
         default = cfg.enable;
+        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
         description = ''
           Whether to enable the vendor branch of Mesa RADV.
         '';
@@ -60,6 +61,7 @@ in
       enableMesaPatches = lib.mkOption {
         type = types.bool;
         default = cfg.enable;
+        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
         description = ''
           Whether to apply the Mesa patches if available.
 

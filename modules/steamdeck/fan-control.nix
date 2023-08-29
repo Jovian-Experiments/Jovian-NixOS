@@ -23,6 +23,7 @@ in
         '';
         type = types.bool;
         default = cfg.enable;
+        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
       };
     };
   };

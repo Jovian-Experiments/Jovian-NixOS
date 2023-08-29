@@ -17,6 +17,7 @@ in
     jovian.devices.steamdeck = {
       enableDefaultSysctlConfig = mkOption {
         default = cfg.enable;
+        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
         type = types.bool;
         description = ''
           Whether to enable stock sysctl configs.
@@ -24,6 +25,7 @@ in
       };
       enableDefaultCmdlineConfig = mkOption {
         default = cfg.enable;
+        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
         type = types.bool;
         description = ''
           Whether to enable stock kernel command line flags.
@@ -31,6 +33,7 @@ in
       };
       enableDefaultStage1Modules = mkOption {
         default = cfg.enable;
+        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
         type = types.bool;
         description = ''
           Whether to enable essential kernel modules in initrd.
@@ -38,6 +41,7 @@ in
       };
       enableProductSerialAccess = mkOption {
         default = cfg.enable;
+        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
         type = types.bool;
         description = lib.mdDoc ''
           > Loosen the product_serial node to `440 / root:wheel`, rather than `400 / root:root`

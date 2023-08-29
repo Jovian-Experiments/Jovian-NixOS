@@ -18,6 +18,7 @@ in
       enableFwupdBiosUpdates = mkOption {
         type = types.bool;
         default = cfg.enable;
+        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
         description = ''
           Whether to use fwupd to update the BIOS.
         '';
