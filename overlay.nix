@@ -61,6 +61,7 @@ rec {
         rm -vf src/README.md
         cp -v ${./CONTRIBUTING.md} src/contributing.md
         printf '# Home\n\n' | cat - ${./README.md} > src/index.md
+        cp -v ${./support/docs/search.md} src/search.md
         mv src $out
         )
       ''

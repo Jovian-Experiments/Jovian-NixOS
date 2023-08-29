@@ -1,0 +1,125 @@
+.pagefind-ui__result-thumb {
+	display: none;
+}
+
+.pagefind-ui__result-excerpt {
+	margin: 0;
+}
+
+#search .pagefind-ui__results {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#search .pagefind-ui__message {
+	font-style: italic;
+	padding-top: @gutter/2;
+	color: #theme.color[gray-dark];
+}
+
+#search mark {
+	background-color: #theme.color[yellow];
+}
+
+#search form {
+	width: 100%;
+	position: relative;
+	@input-height: 2 * @gutter;
+	input {
+		display: block;
+		width: 100%;
+		height: @input-height;
+		border-radius: 2*@unit;
+		border: 1*@unit solid #theme.color[gray];
+		padding: 0 @gutter/2;
+		padding-top: 2*@unit;
+
+	}
+	button {
+		#text-replacement(
+			@image-rules: {
+				display: block;
+				padding: 0;
+				text-indent: 0;
+				content: "×";
+				width:  @input-height;
+				height: @input-height;
+				padding-right: 4*@unit;
+				text-align: center;
+			},
+		);
+		background: unset;
+		border: unset;
+		margin: 0;
+		padding: 0;
+		line-height: @input-height;
+		display: block;
+		position: absolute;
+		top: 2*@unit;
+		right: 2*@unit;
+		height: @input-height - 4*@unit;
+		width: @input-height - 4*@unit;
+		color: #theme.color[gray];
+		&:focus, &:active {
+			border-radius: 2*@unit;
+			outline: 2*@unit solid lighten(#theme.color[blue], 20%);
+		}
+		&:focus, &:active, &:hover {
+			cursor: pointer;
+			color: #theme.color[black];
+		}
+	}
+}
+
+#search .pagefind-ui__result-inner {
+	@color: darken(#theme.color[gray-lighter], 5%);
+
+	margin-bottom: @gutter;
+	padding-bottom: @gutter/2;
+
+	border-left: @gutter/2 solid @color;
+
+	h2, h3, h4, h5, h6 {
+		&, & a {
+			font-size: inherit;
+			line-height: inherit;
+			margin: inherit;
+			color: inherit;
+			font-weight: bold;
+			border-bottom: none;
+		}
+	}
+
+	& > * {
+		padding-left: @gutter;
+		padding-right: @gutter;
+	}
+
+	& > :first-child {
+		background: @color;
+		margin-bottom: @gutter/2;
+		padding-left: 0;
+		a {
+			display: block;
+			padding-left: @gutter;
+			border: 0;
+		}
+
+		a::before {
+			display:inline-block;
+			content: "⇒";
+			position: relative;
+			text-align: right;
+			width: 1em;
+			padding-right: 1ex;
+			margin-left: -1 * (1em);
+			opacity: 0;
+		}
+		a:hover, a:active, a:focus {
+			&::before {
+				opacity: 1;
+			}
+		}
+	}
+}
