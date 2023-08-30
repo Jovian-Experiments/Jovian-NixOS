@@ -51,7 +51,9 @@ let
         --namespace jovian.steam --level 3 \
         ${./template} ${optionsJSONFile} src/steam.md
 
-      ruby ${./converter}/main.rb ${./template} src/ $out/
+      ruby ${./converter}/main.rb \
+        --fixups ${./fixups.rb} \
+        ${./template} src/ $out/
       cp -r ${styles} $out/styles
       )
 
