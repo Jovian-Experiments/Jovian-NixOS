@@ -34,6 +34,29 @@ There are no strict guidelines.
  - Test your changes, and tell us what you did do, and what you did not do.
 
 
+“AI”-assisted changes
+---------------------
+
+> [!NOTE]
+> Using pre-existing **boilerplate**, **snippets**, or **syntax suggestions** from your IDE are not considered as “AI”-assisted changes.
+
+Contributions written largely with help of LLMs (*Large Language Models*), other “AI” (or non-“AI”), or similar systems are not welcome.
+Such systems of concern are generally using statistical models built on “knowledge” acquired for the purpose without express consent, and with disregard of the authorship and attribution.
+
+This includes, but is not limited to:
+
+ - Using them to generate comments
+ - Using them to generate documentation
+ - Using them to generate code
+
+Contributions should be largely authored by the people in the commit information, e.g. the `Committer,` `Author`, `Signed-off-by`, and `Co-authored-by` fields, exclusively.
+
+If you are unsure, or you had help from automated “AI”-generation in *part* of your contribution, please tell us when contributing.
+It does not mean the contribution will be rejected outright.
+We will evaluate on a case-by-case basis.
+We value honesty, and take it into consideration.
+
+
 Other resources
 ---------------
 
