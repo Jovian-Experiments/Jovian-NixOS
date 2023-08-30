@@ -4,14 +4,30 @@ require_relative "lib"
 
 require "fileutils"
 
-if ARGV.length < 3 then
-  $stderr.puts "Usage: main.rb <template_dir> <source dir> <output dir>"
-  exit 1
-end
+begin
+  unused = []
+  while opt = ARGV.shift
+    case opt
+    when /^--fixups/
+      # Load a fixups ruby file
+      load(ARGV.shift)
+    when /^-/
+      $stderr.puts "Unexepected parameter: #{opt}"
+      exit 2
+    else
+      unused << opt
+    end
+  end
 
-$template_dir = ARGV.shift
-$source = ARGV.shift
-$output = ARGV.shift
+  if unused.length < 3 then
+    $stderr.puts "Usage: main.rb <template_dir> <options.json> <page.md|page.html>"
+    exit 1
+  end
+
+  $template_dir = unused.shift
+  $source = unused.shift
+  $output = unused.shift
+end
 
 SitePage.template_location = $template_dir
 
