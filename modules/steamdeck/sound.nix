@@ -15,7 +15,11 @@ in
     jovian.devices.steamdeck = {
       enableSoundSupport = lib.mkOption {
         default = cfg.enable;
+        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
         type = lib.types.bool;
+        description = ''
+          Whether to enable sound support.
+        '';
       };
     };
   };

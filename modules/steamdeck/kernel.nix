@@ -17,6 +17,7 @@ in
       enableKernelPatches = mkOption {
         type = types.bool;
         default = cfg.enable;
+        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
         description = ''
           Whether to apply kernel patches if available.
         '';

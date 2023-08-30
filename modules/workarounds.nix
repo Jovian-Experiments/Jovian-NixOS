@@ -9,6 +9,9 @@ in
         ignoreMissingKernelModules = lib.mkOption {
           default = true;
           type = lib.types.bool;
+          description = ''
+            Whether to ignore missing kernel modules.
+          '';
         };
       };
     };

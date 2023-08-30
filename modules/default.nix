@@ -1,8 +1,8 @@
 {
   imports = [
-    ./steamdeck
+    ./steamdeck/default.nix
     ./overlay.nix
-    ./steam
+    ./steam/default.nix
     ./workarounds.nix
   ];
 }

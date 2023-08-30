@@ -16,6 +16,7 @@ in
       enableControllerUdevRules = mkOption {
         type = types.bool;
         default = cfg.enable;
+        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
         description = ''
             Enables udev rules to make the controller controllable by users.
 

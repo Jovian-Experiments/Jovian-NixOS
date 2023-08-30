@@ -12,11 +12,19 @@ in
     jovian.devices.steamdeck = {
       enableEarlyModesetting = lib.mkOption {
         default = cfg.enable;
+        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
         type = lib.types.bool;
+        description = ''
+          Whether to enable early kernel modesetting.
+        '';
       };
       enableXorgRotation = lib.mkOption {
         default = cfg.enable;
+        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
         type = lib.types.bool;
+        description = ''
+          Whether to rotate the display panel in X11.
+        '';
       };
     };
   };

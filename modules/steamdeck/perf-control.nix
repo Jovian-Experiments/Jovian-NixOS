@@ -16,6 +16,7 @@ in
       enablePerfControlUdevRules = mkOption {
         type = types.bool;
         default = cfg.enable;
+        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
         description = ''
           Whether to make performance-related device attributes controllable by users.
 
