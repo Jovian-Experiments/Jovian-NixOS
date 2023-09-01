@@ -421,9 +421,6 @@ in
         # We have the Mesa integration for the fifo-based dynamic fps-limiter
         STEAM_GAMESCOPE_DYNAMIC_FPSLIMITER = "1";
 
-        # We have gamma/degamma exponent support
-        STEAM_GAMESCOPE_COLOR_TOYS = "1";
-
         # We have NIS support
         STEAM_GAMESCOPE_NIS_SUPPORTED = "1";
 
@@ -444,6 +441,7 @@ in
 
         # Color management support
         STEAM_GAMESCOPE_COLOR_MANAGED = "1";
+        STEAM_GAMESCOPE_VIRTUAL_WHITE = "1";
 
         # Enable HDR support in steam
         STEAM_GAMESCOPE_HDR_SUPPORTED = "1";
