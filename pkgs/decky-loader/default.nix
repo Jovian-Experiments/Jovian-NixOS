@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nodePackages
 , nodejs
 , python3
@@ -94,6 +95,19 @@ let
     pname = "decky-loader";
     inherit version src;
 
+    patches = [
+      # Patches submitted upstream: https://github.com/SteamDeckHomebrew/decky-loader/pull/528
+      # FIXME: remove when merged
+      (fetchpatch {
+        url = "https://github.com/SteamDeckHomebrew/decky-loader/commit/e3a8de2490fea942edad4c0a8971a3958cc01d9b.patch";
+        hash = "sha256-0klVKBvywCXfak8rdB3k4sK/eN/fcY42C29+J1W4pOM=";
+      })
+      (fetchpatch {
+        url = "https://github.com/SteamDeckHomebrew/decky-loader/commit/89f37f4f547ff0d78783899df80a046bc864c48e.patch";
+        hash = "sha256-9+shHrOJntHrqFbdsuBMD5GCQSx7DH3L1FLJihW9xCg=";
+      })
+    ];
+
     buildInputs = [ pythonEnv ];
 
     dontConfigure = true;
@@ -112,6 +126,7 @@ let
       cat << EOF >$out/bin/decky-loader
       #!/bin/sh
       export PATH=${pythonEnv}/bin:$PATH
+      export DECKY_VERSION=v${version}
       exec ${pythonEnv}/bin/python3 $out/lib/decky-loader/main.py
       EOF
       chmod +x $out/bin/decky-loader
