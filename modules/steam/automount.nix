@@ -1,7 +1,7 @@
 {lib, config, pkgs, ...}: let
   inherit (lib) mkIf mkMerge mkOption types mdDoc mkEnableOption;
   inherit (lib.strings) concatMapStringsSep;
-  inherit (pkgs) systemd util-linux procps steam writeShellScriptBin ;
+  inherit (pkgs) systemd util-linux procps steam bash writeShellScriptBin ;
   cfg = config.jovian.steam;
   mount-script = writeShellScriptBin "mount-script" ''
 #Steam Deck Mount External Drive by scawp
@@ -33,19 +33,44 @@
             url=$(urlencode "''${library}")
             if ${procps}/bin/pgrep -x "steam" > /dev/null; then
               ${systemd}/bin/systemd-run -M 1000@ --user --collect --wait \
-              sh -c "${steam}/bin/steam steam://addlibraryfolder/''${url}"
+              ${bash}/bin/sh -c "${steam}/bin/steam steam://addlibraryfolder/''${url}"
             fi
           else
             echo "no steam library on drive"
           fi
         fi
      }
+     umount_drive()
+     {
+        label="$(${util-linux}/bin/lsblk -noLABEL $1)"
+        if [ -z "$label" ]; then
+          label="$(${util-linux}/bin/lsblk -noUUID $1)"
+        fi
+        mount_point="$(${util-linux}/bin/lsblk -noMOUNTPOINT $1)"
+        if [ -z "$mount_point" ]; then
+          echo "Failed to mount "$1" at /mnt/$label"
+        else
+          if [ -d "$mount_point/SteamLibrary" ]; then
+            library="$mount_point/SteamLibrary"
+            url=$(urlencode "''${library}")
+            if ${procps}/bin/pgrep -x "steam" > /dev/null; then
+              ${systemd}/bin/systemd-run -M 1000@ --user --collect --wait \
+                ${bash}/bin/sh -c "${steam}/bin/steam steam://removelibraryfolder/''${url}"
+            fi
+            sleep 5
+            ${util-linux}/bin/umount $mount_point
+          else
+            echo "no steam library on drive"
+          fi
+        fi
+     }
      if [ "$1" = "remove" ]; then
+        umount_drive "/dev/$2"
         exit 0
      else
         mount_drive "/dev/$2"
+        exit 0
      fi
-     exit 0
   '';
 in {
   options.jovian.steam.automount = {
