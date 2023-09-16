@@ -3,6 +3,7 @@
 , fetchFromGitLab
 , fetchFromGitHub
 , fetchurl
+, fetchpatch
 , substituteAll
 , coreutils
 , curl
@@ -30,6 +31,7 @@
 , glfw
 , xorg
 , gamescopeSupport ? true # build mangoapp and mangohudctl
+, lowerBitnessSupport ? stdenv.hostPlatform.is64bit # Support 32 bit on 64bit
 , nix-update-script
 }:
 
@@ -122,13 +124,20 @@ stdenv.mkDerivation (finalAttrs: {
       libdbus = dbus.lib;
       inherit hwdata;
     })
+
+    # Pull gcc-13 build fix for nissing <cstdint>
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/flightlessmango/MangoHud/commit/3f8f036ee8773ae1af23dd0848b6ab487b5ac7de.patch";
+      hash = "sha256-qbNywAXAStGiVZ1LA5qZyNp4n28iNUuE4N69zXv2gmM=";
+    })
   ];
 
   postPatch = ''
     substituteInPlace bin/mangohud.in \
       --subst-var-by libraryPath ${lib.makeSearchPath "lib/mangohud" ([
         (placeholder "out")
-      ] ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
+      ] ++ lib.optionals lowerBitnessSupport [
         mangohud32
       ])} \
       --subst-var-by dataDir ${placeholder "out"}/share
@@ -184,7 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Support 32bit Vulkan applications by linking in 32bit Vulkan layers
   # This is needed for the same reason the 32bit preload workaround is needed.
-  postInstall = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
+  postInstall = lib.optionalString lowerBitnessSupport ''
     ln -s ${mangohud32}/share/vulkan/implicit_layer.d/MangoHud.x86.json \
       "$out/share/vulkan/implicit_layer.d"
 
@@ -194,16 +203,26 @@ stdenv.mkDerivation (finalAttrs: {
     ''}
   '';
 
-  postFixup = ''
+  postFixup = let
+    archMap = {
+      "x86_64-linux" = "x86_64";
+      "i686-linux" = "x86";
+    };
+    layerPlatform = archMap."${stdenv.hostPlatform.system}" or null;
+    # We need to give the different layers separate names or else the loader
+    # might try the 32-bit one first, fail and not attempt to load the 64-bit
+    # layer under the same name.
+  in lib.optionalString (layerPlatform != null) ''
+    substituteInPlace $out/share/vulkan/implicit_layer.d/MangoHud.${layerPlatform}.json \
+      --replace "VK_LAYER_MANGOHUD_overlay" "VK_LAYER_MANGOHUD_overlay_${toString stdenv.hostPlatform.parsed.cpu.bits}"
+  '' + ''
     # Add OpenGL driver path to RUNPATH to support NVIDIA cards
     addOpenGLRunpath "$out/lib/mangohud/libMangoHud.so"
-    ${lib.optionalString gamescopeSupport ''
-      addOpenGLRunpath "$out/bin/mangoapp"
-    ''}
-    ${lib.optionalString finalAttrs.doCheck ''
-      # libcmocka.so is only used for tests
-      rm "$out/lib/libcmocka.so"
-    ''}
+  '' + lib.optionalString gamescopeSupport ''
+    addOpenGLRunpath "$out/bin/mangoapp"
+  '' + lib.optionalString finalAttrs.doCheck ''
+    # libcmocka.so is only used for tests
+    rm "$out/lib/libcmocka.so"
   '';
 
   passthru.updateScript = nix-update-script { };
