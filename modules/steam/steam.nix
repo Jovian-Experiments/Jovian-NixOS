@@ -415,6 +415,9 @@ in
         # Let steam know it can unmount drives without superuser privileges
         STEAM_ALLOW_DRIVE_UNMOUNT = "1";
 
+        # Allow formatting external drives
+        STEAM_ALLOW_DRIVE_ADOPT = "1";
+
         # Enable support for xwayland isolation per-game in Steam
         STEAM_MULTIPLE_XWAYLANDS = "1";
 

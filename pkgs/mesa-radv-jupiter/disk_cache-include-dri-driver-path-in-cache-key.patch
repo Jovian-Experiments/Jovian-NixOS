@@ -53,9 +53,9 @@ index cd44e49bfb4..f17115515a5 100644
 --- a/src/util/meson.build
 +++ b/src/util/meson.build
 @@ -268,7 +268,12 @@ _libmesa_util = static_library(
-   include_directories : [inc_include, inc_src, inc_mapi, inc_mesa, inc_gallium, inc_gallium_aux],
+   include_directories : [inc_util, include_directories('format')],
    dependencies : deps_for_libmesa_util,
-   link_with: [libmesa_format, libmesa_util_sse41],
+   link_with: [libmesa_util_sse41],
 -  c_args : [c_msvc_compat_args],
 +  c_args : [
 +    c_msvc_compat_args,

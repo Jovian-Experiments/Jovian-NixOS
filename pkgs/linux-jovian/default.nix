@@ -1,15 +1,10 @@
-{ lib, fetchFromGitHub, fetchpatch, buildLinux, ... } @ args:
+{ lib, fetchFromGitHub, buildLinux, ... } @ args:
 
 let
-  inherit (lib)
-    concatStringsSep
-    splitVersion
-    take
-    versions
-  ;
+  inherit (lib) versions;
 
-  kernelVersion = "6.1.43";
-  vendorVersion = "valve1";
+  kernelVersion = "6.1.52";
+  vendorVersion = "valve2";
 in
 buildLinux (args // rec {
   version = "${kernelVersion}-${vendorVersion}";
@@ -17,8 +12,7 @@ buildLinux (args // rec {
   # branchVersion needs to be x.y
   extraMeta.branch = versions.majorMinor version;
 
-  kernelPatches = (args.kernelPatches or []) ++ [
-  ];
+  kernelPatches = (args.kernelPatches or []) ++ [];
 
   structuredExtraConfig = with lib.kernel; {
     #
@@ -106,7 +100,7 @@ buildLinux (args // rec {
     owner = "Jovian-Experiments";
     repo = "linux";
     rev = version;
-    hash = "sha256-ZlV8RMnWrIuygl/CkXalSdrXBzV2+JtNlqYj0mFBh4Y=";
+    hash = "sha256-1X+igqfiZMv1aenH/yGezEuEjvIqKkz9g8vvde/sVzs=";
 
     # Sometimes the vendor doesn't update the EXTRAVERSION tag.
     # Let's fix it up in post.
