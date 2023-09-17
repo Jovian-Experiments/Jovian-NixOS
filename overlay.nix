@@ -60,4 +60,6 @@ rec {
   });
 
   sdgyrodsu = final.callPackage ./pkgs/sdgyrodsu { };
+
+  decky-loader = final.callPackage ./pkgs/decky-loader { };
 }
