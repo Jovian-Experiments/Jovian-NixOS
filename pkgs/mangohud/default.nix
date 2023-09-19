@@ -1,13 +1,14 @@
-{ callPackage, fetchFromGitHub, ... }@args:
+{ callPackage, fetchFromGitHub, git, ... }@args:
 
-(callPackage ./upstream (removeAttrs args ["callPackage"])).overrideAttrs (old: {
-  version = "unstable-2023-04-25";
+(callPackage ./upstream (removeAttrs args ["callPackage" "git"])).overrideAttrs (old: {
+  version = "0.7.0.rc1.r4";
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
 
-    # As shipped in SteamOS 3 repo 0.6.9.1.r22.g1d8f9f6
-    rev = "1d8f9f660135f460f4109e98d8725a75c908246a";
-    hash = "sha256-vyqMbdrc5s3vS5apFfzz0rI/y3bVlU8n/BXi4i+UkLU=";
+    rev = "1a0abc65dfb44853813e6e437bd71747bac089e5";
+    hash = "sha256-XOoVAcNrKphuoUbt8GDTX2p/JtCMf87DLRycHdINTBA=";
   };
+
+  nativeBuildInputs = old.nativeBuildInputs ++ [ git ];
 })
