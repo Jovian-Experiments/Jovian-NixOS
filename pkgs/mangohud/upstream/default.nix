@@ -124,13 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
       libdbus = dbus.lib;
       inherit hwdata;
     })
-
-    # Pull gcc-13 build fix for nissing <cstdint>
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/flightlessmango/MangoHud/commit/3f8f036ee8773ae1af23dd0848b6ab487b5ac7de.patch";
-      hash = "sha256-qbNywAXAStGiVZ1LA5qZyNp4n28iNUuE4N69zXv2gmM=";
-    })
   ];
 
   postPatch = ''
