@@ -34,10 +34,26 @@ body > header {
 	}
 
 	h1 > a {
+		position: relative;
 		display: block;
 		text-decoration: none;
 		border: 0;
 		text-shadow: rgba(0,0,0,0.5) 1*@unit 1*@unit 2*@unit;
+		@image-size: 48*@unit;
+
+		padding-left: @image-size - @gutter/2 + @gutter/3;
+
+		&::before {
+			content: "";
+			display: block;
+			position: absolute;
+			top: -@gutter/3;
+			left: -@gutter/2;
+			width: @image-size;
+			height: @image-size;
+			background-image: data-uri("assets/jovian-alpha.png");
+			background-size: contain;
+		}
 	}
 
 	& > * {
