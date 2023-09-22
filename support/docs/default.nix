@@ -61,6 +61,9 @@ let
         --namespace jovian.steam --level 3 \
         ${./template} ${optionsJSONFile} src/steam.md
 
+      ruby ${./converter}/packages.rb \
+        ${./template} ${overlayJSONFile} src/packages.md
+
       ruby ${./converter}/main.rb \
         --fixups ${./fixups.rb} \
         ${./template} src/ $out/
