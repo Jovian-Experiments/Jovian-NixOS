@@ -1,0 +1,50 @@
+<section class="package-details" id="<%= attrname %>">
+  <<%= h_name %>><a href="packages.html#<%= attrname %>"><%= attrname %></a></<%= h_name %>>
+  <div class="data">
+    <div class="package-data -attrname">
+      <<%= h_package %>>Attribute name:</<%= h_package %>>
+      <code><%= attrname %></code>
+    </div>
+    <div class="package-data -pname">
+      <<%= h_package %>>Package name:</<%= h_package %>>
+      <code><%= pname %></code>
+    </div>
+    <div class="package-data -version">
+      <<%= h_package %>>Version:</<%= h_package %>>
+      <code><%= version %></code>
+    </div>
+    <% if defined?(description) %>
+      <div class="package-data -description">
+        <<%= h_package %>>Description:</<%= h_package %>>
+        <div><%= description %></div>
+      </div>
+    <% end %>
+    <% if defined?(longDescription) %>
+      <div class="package-data -description">
+        <<%= h_package %>>Long description:</<%= h_package %>>
+        <div><%= longDescription.gsub("\n", "<br />") %></div>
+      </div>
+    <% end %>
+    <% if defined?(license) %>
+      <%#
+      {
+        "deprecated"=>false,
+        "free"=>true,
+        "fullName"=>"Unfree redistributable firmware",
+        "redistributable"=>true,
+        "shortName"=>"unfreeRedistributableFirmware"
+      }
+      %>
+      <div class="package-data -license">
+        <<%= h_package %>>License:</<%= h_package %>>
+        <div><%= license["fullName"] %></div>
+      </div>
+    <% end %>
+    <% if url && url.strip != "" %>
+      <div class="package-data -position">
+        <<%= h_package %>>Declared in:</<%= h_package %>>
+        <div><a href="<%= url %>"><%= position %></a></div>
+      </div>
+    <% end %>
+  </div>
+</section>
