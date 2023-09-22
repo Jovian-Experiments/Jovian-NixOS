@@ -5,6 +5,7 @@
 , writeText
 , documentationPath ? ../../docs
 , pagefind
+, pkgs
 }:
 
 let
@@ -16,6 +17,15 @@ let
     (makeOptionsDoc { options = options.jovian; prefix = ../../.; })
   ) optionsJSON;
   optionsJSONFile = "${optionsJSON}/share/doc/nixos/options.json";
+
+  # Overlay
+  evalOverlay = callPackage ./lib/eval-overlay.nix { };
+  overlay = evalOverlay { path = ../../overlay.nix; inherit pkgs; };
+  makeOverlayDoc = callPackage ./lib/overlay-doc.nix { };
+  inherit (
+    (makeOverlayDoc { inherit overlay; prefix = ../../.; })
+  ) overlayJSON;
+  overlayJSONFile = "${overlayJSON}/overlay.json";
 
   # Documentation resources
   styles = callPackage "${./styles}" { };
@@ -59,6 +69,7 @@ let
 
       # Copy the raw data, we never know if it'll end-up useful for someone!
       cp -v ${optionsJSONFile} $out/options.json
+      cp -v ${overlayJSONFile} $out/overlay.json
 
       # Pagefind indexing
       (PS4=" $ "; set -x
