@@ -1,6 +1,10 @@
 <section class="option-details" id="<%= name %>">
   <<%= h_name %>><a href="options.html#<%= name %>"><%= name %></a></<%= h_name %>>
   <div class="data">
+    <div class="option-data -name">
+      <<%= h_option %>>Name:</<%= h_option %>>
+      <code><%= name %></code>
+    </div>
     <div class="option-data -default">
       <<%= h_option %>>Default:</<%= h_option %>>
       <% if defined?(default) %>
