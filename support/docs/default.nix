@@ -57,6 +57,9 @@ let
       cp -r ${styles} $out/styles
       )
 
+      # Copy the raw data, we never know if it'll end-up useful for someone!
+      cp -v ${optionsJSONFile} $out/options.json
+
       # Pagefind indexing
       (PS4=" $ "; set -x
       cd $out
