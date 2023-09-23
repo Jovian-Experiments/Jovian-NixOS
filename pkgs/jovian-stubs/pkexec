@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+>&2 echo "[JOVIAN] $0: stub called with: $*"
+args=("$@")
+exec "${args[@]/--disable-internal-agent}"

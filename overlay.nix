@@ -47,6 +47,7 @@ rec {
 
   opensd = super.callPackage ./pkgs/opensd { };
 
+  jovian-stubs = final.callPackage ./pkgs/jovian-stubs { };
   jovian-greeter = super.callPackage ./pkgs/jovian-greeter { };
   jovian-steam-protocol-handler = super.callPackage ./pkgs/jovian-steam-protocol-handler { };
 
