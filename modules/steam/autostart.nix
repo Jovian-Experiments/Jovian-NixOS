@@ -81,8 +81,7 @@ in
       services.greetd = {
         enable = true;
         settings = {
-          default_session = let
-          in {
+          default_session = {
             user = "jovian-greeter";
             command = "${pkgs.jovian-greeter}/bin/jovian-greeter ${cfg.user}";
           };
