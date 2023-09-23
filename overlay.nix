@@ -44,6 +44,7 @@ rec {
   steamdeck-firmware = final.callPackage ./pkgs/jupiter-hw-support/firmware.nix { };
   steamdeck-bios-fwupd = final.callPackage ./pkgs/jupiter-hw-support/bios-fwupd.nix { };
   jupiter-dock-updater-bin = final.callPackage ./pkgs/jupiter-dock-updater-bin { };
+  steamos-polkit-helpers = final.callPackage ./pkgs/jupiter-hw-support/polkit-helpers.nix { };
 
   opensd = super.callPackage ./pkgs/opensd { };
 
