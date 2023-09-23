@@ -14,7 +14,7 @@
 # The following parameters are for your enjoyment of flashing custom/older BIOSes:
 
 # The BIOS file (e.g., "F7A0110_sign.fd") or a directory containing it.
-, biosFile ? jupiter-hw-support.src
+, biosFile ? callPackage ./src.nix { }
 
 # The BIOS version (e.g., "0110").
 # If null, parsed from the BIOS file name.
