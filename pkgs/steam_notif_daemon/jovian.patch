@@ -1,0 +1,29 @@
+diff --git a/main.c b/main.c
+index 97bad39..657ea2b 100644
+--- a/main.c
++++ b/main.c
+@@ -29,7 +29,7 @@ enum sfd_event {
+ };
+ 
+ struct sfd_state {
+-	char steam_path[PATH_MAX];
++	char* steam_path;
+     struct pollfd fds[SFD_EVENT_COUNT];
+     sd_bus* bus;
+     sd_bus_slot *xdg_slot;
+@@ -261,14 +261,7 @@ static int init_signalfd() {
+ }
+ 
+ static void init_steam_path(struct sfd_state *state) {
+-	const char *homedir;
+-	if ((homedir = getenv("HOME")) == NULL) {
+-		homedir = getpwuid(getuid())->pw_dir;
+-	}
+-
+-	snprintf(state->steam_path, sizeof(state->steam_path),
+-		"%s/.steam/root/ubuntu12_32/steam",
+-		homedir);
++	state->steam_path = "@handler@";
+ }
+ 
+ static bool init_dbus(struct sfd_state *state) {
