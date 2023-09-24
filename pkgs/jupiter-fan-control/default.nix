@@ -1,6 +1,6 @@
 { lib, stdenv, python3, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation(finalAttrs: {
   pname = "jupiter-fan-control";
   version = "20230209.1";
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "jupiter-fan-control";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-9sNJdR0t8GW0hcSNylTK5YcflPltfqyN9KnPos1YcA0=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     # PKGBUILD says MIT, but PID.py is licensed under GPLv3+
     license = licenses.gpl3Plus;
   };
-}
+})
