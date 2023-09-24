@@ -1,0 +1,10 @@
+// Utilities for working with the grid.
+// Prefer working with automatic sizing and percent sizing rather
+// than set using grid units, as grid units don't scale well.
+
+@grid-columns: 12;
+
+@lg-grid-unit: ((unit(@screen-lg) * @unit) - 2*@gutter) / @grid-columns;
+@md-grid-unit: ((unit(@screen-md) * @unit) - 2*@gutter) / @grid-columns;
+@sm-grid-unit: ((unit(@screen-sm) * @unit) - 2*@gutter) / @grid-columns;
+@xs-grid-unit: ((unit(@screen-xs) * @unit) - 2*@gutter) / @grid-columns;

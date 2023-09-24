@@ -1,0 +1,69 @@
+name: Docs
+on:
+  pull_request:
+  push:
+  workflow_call:
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Why are we doing this?
+      #
+      # The hosted GitHub runners have free disk space split
+      # between the root partition and a temporary partition,
+      # leaving limited space for builds. We work around this
+      # with easimon/maximize-build-space which creates a LVM
+      # volume to combine the free space in both.
+      #
+      # We mount this new volume at /nix, and set TMPDIR so
+      # all builds happen inside the volume.
+      - name: Create mount point for Nix store
+        run: |
+          sudo mkdir /nix
+
+      - name: Maximize disk space for builds
+        uses: easimon/maximize-build-space@v7
+        with:
+          build-mount-path: /nix
+
+      - name: Set Nix store ownership
+        run: |
+          sudo chown root:root /nix
+
+      - uses: actions/checkout@v3.5.3
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v4
+
+      - name: Override nix-daemon build directory
+        run: |
+          sudo mkdir -p /nix/tmp
+          sudo chmod ug=rwx,o=rwxt /nix/tmp
+
+          sudo mkdir -p /etc/systemd/system/nix-daemon.service.d
+          sudo tee /etc/systemd/system/nix-daemon.service.d/override.conf >/dev/null <<EOF
+          [Service]
+          Environment=TMPDIR=/nix/tmp
+          EOF
+
+          sudo systemctl daemon-reload
+          sudo systemctl restart nix-daemon
+
+      - name: Setup automatic caching
+        uses: DeterminateSystems/magic-nix-cache-action@v2
+
+      - run: nix-build -A documentation
+
+      - name: Unwrap build output
+        run: |
+          output=$(readlink -f result)
+          cp -vr --dereference "$output" "www"
+
+      - name: Upload archive to Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: 'docs'
+          path: 'www'
+          if-no-files-found: error

@@ -1,0 +1,15 @@
+// Common design cues
+// ==================
+//
+// Not to be confused with flair; flair are pre-made styles to apply to a whole
+// component.
+//
+// Those common bits are commonly re-used patterns.
+
+#common() {
+  .fat-border() {
+    border: @gutter solid #theme.color[white];
+    box-shadow: #theme.common[box-shadow];
+    border-radius: 2*@gutter;
+  }
+}

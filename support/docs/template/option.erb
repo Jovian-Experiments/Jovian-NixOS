@@ -1,0 +1,31 @@
+<section class="option-details" id="<%= name %>">
+  <<%= h_name %>><a href="options.html#<%= name %>"><%= name %></a></<%= h_name %>>
+  <div class="data">
+    <div class="option-data -name">
+      <<%= h_option %>>Name:</<%= h_option %>>
+      <code><%= name %></code>
+    </div>
+    <div class="option-data -default">
+      <<%= h_option %>>Default:</<%= h_option %>>
+      <% if defined?(default) %>
+        <code><%= default["text"] %></code>
+      <% else %>
+        <em>(unset)</em>
+      <% end %>
+    </div>
+    <div class="option-data -type">
+      <<%= h_option %>>Type:</<%= h_option %>>
+      <div>
+      <%= type %>
+      </div>
+    </div>
+    <div class="option-data -description">
+      <<%= h_option %>>Description:</<%= h_option %>>
+      <div><%= description %></div>
+    </div>
+    <div class="option-data -declaration">
+      <<%= h_option %>>Declared by:</<%= h_option %>>
+      <div><a href="<%= declaration["url"] %>"><%= declaration["name"] %></a></div>
+    </div>
+  </div>
+</section>

@@ -47,6 +47,27 @@ rec {
 
   jovian-greeter = super.callPackage ./pkgs/jovian-greeter { };
 
+  jovian-documentation = final.callPackage ./support/docs {
+    pagefind = final.callPackage ./pkgs/pagefind { };
+    documentationPath = final.callPackage (
+      { runCommand
+      }:
+      runCommand "jovian-documentation-source" {
+        src = ./docs;
+      } ''
+        (PS4=" $ "; set -x
+        cp --no-preserve=mode -r $src src
+        chmod -R +w src
+        rm -vf src/README.md
+        cp -v ${./CONTRIBUTING.md} src/contributing.md
+        printf '# Home\n\n' | cat - ${./README.md} > src/index.md
+        cp -v ${./support/docs/search.md} src/search.md
+        mv src $out
+        )
+      ''
+    ) { };
+  };
+
   steamPackages = super.steamPackages.overrideScope (scopeFinal: scopeSuper: {
     steam = final.callPackage ./pkgs/steam-jupiter/unwrapped.nix {
       steam-original = scopeSuper.steam;

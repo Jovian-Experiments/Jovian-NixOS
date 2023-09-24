@@ -1,0 +1,44 @@
+body > footer {
+	#fill-width();
+	& > * {
+		#container();
+	}
+
+	color: #theme.footer[foreground];
+	background: #theme.footer[background];
+	background-image: url("assets/jupiter.jpeg");
+	background-size: cover;
+	background-position: top right;
+	box-shadow:
+	  inset 0 1*@unit fade(#theme.navbar[background], 0.8%)
+	, inset 0 -@gutter @gutter -@gutter fade(#theme.navbar[background], 60%)
+	, inset 0 -100vh fade(#theme.footer[background], 80%)
+	;
+
+	padding-bottom: @gutter;
+	padding-top: @gutter;
+	margin-top: @gutter*2;
+	text-align: right;
+
+	h1, a {
+		color: inherit;
+		text-shadow: rgba(255, 255, 255, 0.5) 1*@unit 1*@unit 2*@unit;
+	}
+	
+	nav ul {
+		width: 100%;
+		display: flex;
+		justify-content: flex-end;
+		align-items: end;
+
+		flex-direction: column;
+
+		li:not(:first-child) {
+			margin-left: @gutter;
+		}
+
+		#screen-sm-min({
+			flex-direction: row;
+		});
+	}
+}

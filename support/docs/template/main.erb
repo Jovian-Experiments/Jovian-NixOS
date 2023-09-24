@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html lang="en" class="without-js">
+<head>
+  <title><%= title %> | Jovian-NixOS</title>
+  <base href="<%= document_base %>" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles/index.css" type="text/css" />
+<%#
+  <link rel="shortcut icon" type="image/png" href="favicon.png" />
+  <meta property="og:image" content="logo/opengraph-image.png" />
+%>
+  <script>
+    var html = document.documentElement;
+    html.className = html.className.replace("without-js", "with-js");
+  </script>
+</head>
+
+<body class="path--<%= page_class %>">
+  <header>
+    <div>
+      <h1><a href="index.html">Jovian-NixOS</a></h1>
+      <nav>
+        <ul>
+<%
+  [
+    #["FAQ", "FAQ"],
+    ["getting-started", "Getting Started"],
+    ["in-depth", "In Depth"],
+    ["options", "Options"],
+    ["packages", "Packages"],
+    ["contributing", "Contributing"],
+    # NOTE: keep last
+    ["search", "Search"],
+  ].each do |pair|
+    page, name = pair
+%>
+          <li><a href="<%= page %>.html" class="-<%= page %>"><%= name %></a></li>
+<%
+  end
+%>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="generic-layout">
+<%= contents %>
+    </div>
+  </main>
+
+  <footer>
+    <div>
+      <nav>
+        <ul>
+          <li><a href="sitemap.html">Sitemap</a></li>
+          <% if source_filename %>
+            <%
+              path =
+                case source_filename
+                when "contributing.md"
+                  "../CONTRIBUTING.md"
+                when "index.md"
+                  "../README.md"
+                else
+                  source_filename
+                end
+            %>
+          <li><a href="<%= "https://github.com/Jovian-Experiments/Jovian-NixOS/edit/development/docs/#{path}" %>">Edit this page</a></li>
+          <% end %>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>

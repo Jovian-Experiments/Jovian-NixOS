@@ -1,0 +1,75 @@
+// Layout mixins
+// =============
+
+// For elements that are intended to fill the width of the page, generally
+// to fill with a colour or pattern.
+#fill-width() {
+  // For narrow viewports, correctly fix margins and paddings
+  #screen-xs-max({
+    margin-left: -@gutter;
+    margin-right: -@gutter;
+    padding-left: @gutter;
+    padding-right: @gutter;
+  });
+}
+
+// For elements that are "container widths", meaning they take the width of
+// the page.
+#container() {
+  margin: auto;
+  width: 100%;
+  #screen-sm-min({ max-width: unit(@screen-sm) * @unit - 2*@gutter; });
+  #screen-md-min({ max-width: unit(@screen-md) * @unit - 2*@gutter; });
+  #screen-lg-min({ max-width: unit(@screen-lg) * @unit - 2*@gutter; });
+}
+
+// Spreads the children in equally-sized columns using flexbox.
+// By default, xs and under use only one column.
+// "under" xs cannot be forced to anything else than 1.
+// sm and md can be configured if needed, but will default to @amount.
+#columns(@amount, @xxs: 1, @xs: @xxs, @sm: @amount, @md: @amount, @spacing: @gutter) {
+  #flex-flexible-margin-between(@spacing);
+  justify-content: flex-start;
+
+  // This is a sane default, and helps with using <ul>
+  margin: 0;
+  // Same, as <ul> can often be made a columnar layout, it is a sane default.
+  list-style-type: none;
+
+  // Needed to undo incidental margins
+  margin-right: -@spacing;
+
+  body.-debug & > * {
+    outline: 1px solid pink;
+  }
+
+  & > * {
+    flex-grow: 0;
+    width: calc(100%/@xxs - @spacing);
+    #screen-xs-min({
+      width: calc(100%/@xs - @spacing);
+    });
+    #screen-sm-min({
+      width: calc(100%/@sm - @spacing);
+    });
+    #screen-md-min({
+      width: calc(100%/@md - @spacing);
+    });
+    #screen-lg-min({
+      width: calc(100%/@amount - @spacing);
+    });
+  }
+}
+
+#columns-relative-width(
+@amount: 1,
+@columns: 12,
+@xs: 12,
+@sm: @amount,
+@md: @amount,
+@property: width) {
+  width: 100%;
+  #screen-sm-min({ @{property}: (unit(@screen-sm) * @unit - 2*@gutter) * @amount / 12; });
+  #screen-md-min({ @{property}: (unit(@screen-md) * @unit - 2*@gutter) * @amount / 12; });
+  #screen-lg-min({ @{property}: (unit(@screen-lg) * @unit - 2*@gutter) * @amount / 12; });
+}

@@ -1,0 +1,45 @@
+#theme() {
+  .navbar() {
+    // Static navbar, true or false.
+    static: false;
+
+    // Choose between light, dark, and darker
+    #theme.navbar.variant-darker();
+  }
+  .font() {
+    // Choose between different font variants
+    #theme.font.variant-A();
+  }
+}
+
+// Variables definitions
+// =====================
+
+// A unit-less, equivalent to "non-high DPI" pixels for the desired font size.
+// This ends up being "math'd" away into rem.
+@pixel-equivalent-font-size: 16;
+
+// One "unit" is equivalent to one device pixel for the "default" font size.
+// Using `@unit` ensures the design is totally scalable according to the
+// platform's font sizes.
+@unit: 1rem/@pixel-equivalent-font-size;
+
+// Equivalent, but according to the local font size
+@relative-unit: 1em/@pixel-equivalent-font-size;
+
+// Purposefully set without a unit.
+@line-height: 32 / 18;
+//             ^   ^
+//             ^   \ measured in px when `line-height` is set to 1
+//             \ measured in the mockups
+
+// Margin size between components/elements.
+// It is perfectly fine to divide this by two to share responsibility between
+// side-by-side elements.
+// For *following* elements (top to bottom), prefer relying on the browser's
+// margin collapse; do NOT divide the margin there.
+//   https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Mastering_margin_collapsing
+@gutter: 16*@unit;
+
+// Path to the folder where fonts are located
+@path-fonts: './fonts';

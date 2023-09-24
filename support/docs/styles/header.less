@@ -1,0 +1,119 @@
+body > header {
+	#fill-width();
+	& > * {
+		#container();
+	}
+
+	color: #theme.navbar[foreground];
+
+	background: #theme.navbar[background];
+	background-image: url("assets/jupiter.jpeg");
+	background-size: cover;
+	background-position: center center;
+	box-shadow:
+	  inset 0 -100vh fade(#theme.navbar[background], 30%)
+	, inset 0 -3*@gutter @gutter -3/2*@gutter fade(#theme.navbar[background], 45%)
+	;
+
+	padding-top: @gutter;
+	padding-bottom: @gutter;
+
+	h1, a {
+		color: inherit;
+		margin: 0;
+		text-shadow: rgba(0,0,0,1) 1*@unit 1*@unit 2*@unit;
+	}
+	h1 {
+		margin-bottom: @gutter/2;
+		#screen-sm-min({
+			margin-bottom: 0;
+		});
+
+		white-space: pre;
+		font-size: 50 * 0.6 * @unit;
+	}
+
+	h1 > a {
+		position: relative;
+		display: block;
+		text-decoration: none;
+		border: 0;
+		text-shadow: rgba(0,0,0,0.5) 1*@unit 1*@unit 2*@unit;
+		@image-size: 48*@unit;
+
+		padding-left: @image-size - @gutter/2 + @gutter/3;
+
+		&::before {
+			content: "";
+			display: block;
+			position: absolute;
+			top: -@gutter/3;
+			left: -@gutter/2;
+			width: @image-size;
+			height: @image-size;
+			background-image: data-uri("assets/jovian-alpha.png");
+			background-size: contain;
+		}
+	}
+
+	& > * {
+		display: flex;
+
+		flex-direction: column;
+		#screen-sm-min({
+			flex-direction: row;
+		});
+	}
+
+	nav {
+		width: 100%;
+		display: flex;
+		align-items: end;
+
+		flex-direction: column;
+		#screen-sm-min({
+			flex-direction: row;
+		});
+	}
+
+	nav > ul {
+		display: flex;
+		justify-content: flex-end;
+		width: 100%;
+
+		flex-direction: column;
+		#screen-sm-min({
+			flex-direction: row;
+		});
+
+		li:not(:last-child) {
+			margin-right: @gutter;
+		}
+		.-search {
+			@image-size: 1.2 * @gutter;
+			#text-replacement(
+				@image-rules: {
+					#svg.search();
+					background-size: contain;
+					#screen-xs-max({
+						width:  @image-size;
+						height: @image-size;
+						margin-top: 1 * @unit;
+						left: 100%;
+						right: unset;
+						margin-left: 5 * @unit;
+					});
+				},
+			);
+			#screen-sm-min({
+				margin-left: -2 * @unit;
+				border-bottom: none;
+				vertical-align: text-top;
+				margin-top: 1 * @unit;
+				display: inline-block;
+				width:  @image-size;
+				height: @image-size;
+			});
+		}
+	}
+}

@@ -1,0 +1,59 @@
+// Adding an SVG file
+// ==================
+//
+// Quick notes about adding images:
+// This uses an external pipeline in default.nix to replace the @SVG_* tokens
+// with files from this directory with their name uppercased.
+
+// Inclusion of an SVG file in this file alone will not add it to the build
+// output. The mixins need to *also* be applied as rules for the SVG files to
+// be in the output.
+// This means that adding SVG files here and conditionally applying logic to
+// switch between variants is only costly in build-time, not in output size.
+
+// Note that this allows you to replace a "magic" colour code with a chosen
+// colour. This value (face12) has been chosen so it's not optimized away into
+// a three-digit colour code.
+// A future improvement could be to allow any `faceXX` colour code to be
+// overriden, allowing more complex use cases like gradients to be "native".
+
+// How to
+// ------
+//
+// This is a bit clumsy due to an issue with LESS CSS.
+//
+// You have to first declare the use of the SVG (color optional):
+//
+// ```
+// #_declare__svg(bananaphone, @SVG_BANANAPHONE, #face12);
+// ```
+//
+// Then you **have** to define the actual mixin:
+//
+// ```
+// #svg.bananaphone { &:extend(._svg__bananaphone all); }
+// ```
+// 
+// The apparently redundant mixin is to ensure only `extend` is used so that
+// the SVG content is not repeated as many times as it is used.
+
+// * * *
+
+// Implementation
+#_declare__svg(@name, @svg, @color: #face12) {
+  .__svg_@{name} {
+    @_colorized: replace(@svg, "#face12", @color);
+    // ugh, that's an ugly hack... but escape() apparently doesn't deal well with percent signs.
+    @_data: replace(escape(@_colorized), "%", "PERCENT");
+    background-image: replace(~"url('data:image/svg+xml;utf8,@{_data}')", "PERCENT", "%");
+  }
+}
+
+// Branding
+// ========
+
+// #_declare__svg(logo-horizontal, @SVG_LOGO_HORIZONTAL, #face12);
+// #svg.logo-horizontal { &:extend(.__svg_logo-horizontal); }
+
+#_declare__svg(search, @SVG_SEARCH, #ffffff);
+#svg.search { &:extend(.__svg_search); }

@@ -1,0 +1,78 @@
+@import "./assets/svg";
+@import "./common/index";
+@import "./nav";
+@import "./header";
+@import "./footer";
+@import "./base";
+@import "./highlight";
+@import "./options";
+@import "./packages";
+@import "./search";
+
+.responsive-table {
+	overflow-x: auto;
+}
+
+.for-github {
+	&.-unneeded {
+		display: none;
+	}
+}
+
+.admonition-box {
+	#_admonition(@color) {
+		header {
+			color: @color;
+		}
+		#translucent(border-left-color, @color, 0.7);
+	};
+	#_admonition(#999);
+
+	header {
+		font-weight: bold;
+	}
+
+	&.-important {
+		#_admonition(rgb(130, 80, 223));
+	}
+	&.-note {
+		#_admonition(rgb(9, 105, 218));
+	}
+	&.-warning {
+		#_admonition(rgb(154, 103, 0));
+	}
+}
+
+//
+// Homepage stuff
+//
+
+.path--index-html .generic-layout > h1 {
+	display: none;
+}
+
+.homepage-title {
+	display: none;
+}
+
+.homepage-hero {
+	background-color: #theme.color[gray-lighter];
+	padding: @gutter;
+	margin-top: @gutter;
+
+	h2 {
+		color: inherit;
+		margin-top: 0;
+		margin-bottom: @gutter;
+	}
+
+	:last-child {
+		margin-bottom: 0;
+	}
+}
+
+// Optimizes usage of the data-uri
+body > footer,
+body > header {
+	background-image: data-uri("assets/jupiter.jpeg");
+}
