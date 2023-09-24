@@ -46,6 +46,7 @@ rec {
   opensd = super.callPackage ./pkgs/opensd { };
 
   jovian-greeter = super.callPackage ./pkgs/jovian-greeter { };
+  jovian-steam-protocol-handler = super.callPackage ./pkgs/jovian-steam-protocol-handler { };
 
   steamPackages = super.steamPackages.overrideScope (scopeFinal: scopeSuper: {
     steam = final.callPackage ./pkgs/steam-jupiter/unwrapped.nix {
