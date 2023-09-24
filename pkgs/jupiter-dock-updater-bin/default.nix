@@ -6,14 +6,14 @@
 , libusb
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation(finalAttrs: {
   pname = "jupiter-dock-updater-bin";
   version = "20230714.01";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "jupiter-dock-updater-bin";
-    rev = "jupiter-${version}";
+    rev = "jupiter-${finalAttrs.version}";
     hash = "sha256-tfMPBC1x4YE3Sv3GbVkQJ12CYODeHjK1cBEaw9jBZpY=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-}
+})
