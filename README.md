@@ -1,113 +1,71 @@
-<div align="center"><h1>Jovian NixOS</h1></div>
-<div align="center"><strong><em>NixOS on the Steam Deck</em></strong></div>
+<!--
 
-****
+NOTE: This page also serves as the index page of the website!!
+
+Its docs-folder-relative links will be rewritten accordingly.
+
+HTML may be used to hide elements from the main website, be mindful about it.
+
+-->
+<div class="for-github -title homepage-title">
+    <div align="center"><h1>Jovian NixOS</h1></div>
+    <div align="center"><strong><em>NixOS on the Steam Deck</em></strong></div>
+</div>
+<div class="for-github -unneeded">
+<hr />
+</div>
+
+<div class="homepage-hero">
+
+What is Jovian NixOS?
+---------------------
 
 A set of packages and configurations for running NixOS on the [Steam Deck](https://www.steamdeck.com).
-This repo is also useful for obtaining a Deck-like experience on other `x86_64` devices.
 
-Installation
-------------
+This repo is also useful for obtaining a Steam Deck-like experience on other `x86_64` devices.
 
-Use [the normal installation images](https://nixos.org/download.html#download-nixos) available on NixOS.org.
+</div>
 
-Prefer the `nixos-unstable` image, but you can also use the latest stable image as long as you use the `unstable` channel for the system.
+<div class="for-github -unneeded">
+<hr />
+</div>
 
-When configuring the system, import `./modules` from this repo in your configuration.
+Pointers to helpful pages
+-------------------------
 
-### Steam Deck
+ - The [Getting Started](docs/getting-started.md) page may be your first stop.
+ - The [Configuration](docs/configuration.md) page guides you into configuring your system.
+ - The [Options](docs/options.md) is good to know all that you can do.
 
-To enter the boot menu, power off the Steam Deck then hold down `Volume-` and tap the `Power` button.
+<div class="for-github -unneeded">
+<hr />
+</div>
 
-When configuring the system, import `./modules` from this repo in your configuration and enable the Steam Deck-specific hardware configurations with `jovian.devices.steamdeck.enable = true;`.
+Who are we?
+-----------
 
-### Other Devices
+Most [contributors](https://github.com/Jovian-Experiments/Jovian-NixOS/graphs/contributors) here are also contributors to the [Nixpkgs, and NixOS Linux](https://github.com/NixOS/nixpkgs) ecosystem.
 
-No other device-specific quirks or configuration handled for now.
+We're a few peeps that want to keep their Steam Deck useful as a gaming device, while also benefiting from NixOS.
 
-Feel free to contribute one or more!
 
-Configuration
--------------
+Can I help?
+-----------
 
-All available module options along with their descriptions can be found under `modules`.
+Probably!
 
-To use the Steam Deck UI, set `jovian.steam.enable = true;` in your configuration.
-This will only enable the Steam Deck UI tooling. To enable "desktop" steam, enable the usual NixOS options.
-Then you can start the UI using one of the following methods:
+See the [contributing](CONTRIBUTING.md) page.
 
-- (**preferred**) Use `jovian.steam.autoStart = true;` to auto-start at login, and enabling use of *Switch to Desktop* option.
-- Select "Gaming Mode" in the Display Manager or run `steam-session` in a VT.
-- Launch `steam-session` within an existing desktop session. This will run [gamescope](https://github.com/Plagman/gamescope) in nested mode which results in higher latency.
 
-If you want *Switch to Desktop* to switch to another session with `autoStart`, you will need to configure `jovian.steam.desktopSession`.
-Configure it with the name of the X11 or wayland session of your choosing.
-The *Switch to Desktop* option will not work with the other two methods of running the Steam Deck UI, instead if will close Steam.
+How do I reach any of you?
+--------------------------
 
-Firmware Updates
-----------------
+For support, don't hesitate [to file an issue](https://github.com/Jovian-Experiments/Jovian-NixOS/issues), questions are accepted.
 
-### `steamdeck-firmware`
+For chatting about the project [the matrix room at #Jovian-Experiments:matrix.org](https://matrix.to/#/#Jovian-Experiments:matrix.org) is where we hang out.
 
-Updates to the BIOS and the controller are available in the `steamdeck-firmware` package:
+For other purposes, contact the developers via e-mail.
 
-- BIOS: Run `sudo jupiter-biosupdate`
-- Controller: Run `sudo jupiter-controller-update`
+For obfuscation, see these raw commits which contain the relevant e-mail address at the top:
 
-### `jupiter-dock-updater-bin`
-
-Updates to the Docking Station firmware are available in the `jupiter-dock-updater-bin` package.
-Connect to the dock via USB-C and run `jupiter-dock-updater` to update.
-
-FAQs
-----
-
-> **Jovian**
-> “Relating to [...] Jupiter or the class of [...] which Jupiter belongs.”
-
-> What's Jupiter?
-
-[There's a disambiguation page that won't help you](https://en.wikipedia.org/wiki/Jupiter_(disambiguation)).
-I don't know *exactly* what it's the codename for.
-It is either the codename for the Steam Deck, or the codename for the new Steam OS for the Steam Deck.
-Things get awfully murky when you realize that *Neptune*'s also a thing, and it's unclear really from the outside, and quick searches don't provide *conclusive* evidence.
-But to the best of my knowledge, Jupiter is the OS for us.
-
-> What channels are supported?
-
-Truthfully, no channel is *supported*, but the older the stable release was cut, the more likely the additions from Jovian NixOS won't work as expected.
-
-Thus, it is preferrable to use `nixos-unstable`. The latest update *should* work fine, and when it doesn't, it'll be handled soon enough.
-
-* * *
-
-Importing the modules in your configuration
--------------------------------------------
-
-One way to do so is by using `fetchTarball` in the `imports` of your configuration.
-
-```nix
-{ config, lib, pkgs, ... }:
-
-{
-  imports = [
-    (
-      # Put the most recent revision here:
-      let revision = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; in
-      builtins.fetchTarball {
-        url = "https://github.com/Jovian-Experiments/Jovian-NixOS/archive/${revision}.tar.gz";
-        # Update the hash as needed:
-        sha256 = "sha256:0000000000000000000000000000000000000000000000000000";
-      } + "/modules"
-    )
-
-  /* ... */
-  ];
-
-  /* ... */
-}
-```
-
-Another way is to use *Flakes*, or any other method to fetch inputs.
-
-When hacking on Jovian NixOS things, adding the path to a Git checkout of this repo to `imports` works well too.
+ - [@samueldr (Samuel Dionne-Riel)](https://github.com/Jovian-Experiments/Jovian-NixOS/commit/af7041f1e92d6d4e1e04e6e4f9ec6e301d2b8e01.patch)
