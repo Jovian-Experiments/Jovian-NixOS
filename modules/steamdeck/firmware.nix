@@ -4,7 +4,6 @@
 
 let
   inherit (lib)
-    mkDefault
     mkIf
     mkMerge
     mkOption
@@ -15,6 +14,14 @@ in
 {
   options = {
     jovian.devices.steamdeck = {
+      autoUpdate = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to automatically update the BIOS and controller firmware.
+        '';
+      };
+
       enableFwupdBiosUpdates = mkOption {
         type = types.bool;
         default = cfg.enable;
@@ -27,6 +34,12 @@ in
   };
 
   config = mkMerge [
+    (mkIf (cfg.autoUpdate) {
+      systemd.packages = [pkgs.steamdeck-firmware];
+
+      systemd.services.jupiter-biosupdate.wantedBy = ["multi-user.target"];
+      systemd.services.jupiter-controller-update.wantedBy = ["multi-user.target"];
+    })
     (mkIf (cfg.enableFwupdBiosUpdates) {
       services.fwupd.enable = true;
 

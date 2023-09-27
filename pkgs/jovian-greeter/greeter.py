@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 from typing import Any, Optional, Iterable, Mapping, List
 
-DEFAULT_SESSION = 'steam-wayland'
+DEFAULT_SESSION = 'gamescope-wayland'
 HELPER_PREFIX = Path('/run/current-system/sw/lib/jovian-greeter')
 
 class Session:

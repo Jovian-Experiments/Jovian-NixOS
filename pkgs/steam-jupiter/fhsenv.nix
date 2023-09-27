@@ -4,48 +4,23 @@
 { lib
 , runCommand
 , writeShellScriptBin
+, dmidecode
+, jovian-stubs
 , steam-fhsenv
+, steamos-polkit-helpers
 , ...
 } @ args:
 
 let
-  extraArgs = builtins.removeAttrs args [ "lib" "runCommand" "writeShellScriptBin" "steam-fhsenv" ];
-
-  # The sudo wrapper doesn't work in FHS environments. For our purposes
-  # we add a passthrough sudo command that does not actually escalate
-  # privileges.
-  #
-  # <https://github.com/NixOS/nixpkgs/issues/42117>
-  passthroughSudo = writeShellScriptBin "sudo" ''
-    declare -a final
-
-    positional=""
-    for value in "$@"; do
-      if [[ -n "$positional" ]]; then
-        final+=("$value")
-      elif [[ "$value" == "-n" ]]; then
-        :
-      else
-        positional="y"
-        final+=("$value")
-      fi
-    done
-
-    exec "''${final[@]}"
-  '';
-
-  # Null SteamOS updater that does nothing
-  #
-  # This gets us past the OS update step in the OOBE wizard.
-  nullOsUpdater = writeShellScriptBin "steamos-update" ''
-    >&2 echo "steamos-update: Not supported on NixOS - Doing nothing"
-    exit 7;
-  '';
-
-  # Null Steam Deck BIOS updater that does nothing
-  nullBiosUpdater = writeShellScriptBin "jupiter-biosupdate" ''
-    >&2 echo "jupiter-biosupdate: Doing nothing"
-  '';
+  extraArgs = builtins.removeAttrs args [
+    "lib"
+    "runCommand"
+    "writeShellScriptBin"
+    "dmidecode"
+    "jovian-stubs"
+    "steam-fhsenv"
+    "steamos-polkit-helpers"
+  ];
 
   # A very simplistic "session switcher." All it does is kill gamescope.
   sessionSwitcher = writeShellScriptBin "steamos-session-select" ''
@@ -67,21 +42,20 @@ let
     mkdir -p ~/.local/state
     >~/.local/state/steamos-session-select echo "$session"
 
-    if [[ -n "$gamescope_pid" ]]; then
-      kill "$gamescope_pid"
-    else
-      >&2 echo "!! Don't know how to kill gamescope"
-      exit 1
-    fi
+    systemctl stop --user gamescope-session
   '';
 
   wrappedSteam = steam-fhsenv.override (extraArgs // {
     extraPkgs = pkgs: (if args ? extraPkgs then args.extraPkgs pkgs else []) ++ [
-      nullOsUpdater nullBiosUpdater
+      dmidecode
+      jovian-stubs
       sessionSwitcher
+
+      # FIXME: figure out how to fix pkexec (needs SUID in fhsenv, see https://github.com/NixOS/nixpkgs/issues/69338) 
+      # and readd steamos-polkit-helpers
     ];
     extraProfile = (args.extraProfile or "") + ''
-      export PATH=${passthroughSudo}/bin:$PATH
+      export PATH=${jovian-stubs}/bin:$PATH
     '';
 
     # We need to add this flag when Steam is started directly (e.g., desktop mode)

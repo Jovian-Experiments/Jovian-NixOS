@@ -22,6 +22,7 @@ rec {
   gamescope = final.callPackage ./pkgs/gamescope {
     gamescope' = super.gamescope;
   };
+  gamescope-session = final.callPackage ./pkgs/gamescope-session { };
 
   mangohud = final.callPackage ./pkgs/mangohud {
     libXNVCtrl = linuxPackages_jovian.nvidia_x11.settings.libXNVCtrl;
@@ -36,16 +37,21 @@ rec {
   };
 
   jupiter-fan-control = final.callPackage ./pkgs/jupiter-fan-control { };
+  powerbuttond = final.callPackage ./pkgs/powerbuttond { };
+  steam_notif_daemon = final.callPackage ./pkgs/steam_notif_daemon { };
 
   jupiter-hw-support = final.callPackage ./pkgs/jupiter-hw-support { };
   steamdeck-hw-theme = final.callPackage ./pkgs/jupiter-hw-support/theme.nix { };
   steamdeck-firmware = final.callPackage ./pkgs/jupiter-hw-support/firmware.nix { };
   steamdeck-bios-fwupd = final.callPackage ./pkgs/jupiter-hw-support/bios-fwupd.nix { };
   jupiter-dock-updater-bin = final.callPackage ./pkgs/jupiter-dock-updater-bin { };
+  steamos-polkit-helpers = final.callPackage ./pkgs/jupiter-hw-support/polkit-helpers.nix { };
 
   opensd = super.callPackage ./pkgs/opensd { };
 
+  jovian-stubs = final.callPackage ./pkgs/jovian-stubs { };
   jovian-greeter = super.callPackage ./pkgs/jovian-greeter { };
+  jovian-steam-protocol-handler = super.callPackage ./pkgs/jovian-steam-protocol-handler { };
 
   jovian-documentation = final.callPackage ./support/docs {
     pagefind = final.callPackage ./pkgs/pagefind { };

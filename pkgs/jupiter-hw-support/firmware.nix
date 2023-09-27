@@ -10,8 +10,10 @@
 # jupiter-biosupdate
 , libkrb5
 , zlib
-, jq
+, coreutils
+, gawk
 , dmidecode
+, jq
 
 , efiSysMountPoint ? "/boot"
 }:
@@ -96,7 +98,7 @@ stdenv.mkDerivation {
     sed -i "s|/usr/share/jupiter_bios_updater/h2offt|$h2offt_nixos|g" $out/bin/jupiter-biosupdate
     sed -i "s|/usr/|$out/|g" $out/bin/jupiter-biosupdate
     wrapProgram $out/bin/jupiter-biosupdate \
-      --prefix PATH : ${lib.makeBinPath [ jq dmidecode ]}
+      --prefix PATH : ${lib.makeBinPath [ coreutils dmidecode gawk jq ]}
 
     cp usr/bin/jupiter-controller-update $out/bin
     sed -i "s|/usr/|$out/|g" $out/bin/jupiter-controller-update
@@ -109,6 +111,10 @@ stdenv.mkDerivation {
     # > Attempts to use gtk2 libraries which are not on the device.
     rm h2offt-g H2OFFTx64-G.sh
     popd
+
+    substituteInPlace usr/lib/systemd/system/*.service --replace "/usr" "$out"
+    install -D -m 644 usr/lib/systemd/system/jupiter-biosupdate.service $out/lib/systemd/system/jupiter-biosupdate.service
+    install -D -m 644 usr/lib/systemd/system/jupiter-controller-update.service $out/lib/systemd/system/jupiter-controller-update.service
 
     runHook postInstall
   '';

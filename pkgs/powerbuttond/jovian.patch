@@ -1,0 +1,18 @@
+diff --git a/powerbuttond.c b/powerbuttond.c
+index 722ba77..b8c3c97 100644
+--- a/powerbuttond.c
++++ b/powerbuttond.c
+@@ -31,12 +31,9 @@ struct libevdev* find_dev(void) {
+ }
+ 
+ void do_press(const char* type) {
+-	char steam[PATH_MAX];
++	char* steam = "@handler@";
+ 	char press[32];
+-	char* home = getenv("HOME");
+ 	char* const args[] = {steam, "-ifrunning", press, NULL};
+-
+-	snprintf(steam, sizeof(steam), "%s/.steam/root/ubuntu12_32/steam", home);
+ 	snprintf(press, sizeof(press), "steam://%spowerpress", type);
+ 
+ 	pid_t pid = vfork();

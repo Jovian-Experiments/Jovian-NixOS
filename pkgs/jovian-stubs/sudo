@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+>&2 echo "[JOVIAN] $0: stub called with: $*"
+
+declare -a final
+
+positional=""
+for value in "$@"; do
+    if [[ -n "$positional" ]]; then
+        final+=("$value")
+    elif [[ "$value" == "-n" ]]; then
+        :
+    else
+        positional="y"
+        final+=("$value")
+    fi
+done
+
+exec "${final[@]}"
