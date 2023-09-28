@@ -40,6 +40,7 @@ let
       "${placeholder "out"}/lib/hwsupport"
     ];
     execer = [
+      "cannot:${e2fsprogs}/bin/fsck.ext4"
       "cannot:${e2fsprogs}/bin/mkfs.ext4"
       "cannot:${procps}/bin/pgrep"
       "cannot:${systemd}/bin/systemctl"
