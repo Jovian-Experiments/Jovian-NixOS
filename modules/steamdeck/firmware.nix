@@ -34,6 +34,11 @@ in
   };
 
   config = mkMerge [
+    (mkIf (cfg.enable) {
+      nixpkgs.overlays = [
+        (_: prev: { linux-firmware = prev.linux-firmware-jupiter; })
+      ];
+    })
     (mkIf (cfg.autoUpdate) {
       systemd.packages = [pkgs.steamdeck-firmware];
 
