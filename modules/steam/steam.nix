@@ -58,6 +58,11 @@ in
           }
         });
       '';
+
+      # Steam will run some helper tools with pkexec, which needs setuid,
+      # which means bubblewrap itself also needs to be setuid.
+      # Requires https://github.com/NixOS/nixpkgs/pull/260404.
+      security.bubblewrap.allowSetuid = true;
     }
   ]);
 }

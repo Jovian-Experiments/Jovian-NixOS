@@ -50,9 +50,7 @@ let
       dmidecode
       jovian-stubs
       sessionSwitcher
-
-      # FIXME: figure out how to fix pkexec (needs SUID in fhsenv, see https://github.com/NixOS/nixpkgs/issues/69338) 
-      # and readd steamos-polkit-helpers
+      steamos-polkit-helpers
     ];
     extraProfile = (args.extraProfile or "") + ''
       export PATH=${jovian-stubs}/bin:$PATH
