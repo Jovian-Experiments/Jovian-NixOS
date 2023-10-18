@@ -22,7 +22,7 @@ in
 
             When enabled, you can either use the `autoStart` option (preferred),
             launch the Steam Deck UI from your Display Manager or
-            by running `steam-session`.
+            by running `start-gamescope-session`.
           '';
         };
       };
