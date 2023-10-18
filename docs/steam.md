@@ -12,8 +12,8 @@ You can enable the Steam Deck version of the Steam client with:
 
 To manually start **Gaming Mode** (also known as the **Steam Deck UI**), there are two options:
 
-- Select "Gaming Mode" in the Display Manager or run `steam-session` in a VT.
-- Launch `steam-session` within an existing desktop session. This will run [gamescope](https://github.com/Plagman/gamescope) in nested mode which results in higher latency.
+- Select "Gaming Mode" in the Display Manager or run `start-gamescope-session` in a VT.
+- Launch `gamescope-session` within an existing desktop session. This will run [gamescope](https://github.com/Plagman/gamescope) in nested mode which results in higher latency.
 
 ## Start On Boot
 
@@ -38,7 +38,7 @@ To automatically launch Gaming Mode on boot and enable desktop switching from th
 Logs from Gaming Mode can be obtained with:
 
 ```bash
-journalctl --user -u steam-session.slice
+journalctl --user -u gamescope-session
 ```
 
 
