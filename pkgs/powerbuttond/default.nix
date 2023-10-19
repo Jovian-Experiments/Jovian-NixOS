@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation {
   pname = "powerbuttond";
-  version = "1.0";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "powerbuttond";
-    rev = "v1";
-    hash = "sha256-2MvmkclbPIu8qIoZRd+4Kr+H7nO1xUWJ2JrCJC7gzK4=";
+    rev = "v2";
+    hash = "sha256-syeVkiD42QM3wkE0iqfS5+Z3hqh1reqCWGnTR3BGXV4=";
   };
 
   patches = [
