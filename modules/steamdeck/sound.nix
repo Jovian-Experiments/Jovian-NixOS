@@ -7,7 +7,8 @@ let
     cp -r --no-preserve=all ${pkgs.alsa-ucm-conf} $out
 
     # override acp5x configs with Jovian stuff
-    cp -f ${pkgs.jupiter-hw-support}/share/alsa/ucm2/conf.d/acp5x/* $out/share/alsa/ucm2/conf.d/acp5x/
+    # NOTE: different location to account for upstream changes in alsa-ucm-conf 1.2.9+
+    cp -rf ${pkgs.jupiter-hw-support}/share/alsa/ucm2/conf.d/acp5x/* $out/share/alsa/ucm2/AMD/acp5x/
   '';
 in
 {
@@ -57,6 +58,12 @@ in
         environment.ALSA_CONFIG_UCM2 = config.environment.variables.ALSA_CONFIG_UCM2;
       };
       systemd.user.services.pipewire = lib.mkIf (!systemWide) {
+        environment.ALSA_CONFIG_UCM2 = config.environment.variables.ALSA_CONFIG_UCM2;
+      };
+      systemd.services.wireplumber = lib.mkIf systemWide {
+        environment.ALSA_CONFIG_UCM2 = config.environment.variables.ALSA_CONFIG_UCM2;
+      };
+      systemd.user.services.wireplumber = lib.mkIf (!systemWide) {
         environment.ALSA_CONFIG_UCM2 = config.environment.variables.ALSA_CONFIG_UCM2;
       };
     }))
