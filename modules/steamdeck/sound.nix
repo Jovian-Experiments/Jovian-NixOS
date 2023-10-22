@@ -60,6 +60,12 @@ in
       systemd.user.services.pipewire = lib.mkIf (!systemWide) {
         environment.ALSA_CONFIG_UCM2 = config.environment.variables.ALSA_CONFIG_UCM2;
       };
+      systemd.services.wireplumber = lib.mkIf systemWide {
+        environment.ALSA_CONFIG_UCM2 = config.environment.variables.ALSA_CONFIG_UCM2;
+      };
+      systemd.user.services.wireplumber = lib.mkIf (!systemWide) {
+        environment.ALSA_CONFIG_UCM2 = config.environment.variables.ALSA_CONFIG_UCM2;
+      };
     }))
   ]);
 }
