@@ -78,6 +78,36 @@ One way to do so is by using `fetchTarball` in the `imports` of your configurati
 
 Another way is to use *Flakes*, or any other method to fetch inputs.
 
+```nix
+{
+    description = "Jovian-NixOS flake config";
+    inputs = {
+        nixpkgs.url = "github:NixOs/nixpkgs/nixos-unstable"; # or pin it
+        jovian-nixos = {
+            inputs.nixpkgs.follows = "nixpkgs";
+            url = "github:Jovian-Experiments/Jovian-NixOS/development";
+        };
+    };
+    outputs = { self, nixpkgs, jovian-nixos, ...}: let
+        hostname = "jovian";
+    in {
+        nixoConfigurations."${hostname}" = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+            modules = [
+                jovian-nixos.nixosModules.jovian
+                {
+                    /* your nixos configuration */
+                    jovian = {
+                        devices.steamdeck.enable = true;
+                        steam.enable = true;
+                    };
+                }
+            ];
+        };
+    };
+}
+```
+
 When hacking on Jovian NixOS things, adding the path to a Git checkout of this repo to `imports` works well too.
 
 See the [Configuration](configuration.md) page for more information about configuration.
