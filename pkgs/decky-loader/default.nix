@@ -9,7 +9,7 @@
 let
   version = "2.10.5";
   hash = "sha256-TSw7Vc6Gnl2G7WIu8nElqjY54eY+LPrGF+k5Fl7hCPw=";
-  npmHash = "sha256-FyrFVHRCJX/PUGilLpiRaQwcDUO9edNWCvN/3ugVejQ=";
+  npmHash = "sha256-tJ/psoByV7ySrE/Z4K0mGZAy2clsiiruUZ8tICUhDM8=";
 
   src = fetchFromGitHub {
     owner = "SteamDeckHomebrew";
@@ -41,7 +41,7 @@ let
 
       rm node_modules/.modules.yaml
       tar -czf $out --owner=0 --group=0 --numeric-owner --format=gnu \
-        --mtime="@$SOURCE_DATE_EPOCH" --sort=name \
+        --mtime="@$SOURCE_DATE_EPOCH" --sort=name --hard-dereference \
         node_modules
 
       runHook postInstall
