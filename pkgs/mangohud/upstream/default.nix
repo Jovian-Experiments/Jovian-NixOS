@@ -3,7 +3,6 @@
 , fetchFromGitLab
 , fetchFromGitHub
 , fetchurl
-, fetchpatch
 , substituteAll
 , coreutils
 , curl
@@ -16,6 +15,7 @@
 , mangohud32
 , addOpenGLRunpath
 , appstream
+, git
 , glslang
 , mako
 , meson
@@ -31,13 +31,13 @@
 , glfw
 , xorg
 , gamescopeSupport ? true # build mangoapp and mangohudctl
-, lowerBitnessSupport ? stdenv.hostPlatform.is64bit # Support 32 bit on 64bit
+, lowerBitnessSupport ? stdenv.hostPlatform.isx86_64 # Support 32 bit on 64bit
 , nix-update-script
 }:
 
 let
   # Derived from subprojects/cmocka.wrap
-  cmocka = rec {
+  cmocka = {
     version = "1.81";
     src = fetchFromGitLab {
       owner = "cmocka";
@@ -49,16 +49,16 @@ let
 
   # Derived from subprojects/imgui.wrap
   imgui = rec {
-    version = "1.81";
+    version = "1.89.9";
     src = fetchFromGitHub {
       owner = "ocornut";
       repo = "imgui";
       rev = "refs/tags/v${version}";
-      hash = "sha256-rRkayXk3xz758v6vlMSaUu5fui6NR8Md3njhDB0gJ18=";
+      hash = "sha256-0k9jKrJUrG9piHNFQaBBY3zgNIKM23ZA879NY+MNYTU=";
     };
     patch = fetchurl {
       url = "https://wrapdb.mesonbuild.com/v2/imgui_${version}-1/get_patch";
-      hash = "sha256-bQC0QmkLalxdj4mDEdqvvOFtNwz2T1MpTDuMXGYeQ18=";
+      hash = "sha256-myEpDFl9dr+NTus/n/oCSxHZ6mxh6R1kjMyQtChD1YQ=";
     };
   };
 
@@ -76,17 +76,31 @@ let
       hash = "sha256-hgNYz15z9FjNHoj4w4EW0SOrQh1c4uQSnsOOrt2CDhc=";
     };
   };
+
+  implot = rec {
+    version = "0.16";
+    src = fetchFromGitHub {
+      owner = "epezent";
+      repo = "implot";
+      rev = "v${version}";
+      hash = "sha256-/wkVsgz3wiUVZBCgRl2iDD6GWb+AoHN+u0aeqHHgem0=";
+    };
+    patch = fetchurl {
+      url = "https://wrapdb.mesonbuild.com/v2/implot_${version}-1/get_patch";
+      hash = "sha256-HGsUYgZqVFL6UMHaHdR/7YQfKCMpcsgtd48pYpNlaMc=";
+    };
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangohud";
-  version = "0.6.9-1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-AX4m1XZ+yXp74E3slFGyI3CGu2eYU+eXNN2EY+ivdfk=";
+    hash = "sha256-KkMN7A3AcS/v+b9GCs0pI6MBBk3WwOMciaoiBzL5xOQ=";
   };
 
   outputs = [ "out" "doc" "man" ];
@@ -99,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''}
     cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
     cp -R --no-preserve=mode,ownership ${vulkan-headers.src} Vulkan-Headers-${vulkan-headers.version}
+    cp -R --no-preserve=mode,ownership ${implot.src} implot-${implot.version}
   )'';
 
   patches = [
@@ -133,12 +148,14 @@ stdenv.mkDerivation (finalAttrs: {
       ] ++ lib.optionals lowerBitnessSupport [
         mangohud32
       ])} \
+      --subst-var-by version "${finalAttrs.version}" \
       --subst-var-by dataDir ${placeholder "out"}/share
 
     (
       cd subprojects
       unzip ${imgui.patch}
       unzip ${vulkan-headers.patch}
+      unzip ${implot.patch}
     )
   '';
 
@@ -154,6 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     addOpenGLRunpath
+    git
     glslang
     mako
     meson
