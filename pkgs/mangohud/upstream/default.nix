@@ -49,16 +49,16 @@ let
 
   # Derived from subprojects/imgui.wrap
   imgui = rec {
-    version = "1.81";
+    version = "1.89.9";
     src = fetchFromGitHub {
       owner = "ocornut";
       repo = "imgui";
       rev = "refs/tags/v${version}";
-      hash = "sha256-rRkayXk3xz758v6vlMSaUu5fui6NR8Md3njhDB0gJ18=";
+      hash = "sha256-0k9jKrJUrG9piHNFQaBBY3zgNIKM23ZA879NY+MNYTU=";
     };
     patch = fetchurl {
       url = "https://wrapdb.mesonbuild.com/v2/imgui_${version}-1/get_patch";
-      hash = "sha256-bQC0QmkLalxdj4mDEdqvvOFtNwz2T1MpTDuMXGYeQ18=";
+      hash = "sha256-myEpDFl9dr+NTus/n/oCSxHZ6mxh6R1kjMyQtChD1YQ=";
     };
   };
 
@@ -74,6 +74,20 @@ let
     patch = fetchurl {
       url = "https://wrapdb.mesonbuild.com/v2/vulkan-headers_${version}-2/get_patch";
       hash = "sha256-hgNYz15z9FjNHoj4w4EW0SOrQh1c4uQSnsOOrt2CDhc=";
+    };
+  };
+
+  implot = rec {
+    version = "0.16";
+    src = fetchFromGitHub {
+      owner = "epezent";
+      repo = "implot";
+      rev = "v${version}";
+      hash = "sha256-/wkVsgz3wiUVZBCgRl2iDD6GWb+AoHN+u0aeqHHgem0=";
+    };
+    patch = fetchurl {
+      url = "https://wrapdb.mesonbuild.com/v2/implot_${version}-1/get_patch";
+      hash = "sha256-HGsUYgZqVFL6UMHaHdR/7YQfKCMpcsgtd48pYpNlaMc=";
     };
   };
 in
@@ -99,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''}
     cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
     cp -R --no-preserve=mode,ownership ${vulkan-headers.src} Vulkan-Headers-${vulkan-headers.version}
+    cp -R --no-preserve=mode,ownership ${implot.src} implot-${implot.version}
   )'';
 
   patches = [
@@ -140,6 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
       cd subprojects
       unzip ${imgui.patch}
       unzip ${vulkan-headers.patch}
+      unzip ${implot.patch}
     )
   '';
 
