@@ -38,14 +38,17 @@ let
         then lib.removePrefix "/" (lib.removePrefix (toString prefix) (toString decl))
         else (toNixpkgsRelative decl)
       ;
-      subpath = head (splitString ":" position);
-      lineno = last (splitString ":" position);
       url =
-        if lib.hasPrefix "<nixpkgs" position
+        if position == null || lib.hasPrefix "<nixpkgs" position
         then null
-        else "${sourceLinkPrefix}/${subpath}#L${lineno}"
+        else let
+          subpath = head (splitString ":" position);
+          lineno = last (splitString ":" position);
+        in "${sourceLinkPrefix}/${subpath}#L${lineno}"
       ;
-      position = toRelative drv.meta.position;
+      position = if drv.meta ? "position" 
+                 then toRelative drv.meta.position
+                 else null;
     in
     {
       entry_type = "package";

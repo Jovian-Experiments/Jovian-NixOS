@@ -40,7 +40,7 @@
         <div><%= license["fullName"] %></div>
       </div>
     <% end %>
-    <% if url && url.strip != "" %>
+    <% if position && url && url.strip != "" %>
       <div class="package-data -position">
         <<%= h_package %>>Declared in:</<%= h_package %>>
         <div><a href="<%= url %>"><%= position %></a></div>
