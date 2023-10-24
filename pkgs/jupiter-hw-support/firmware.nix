@@ -105,6 +105,12 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/jupiter-controller-update \
       --prefix PATH : ${lib.makeBinPath [ jq pythonEnv ]}
 
+    mkdir -p $out/libexec
+    makeShellWrapper \
+      $out/share/jupiter_controller_fw_updater/d20bootloader.py \
+      $out/libexec/d20bootloader \
+      --prefix PATH : ${lib.makeBinPath [ jq pythonEnv ]}
+
     pushd $out/share/jupiter_bios_updater
     # Upstream comment:
     # > Remove gtk2 binary and respective build/start script - unused
