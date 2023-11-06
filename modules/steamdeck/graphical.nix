@@ -38,7 +38,7 @@ in
     (mkIf cfg.enableXorgRotation {
       environment.etc."X11/xorg.conf.d/90-jovian.conf".text = ''
         Section "Monitor"
-          Identifier     "eDP"
+          Identifier     "eDP-1"
           Option         "Rotate"    "right"
         EndSection
 
