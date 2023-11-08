@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, ncurses }:
+{ lib, stdenv, fetchFromGitHub, ncurses, hidapi, systemd }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation(finalAttrs: {
   pname = "sdgyrodsu";
-  version = "unstable-2022-08-22";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "kmicki";
     repo = "SteamDeckGyroDSU";
-    rev = "6244cbc3ec55687efa9b6ade32d6c04637065003";
-    sha256 = "sha256-3hMSgFqNV9GyShwU0aB3tEpx82SUBHGl9jpYDYDua8k=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-bYaqT2fznIQ8UPKUBQZFLB02XuVx3zDeX7XtsBAZfWk=";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses hidapi systemd ];
 
-  makeFlags = [ "NOPREPARE=1" "release" ];
+  makeFlags = [ "NOPREPARE=1" "CHECKDEPS=" "release" ];
 
   installPhase = ''
     runHook preInstall
@@ -29,4 +29,4 @@ stdenv.mkDerivation {
     homepage = "https://github.com/kmicki/SteamDeckGyroDSU";
     license = licenses.mit;
   };
-}
+})
