@@ -24,23 +24,15 @@ in
     };
   };
   config = mkIf cfg.enableGyroDsuService {
-    systemd.services.sdgyrodsu = {
+    systemd.user.services.sdgyrodsu = {
       description = "Cemuhook DSU server for the Steam Deck Gyroscope";
-      wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.usbutils ];
+      wantedBy = [ "graphical-session.target" ];
       serviceConfig = {
-        DynamicUser = true;
-        SupplementaryGroups = [ "input" ];
         ExecStart = "${pkgs.sdgyrodsu}/bin/sdgyrodsu";
         PrivateTmp = true;
         ProtectSystem = "strict";
         ProtectHome = true;
       };
     };
-
-    services.udev.extraRules = ''
-      # This rule is needed to expose the hiddev devices to sdgyrodsu
-      SUBSYSTEM=="usbmisc", ATTRS{idVendor}=="28de", MODE="0660", GROUP="input"
-    '';
   };
 }
