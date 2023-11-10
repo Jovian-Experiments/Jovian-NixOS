@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation(finalAttrs: {
   pname = "sdgyrodsu";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "kmicki";
     repo = "SteamDeckGyroDSU";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bYaqT2fznIQ8UPKUBQZFLB02XuVx3zDeX7XtsBAZfWk=";
+    sha256 = "sha256-2OLdcRauBBjsS88nlCidnTdVzuh2KBLOOC7fsn1BFnc=";
   };
 
   buildInputs = [ ncurses hidapi systemd ];
