@@ -36,7 +36,7 @@ This is where the fun begins!
 This only applies if you have a "made for gaming" device like the Steam Deck, or other portable gaming devices.
 
 Other computers are just boring computers, and mostly need nothing special here.
-Note that since the Steam Deck experience is developed on AMD hardware, using [other hardware](https://github.com/Jovian-Experiments/Jovian-NixOS/labels/8.%20hardware%3A%20other) may have issues, especially [NVIDIA hardware](https://github.com/Jovian-Experiments/Jovian-NixOS/labels/8. hardware%3A NVIDIA).
+Note that since the Steam Deck experience is developed on AMD hardware, using [other hardware](https://github.com/Jovian-Experiments/Jovian-NixOS/labels/8.%20hardware%3A%20other) may have issues, especially [NVIDIA hardware](https://github.com/Jovian-Experiments/Jovian-NixOS/issues?q=label%3A%228.+hardware%3A+NVIDIA%22).
 
 **Known hardware**
 
@@ -78,6 +78,47 @@ One way to do so is by using `fetchTarball` in the `imports` of your configurati
 
 Another way is to use *Flakes*, or any other method to fetch inputs.
 
+Add this to your `flake.nix`:
+
+```nix
+  inputs = {
+    jovian.url = "github:Jovian-Experiments/Jovian-NixOS";
+  };
+
+```
+
+Then, in your config, add this to your imports:
+
+```nix
+  imports = [
+    inputs.jovian.nixosModules.jovian 
+  ];
+```
+
+Make sure that you're building against the unstable branch! If you have multiple hosts defined in your flake, you can build your system with unstable pkgs by passing just that to your deck host. 
+
+```nix
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";   
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+  };
+
+  outputs = { self, nixpkgs, nixpkgs-unstable, ...}: {
+    nixosConfigurations = {
+      firstHostname = nixpkgs.lib.nixosSystem {
+        ...
+      };
+
+      steamDeckHostname = nixpkgs-unstable.lib.nixosSystem {
+        ...
+      };
+    };
+  }
+  
+```
+
 When hacking on Jovian NixOS things, adding the path to a Git checkout of this repo to `imports` works well too.
+
+If you want to test changes with flakes, you can override your jovian input with `--override-input jovian git+file:///<path/to/local/repo>`
 
 See the [Configuration](configuration.md) page for more information about configuration.
