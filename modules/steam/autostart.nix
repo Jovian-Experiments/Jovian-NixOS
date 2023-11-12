@@ -31,7 +31,15 @@ in
         };
 
         desktopSession = mkOption {
-          type = types.nullOr types.str;
+          type = with types ; nullOr str // {         
+            check = userProvidedDesktopSession:
+              lib.assertMsg (userProvidedDesktopSession != null -> (str.check userProvidedDesktopSession && lib.elem userProvidedDesktopSession config.services.xserver.displayManager.sessionData.sessionNames)) ''
+                  Desktop session '${userProvidedDesktopSession}' not found.
+                  Valid values for 'jovian.steam.desktopSession' are:
+                    ${lib.concatStringsSep "\n  " (lib.lists.remove "gamescope-wayland" config.services.xserver.displayManager.sessionData.sessionNames)}
+                  If you don't want a desktop session to switch to, remove 'jovian.steam.desktopSession' from your config.
+              '';
+          };
           default = null;
           example = "plasma";
           description = lib.mdDoc ''
