@@ -76,7 +76,7 @@ One way to do so is by using `fetchTarball` in the `imports` of your configurati
 }
 ```
 
-Another way is to use *Flakes*, or any other method to fetch inputs. Refer to [this link](https://gitlab.gnome.org/search?group_id=362&project_id=5765&scope=blobs&search=vpn)
+Another way is to use *Flakes*, or any other method to fetch inputs. Refer to [this link](https://nixos-and-flakes.thiscute.world/nixos-with-flakes/nixos-with-flakes-enabled#managing-system-packages-with-flakes)
 
 When hacking on Jovian NixOS things, adding the path to a Git checkout of this repo to `imports` works well too.
 
