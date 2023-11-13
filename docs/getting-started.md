@@ -76,49 +76,10 @@ One way to do so is by using `fetchTarball` in the `imports` of your configurati
 }
 ```
 
-Another way is to use *Flakes*, or any other method to fetch inputs.
-
-Add this to your `flake.nix`:
-
-```nix
-  inputs = {
-    jovian.url = "github:Jovian-Experiments/Jovian-NixOS";
-  };
-
-```
-
-Then, in your config, add this to your imports:
-
-```nix
-  imports = [
-    inputs.jovian.nixosModules.jovian 
-  ];
-```
-
-Make sure that you're building against the unstable branch! If you have multiple hosts defined in your flake, you can build your system with unstable pkgs by passing just that to your deck host. 
-
-```nix
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";   
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-  };
-
-  outputs = { self, nixpkgs, nixpkgs-unstable, ...}: {
-    nixosConfigurations = {
-      firstHostname = nixpkgs.lib.nixosSystem {
-        ...
-      };
-
-      steamDeckHostname = nixpkgs-unstable.lib.nixosSystem {
-        ...
-      };
-    };
-  }
-  
-```
+Another way is to use *Flakes*, or any other method to fetch inputs. Refer to [this link](https://gitlab.gnome.org/search?group_id=362&project_id=5765&scope=blobs&search=vpn)
 
 When hacking on Jovian NixOS things, adding the path to a Git checkout of this repo to `imports` works well too.
 
-If you want to test changes with flakes, you can override your jovian input with `--override-input jovian git+file:///<path/to/local/repo>`
+If you want to hack on the module with flakes, you can [check this out](https://nixos-and-flakes.thiscute.world/other-usage-of-flakes/inputs) to see how.
 
 See the [Configuration](configuration.md) page for more information about configuration.
