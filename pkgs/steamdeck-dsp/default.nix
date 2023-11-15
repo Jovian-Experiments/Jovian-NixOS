@@ -4,6 +4,7 @@
 , boost
 , lv2
 , faust2lv2
+, rnnoise-plugin
 , which
 }:
 
@@ -27,6 +28,13 @@ stdenv.mkDerivation(finalAttrs: {
     substituteInPlace Makefile \
       --replace /usr/include/boost "${boost.dev}/include/boost" \
       --replace /usr/include/lv2 "${lv2.dev}/include/lv2"
+
+    substituteInPlace pipewire-confs/filter-chain-mic.conf \
+      --replace "/usr/lib/ladspa/librnnoise_ladspa.so" "${rnnoise-plugin}/lib/ladspa/librnnoise_ladspa.so"
+
+    # Stop trying to run `echo`, we don't have it
+    substituteInPlace ucm2/conf.d/*/*.conf \
+      --replace "exec" "# exec"
   '';
 
   preInstall = ''
