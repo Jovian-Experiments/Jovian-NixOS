@@ -1,12 +1,14 @@
 { linux-firmware, fetchFromGitHub }:
 
-linux-firmware.overrideAttrs(_: {
+linux-firmware.overrideAttrs(_: rec {
+  version = "20231113.1";
+
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "linux-firmware";
-    rev = "jupiter-20230420";
-    hash = "sha256-ys/7G+JsiuKQo9aL5MZjs4NxqDjK2bdJkLRJaoNeIDM=";
+    rev = "jupiter-${version}";
+    hash = "sha256-aaTFdotKyTjPK9iuPs91Dqvk9521E4VIcggxYIRlffQ=";
   };
 
-  outputHash = "sha256-eEeBS95gI7G9KVpc9boqRAdecrPc0EsfFD2nhh63fCY=";
+  outputHash = "sha256-puzVKvwV0fCDz+M6cm18Xq4W0qAFgtFu3okSnsj9RNU=";
 })
