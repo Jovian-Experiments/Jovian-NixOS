@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="firmware">
-  <id>value.Jupiter.BIOS.firmware</id>
-  <name>Steam Deck</name>
+  <id>unofficial.valve.steamdeck.@board@.BIOS</id>
+  <name>Steam Deck (@model@)</name>
   <provides>
-    <firmware type="flashed">bbb1cf06-f7b9-4466-adcc-6b8815bd99e6</firmware>
+    <firmware type="flashed">@guid@</firmware>
   </provides>
   <custom>
     <value key="LVFS::UpdateProtocol">org.uefi.capsule</value>
