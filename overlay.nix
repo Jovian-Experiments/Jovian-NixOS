@@ -19,6 +19,8 @@ rec {
     ];
   };
 
+  galileo-mura = final.callPackage ./pkgs/galileo-mura { };
+
   gamescope = final.callPackage ./pkgs/gamescope {
     gamescope' = super.gamescope;
   };
