@@ -60,7 +60,9 @@ See the [contributing](CONTRIBUTING.md) page.
 How do I reach any of you?
 --------------------------
 
-For support, don't hesitate [to file an issue](https://github.com/Jovian-Experiments/Jovian-NixOS/issues), questions are accepted.
+For support, don't hesitate [to file an issue](https://github.com/Jovian-Experiments/Jovian-NixOS/issues).
+
+For questions, please use the [Discussions page](https://github.com/Jovian-Experiments/Jovian-NixOS/discussions).
 
 For chatting about the project [the matrix room at #Jovian-Experiments:matrix.org](https://matrix.to/#/#Jovian-Experiments:matrix.org) is where we hang out.
 
