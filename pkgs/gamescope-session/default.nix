@@ -10,6 +10,7 @@
   coreutils,
   dbus,
   findutils,
+  galileo-mura,
   gamescope,
   gnugrep,
   gnused,
@@ -34,6 +35,7 @@ let
       coreutils
       dbus
       findutils
+      galileo-mura
       gnugrep
       gnused
       gnutar
@@ -96,13 +98,13 @@ let
   };
 in stdenv.mkDerivation(finalAttrs: {
   pname = "gamescope-session";
-  version = "3.12.6-1.2";
+  version = "3.13.2-1";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "PKGBUILDs-mirror";
     rev = "jupiter-main/gamescope-${finalAttrs.version}";
-    hash = "sha256-k9i+FrTUvRiA51I8sUCe87mHIgk51k23CFMPPgZ5pw0=";
+    hash = "sha256-y36+lgTDtLtLffLm7JgwHImhphjapJAbIblL/GAKWf0=";
   };
 
   patchPhase = ''
