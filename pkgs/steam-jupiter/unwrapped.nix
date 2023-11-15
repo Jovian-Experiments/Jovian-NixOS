@@ -7,8 +7,8 @@
 
 let
   bundle = fetchurl {
-    url = "https://steamdeck-packages.steamos.cloud/archlinux-mirror/sources/jupiter-main/steam-jupiter-stable-1.0.0.76-1.src.tar.gz";
-    hash = "sha256-Gme9UzGD+g0gw+w8BP+LJ7mzuQxutSqgyZ3YtygXC0s=";
+    url = "https://steamdeck-packages.steamos.cloud/archlinux-mirror/sources/jupiter-main/steam-jupiter-stable-1.0.0.78-1.src.tar.gz";
+    hash = "sha256-V5qJ632NO99B+WxB1q9A8D8LZYLQEFs6aV4wFT+eDT4=";
   };
 
 in steam-original.overrideAttrs (old: {
