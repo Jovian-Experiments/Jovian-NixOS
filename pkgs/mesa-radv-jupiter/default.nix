@@ -93,7 +93,7 @@
 
 let
   version = "23.3.0";
-  jupiterVersion = "steamos-23.9.1";
+  jupiterVersion = "steamos-23.9.2";
 
   withLibdrm = lib.meta.availableOn stdenv.hostPlatform libdrm;
 
@@ -121,7 +121,7 @@ self = stdenv.mkDerivation {
     owner = "Jovian-Experiments";
     repo = "mesa";
     rev = jupiterVersion;
-    hash = "sha256-sUyGYHApzW4qMQZI9c1Nxh/6Q3fP6wGRKLP/c3Wxc/c=";
+    hash = "sha256-qb/XMYrSEOW9HeTRQiKBehYkXDQBNybRCg63+pib0H0=";
   };
 
   # TODO:
