@@ -46,6 +46,6 @@ stdenv.mkDerivation(finalAttrs: {
     description = "Steamdeck Audio Processing";
     # Actual license of all parts unclear.
     # https://github.com/Jovian-Experiments/steamdeck-dsp/blob/0.38/LICENSE
-    license = [ lib.licenses.gpl3 faust2lv2.meta.license ];
+    license = lib.licenses.gpl3;
   };
 })
