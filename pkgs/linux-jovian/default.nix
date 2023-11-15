@@ -4,7 +4,7 @@ let
   inherit (lib) versions;
 
   kernelVersion = "6.1.52";
-  vendorVersion = "valve4";
+  vendorVersion = "valve5";
 in
 buildLinux (args // rec {
   version = "${kernelVersion}-${vendorVersion}";
@@ -36,6 +36,8 @@ buildLinux (args // rec {
     # Update this to =y to workaround initialization issues and deadlocks when loaded as module
     # The cs35l41 / acp5x drivers in EV2 fail IRQ initialization with this set to =y, changed back
     SPI_AMD = module;
+    # Jovian: not a real option?
+    # CONFIG_I2C_AMD=m;
 
     # Works around issues with the touchscreen driver
     PINCTRL_AMD = yes;
@@ -45,9 +47,49 @@ buildLinux (args // rec {
     SND_SOC_WM_ADSP = module;
     SND_SOC_CS35L41 = module;
     SND_SOC_CS35L41_SPI = module;
-    # Jovian-NixOS: Vendor fragment disables the option, forced enabled by actual kernel config.
+    # Jovian: Vendor fragment disables the option, forced enabled by actual kernel config.
     # SND_SOC_CS35L41_I2C = no;
     SND_SOC_NAU8821 = module;
+    SND_SOC_MAX98388 = module;
+
+    SND_SOC_AMD_ACP3x = no;
+    # Jovian: unused?
+    # SND_SOC_AMD_RV_RT5682_MACH = no;
+    SND_SOC_AMD_RENOIR = no;
+    # Jovian: unused?
+    # SND_SOC_AMD_RENOIR_MACH = no;
+
+    SND_SOC_AMD_ACP6x = no;
+    # Jovian: unused?
+    # SND_SOC_AMD_YC_MACH = no;
+    SND_AMD_ACP_CONFIG = module;
+    SND_SOC_AMD_ACP_COMMON = module;
+    # Jovian: unused?
+    # SND_SOC_AMD_ACP_PDM = no;
+    # SND_SOC_AMD_ACP_I2S = no;
+    # SND_SOC_AMD_ACP_PCM = no;
+    SND_SOC_AMD_ACP_PCI = no;
+    SND_AMD_ASOC_RENOIR = no;
+    SND_AMD_ASOC_REMBRANDT = no;
+    SND_SOC_AMD_MACH_COMMON = module;
+    SND_SOC_AMD_LEGACY_MACH = no;
+
+    SND_SOC_AMD_SOF_MACH = module;
+    SND_SOC_AMD_RPL_ACP6x = no;
+    SND_SOC_AMD_PS = no;
+    # Jovian: unused?
+    # SND_SOC_AMD_PS_MACH = no;
+
+    SND_SOC_SOF = module;
+    SND_SOC_SOF_PROBE_WORK_QUEUE = yes;
+    SND_SOC_SOF_IPC3 = yes;
+    SND_SOC_SOF_INTEL_IPC4 = yes;
+
+    SND_SOC_SOF_AMD_TOPLEVEL = module;
+    SND_SOC_SOF_AMD_COMMON = module;
+    SND_SOC_SOF_AMD_RENOIR = no;
+    SND_SOC_SOF_AMD_REMBRANDT = no;
+    SND_SOC_SOF_AMD_VANGOGH = module;
 
     # Enable Ambient Light Sensor
     LTRF216A = module;
@@ -67,10 +109,22 @@ buildLinux (args // rec {
     # virtualization-specific drivers.
     HYPERVISOR_GUEST = lib.mkForce no;
 
-    #
-    # Fallout from the vendor-set options
-    # -----------------------------------
-    #
+    # Disable some options enabled in ArchLinux 6.1.12-arch1 config
+    X86_AMD_PSTATE = lib.mkForce no;
+    # Jovian: meh
+    # CONFIG_HAVE_RUST=n
+
+    # Build as module to experiment with toggling
+    TCG_TPM = module;
+
+    # Galileo Analogix I2C magic module thing
+    DRM_ANALOGIX_ANX7580 = module;
+
+    # Per Colin at Quectel
+    CFG80211_CERTIFICATION_ONUS = yes;
+    ATH_REG_DYNAMIC_USER_REG_HINTS = yes;
+
+    # Jovian: fix fallout from the vendor-set options
     DRM_AMD_DC_SI = lib.mkForce (option no);
     DRM_AMD_DC_DCN = lib.mkForce (option no);
     DRM_AMD_DC_HDCP = lib.mkForce (option no);
@@ -78,29 +132,13 @@ buildLinux (args // rec {
     DRM_VMWGFX_FBCON = lib.mkForce (option no);
     KVM_GUEST = lib.mkForce (option no);
     MOUSE_PS2_VMMOUSE = lib.mkForce (option no);
-
-    # Workaround for regression with AMD SEV configs enabled
-    # https://github.com/NixOS/nixpkgs/pull/203908#issuecomment-1360956830
-    CRYPTO_DEV_CCP = lib.mkForce no;
-    AMD_MEM_ENCRYPT = lib.mkForce no;
-    KVM_AMD_SEV = lib.mkForce (option no);
-    SEV_GUEST = lib.mkForce (option no);
-
-    # Does not build with it set, and not supported by the vendor
-    # https://twitter.com/Plagman2/status/1623024896887631875
-    X86_AMD_PSTATE = lib.mkForce no;
-    X86_AMD_PSTATE_UT = lib.mkForce (option no);
-
-    # Temporary workaround pending pahole fixes
-    # https://aur.archlinux.org/packages/linux-mainline-git#comment-903098
-    DEBUG_INFO_BTF = lib.mkForce no;
   };
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "linux";
     rev = version;
-    hash = "sha256-RUUpkufTFKqMD5rcKkl8nOtosTrvLUIobYRdxDBohUY=";
+    hash = "sha256-XNGX/ETGWVA1dQA7A+DUv8oW3PgdO4RJn9p2P1pC1FQ=";
 
     # Sometimes the vendor doesn't update the EXTRAVERSION tag.
     # Let's fix it up in post.
