@@ -113,7 +113,7 @@ in stdenv.mkDerivation(finalAttrs: {
     patchShebangs steam-http-loader
 
     substituteInPlace gamescope-session \
-      --replace /usr/share/steamos ${steamdeck-hw-theme}/share/steamos \
+      --replace /usr/share ${steamdeck-hw-theme}/share \
       --replace /usr/lib/steam ${steamPackages.steam}/lib/steam
 
     substituteInPlace gamescope-session.service \
