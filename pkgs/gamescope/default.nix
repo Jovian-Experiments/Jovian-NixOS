@@ -1,7 +1,6 @@
 { gamescope'
 , fetchpatch
 , fetchFromGitHub
-, substituteAll
 , glm
 , gbenchmark
 }:
@@ -10,8 +9,8 @@
 #       version shipped by the vendor, ensuring feature level is equivalent.
 
 let
-  version = "3.12.6";
-  hash = "sha256-xQPRUO7UivfdoVf2MWfRI6l2T8n+gGqhQyj068fr7Sg=";
+  version = "3.13.5";
+  hash = "sha256-ITpUHE8VQKZOaCGHBdh0d40J5ejdG/ahv4V3o0KKMh4=";
 
   joshShaders = fetchFromGitHub {
     owner = "Joshua-Ashton";
@@ -29,6 +28,9 @@ gamescope'.overrideAttrs({ buildInputs, postPatch ? "", postInstall ? "", ... }:
     fetchSubmodules = true;
     inherit hash;
   };
+
+  # Clobber unvendoring vkroots, nixpkgs version is too old
+  postUnpack = null;
 
   # (We are purposefully clobbering the patches from Nixpkgs here)
   patches = [

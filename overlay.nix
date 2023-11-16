@@ -11,13 +11,15 @@ rec {
     linux-firmware = super.linux-firmware;
   };
   linuxPackages_jovian = linuxPackagesFor final.linux_jovian;
-  linux_jovian = super.callPackage ./pkgs/linux-jovian {
+  linux_jovian = final.callPackage ./pkgs/linux-jovian {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
       kernelPatches.export-rt-sched-migrate
     ];
   };
+
+  galileo-mura = final.callPackage ./pkgs/galileo-mura { };
 
   gamescope = final.callPackage ./pkgs/gamescope {
     gamescope' = super.gamescope;
@@ -46,12 +48,13 @@ rec {
   steamdeck-bios-fwupd = final.callPackage ./pkgs/jupiter-hw-support/bios-fwupd.nix { };
   jupiter-dock-updater-bin = final.callPackage ./pkgs/jupiter-dock-updater-bin { };
   steamos-polkit-helpers = final.callPackage ./pkgs/jupiter-hw-support/polkit-helpers.nix { };
+  steamdeck-dsp = final.callPackage ./pkgs/steamdeck-dsp { };
 
-  opensd = super.callPackage ./pkgs/opensd { };
+  opensd = final.callPackage ./pkgs/opensd { };
 
   jovian-stubs = final.callPackage ./pkgs/jovian-stubs { };
-  jovian-greeter = super.callPackage ./pkgs/jovian-greeter { };
-  jovian-steam-protocol-handler = super.callPackage ./pkgs/jovian-steam-protocol-handler { };
+  jovian-greeter = final.callPackage ./pkgs/jovian-greeter { };
+  jovian-steam-protocol-handler = final.callPackage ./pkgs/jovian-steam-protocol-handler { };
 
   jovian-documentation = final.callPackage ./support/docs {
     pagefind = final.callPackage ./pkgs/pagefind { };
@@ -74,7 +77,7 @@ rec {
     ) { };
   };
 
-  jovian-hardware-survey = super.callPackage ./pkgs/jovian-hardware-survey { };
+  jovian-hardware-survey = final.callPackage ./pkgs/jovian-hardware-survey { };
 
   steamPackages = super.steamPackages.overrideScope (scopeFinal: scopeSuper: {
     steam = final.callPackage ./pkgs/steam-jupiter/unwrapped.nix {

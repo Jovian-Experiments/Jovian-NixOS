@@ -100,6 +100,10 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/jupiter-biosupdate \
       --prefix PATH : ${lib.makeBinPath [ coreutils dmidecode gawk jq ]}
 
+    cp usr/bin/jupiter-initial-firmware-update $out/bin
+    sed -i "s|/usr/|$out/|g" $out/bin/jupiter-initial-firmware-update
+    chmod +x $out/bin/jupiter-initial-firmware-update
+
     cp usr/bin/jupiter-controller-update $out/bin
     sed -i "s|/usr/|$out/|g" $out/bin/jupiter-controller-update
     wrapProgram $out/bin/jupiter-controller-update \

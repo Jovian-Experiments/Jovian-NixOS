@@ -7,7 +7,7 @@ let
     cp -r --no-preserve=all ${pkgs.alsa-ucm-conf} $out
 
     # override acp5x configs with Jovian stuff
-    cp -rf ${pkgs.jupiter-hw-support}/share/alsa $out/share
+    cp -rf ${pkgs.steamdeck-dsp}/share/alsa $out/share
     
     # remove more specific upstream symlink so Valve acp5x config is picked
     rm $out/share/alsa/ucm2/conf.d/acp5x/Valve-Jupiter-1.conf

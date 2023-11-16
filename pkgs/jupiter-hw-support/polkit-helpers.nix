@@ -5,6 +5,7 @@
   bash,
   coreutils,
   dmidecode,
+  gawk,
   gnugrep,
   jovian-stubs,
   jupiter-dock-updater-bin,
@@ -23,6 +24,7 @@ let
     inputs = [
       coreutils
       dmidecode
+      gawk
       gnugrep
       "${jupiter-dock-updater-bin}/lib/jupiter-dock-updater"
       jovian-stubs

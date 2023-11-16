@@ -35,7 +35,10 @@ in
 
   config = mkMerge [
     (mkIf (cfg.enable) {
-      hardware.firmware = [(lib.hiPrio pkgs.linux-firmware-jupiter)];
+      hardware.firmware = [
+        (lib.hiPrio pkgs.linux-firmware-jupiter)
+        (lib.hiPrio pkgs.steamdeck-dsp)
+      ];
     })
     (mkIf (cfg.autoUpdate) {
       systemd.packages = [pkgs.steamdeck-firmware];

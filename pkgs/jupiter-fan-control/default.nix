@@ -2,15 +2,13 @@
 
 stdenv.mkDerivation(finalAttrs: {
   pname = "jupiter-fan-control";
-  version = "20230209.1";
+  version = "20231114.3";
 
-  # TODO: Replace with https://gitlab.steamos.cloud/jupiter/jupiter-fan-control
-  # once it becomes public
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "jupiter-fan-control";
     rev = finalAttrs.version;
-    sha256 = "sha256-9sNJdR0t8GW0hcSNylTK5YcflPltfqyN9KnPos1YcA0=";
+    sha256 = "sha256-gbIqsrTHp8T6tcmeAsgDKEb37EqUfSLOLhtrSzBY8YE=";
   };
 
   buildInputs = [
