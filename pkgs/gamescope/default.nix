@@ -9,8 +9,8 @@
 #       version shipped by the vendor, ensuring feature level is equivalent.
 
 let
-  version = "3.13.3";
-  hash = "sha256-jH+N59eCJ2xggni0QMD+U8iCOMCjO1Y31QcfQTTAh3U=";
+  version = "3.13.5";
+  hash = "sha256-ITpUHE8VQKZOaCGHBdh0d40J5ejdG/ahv4V3o0KKMh4=";
 
   joshShaders = fetchFromGitHub {
     owner = "Joshua-Ashton";
