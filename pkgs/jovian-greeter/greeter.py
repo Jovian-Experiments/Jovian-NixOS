@@ -174,6 +174,8 @@ class Context:
         return None
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
+
     if len(sys.argv) != 2:
         logging.error("Usage: jovian-greeter <user>")
         sys.exit(1)
