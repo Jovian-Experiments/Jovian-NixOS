@@ -4,6 +4,7 @@
 , fetchpatch
 , nodePackages
 , nodejs
+, cacert
 , python3
 }:
 let
@@ -30,6 +31,7 @@ let
       runHook preBuild
 
       export SOURCE_DATE_EPOCH=1
+      export NODE_EXTRA_CA_CERTS="${cacert}/etc/ssl/certs/ca-bundle.crt"
       cd frontend
       pnpm i --ignore-scripts --ignore-pnpmfile --frozen-lockfile --node-linker=hoisted
 
