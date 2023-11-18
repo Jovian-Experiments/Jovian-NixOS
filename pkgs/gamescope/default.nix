@@ -9,9 +9,6 @@
 #       version shipped by the vendor, ensuring feature level is equivalent.
 
 let
-  version = "3.13.5";
-  hash = "sha256-ITpUHE8VQKZOaCGHBdh0d40J5ejdG/ahv4V3o0KKMh4=";
-
   joshShaders = fetchFromGitHub {
     owner = "Joshua-Ashton";
     repo = "GamescopeShaders";
@@ -19,14 +16,15 @@ let
     hash = "sha256-gR1AeAHV/Kn4ntiEDUSPxASLMFusV6hgSGrTbMCBUZA=";
   };
 in
-gamescope'.overrideAttrs({ buildInputs, postPatch ? "", postInstall ? "", ... }: {
-  name = "gamescope-${version}";
+gamescope'.overrideAttrs(old: rec {
+  version = "3.13.7";
+
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    inherit hash;
+    hash = "sha256-Q9pUU0L9d5nAQDgsMqFx2oj38chouRLk2tFGiRqvp/k=";
   };
 
   # Clobber unvendoring vkroots, nixpkgs version is too old
@@ -47,12 +45,12 @@ gamescope'.overrideAttrs({ buildInputs, postPatch ? "", postInstall ? "", ... }:
     substituteInPlace src/reshade_effect_manager.cpp --replace "@out@" "$out"
   '';
 
-  buildInputs = buildInputs ++ [
+  buildInputs = old.buildInputs ++ [
     gbenchmark
     glm
   ];
 
-  postInstall = postInstall + ''
+  postInstall = old.postInstall + ''
     mkdir -p $out/share/gamescope/reshade
 	  cp -r ${joshShaders}/* $out/share/gamescope/reshade/
   '';
