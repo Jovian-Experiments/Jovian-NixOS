@@ -66,16 +66,6 @@ in
         }
       ];
 
-      warnings = lib.optional (cfg.desktopSession == null) ''
-        jovian.steam.desktopSession is unset.
-
-        This means that using the Switch to Desktop function in Gaming Mode will
-        relaunch Gaming Mode.
-
-        Set jovian.steam.desktopSession to the name of a desktop session, or "steam-wayland"
-        to keep this behavior.
-      '';
-
       services.xserver = {
         enable = true;
         displayManager.lightdm.enable = false;
