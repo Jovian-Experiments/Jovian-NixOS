@@ -7,7 +7,7 @@
 
   assertions = [
     {
-      assertion = lib.versionAtLeast lib.version "23.11";
+      assertion = lib.hasInfix lib.version "pre";
       message = "Jovian NixOS is only validated with the nixos-unstable branch of Nixpkgs. Please upgrade your Nixpkgs version.";
     }
   ];
