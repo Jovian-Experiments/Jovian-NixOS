@@ -2,6 +2,7 @@
 
 let
   inherit (lib)
+    mkDefault
     mkIf
     mkMerge
     mkOption
@@ -143,6 +144,8 @@ in
           }
         });
       '';
+
+      xdg.portal.configPackages = mkDefault [ pkgs.gamescope-session ];
     })
   ]);
 }
