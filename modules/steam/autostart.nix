@@ -37,8 +37,8 @@ in
               lib.assertMsg (userProvidedDesktopSession != null -> (str.check userProvidedDesktopSession && lib.elem userProvidedDesktopSession config.services.xserver.displayManager.sessionData.sessionNames)) ''
                   Desktop session '${userProvidedDesktopSession}' not found.
                   Valid values for 'jovian.steam.desktopSession' are:
-                    ${lib.concatStringsSep "\n  " (lib.lists.remove "gamescope-wayland" config.services.xserver.displayManager.sessionData.sessionNames)}
-                  If you don't want a desktop session to switch to, remove 'jovian.steam.desktopSession' from your config.
+                    ${lib.concatStringsSep "\n  " config.services.xserver.displayManager.sessionData.sessionNames}
+                  If you don't want a desktop session to switch to, set 'jovian.steam.desktopSession' to 'gamescope-wayland'.
               '';
           };
           default = null;
@@ -46,8 +46,7 @@ in
           description = lib.mdDoc ''
             The session to launch for Desktop Mode.
 
-            By default, attempting to switch to the desktop will launch
-            Gaming Mode again.
+            By default, attempting to switch to the desktop will launch Gaming Mode again.
           '';
         };
       };
@@ -73,7 +72,7 @@ in
         This means that using the Switch to Desktop function in Gaming Mode will
         relaunch Gaming Mode.
 
-        Set jovian.steam.desktopSession to the name of a desktop session, or "steam-wayland"
+        Set jovian.steam.desktopSession to the name of a desktop session, or "gamescope-wayland"
         to keep this behavior.
       '';
 
