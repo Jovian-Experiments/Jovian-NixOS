@@ -16,7 +16,7 @@
 # Board prefixes to build the output for.
 , boards ? [
   "F7A" # Jupiter
-  #"F7G" # Galileo
+  "F7G" # Galileo
 ]
 
 # Directory containing the BIOS files.
@@ -56,15 +56,25 @@ in runCommand "steamdeck-bios-fwupd-${version}" {
 
     >&2 echo ":: Detected numeric BIOS version $versionNumber"
 
+    uefi_guid=bbb1cf06-f7b9-4466-adcc-6b8815bd99e6
+
+    # Run `fwupdtool hwids`
+    # Manufacturer + Family + ProductName
     case "$board" in
       F7A)
-        guid=bbb1cf06-f7b9-4466-adcc-6b8815bd99e6
+        # Manufacturer: Valve
+        # Family: Aerith
+        # ProductName: Jupiter
+        hwid=c92f10e2-b04e-59fd-9a1c-e9f354fe80d0
         model="LCD [Jupiter]"
         ;;
-      #F7G)
-      #  guid=00000000-0000-0000-0000-000000000000
-      #  model="OLED [Galileo]"
-      #  ;;
+      F7G)
+        # Manufacturer: Valve
+        # Family: Sephiroth
+        # ProductName: Galileo
+        hwid=642e9dd3-94fe-5b66-a403-5e765427de87
+        model="OLED [Galileo]"
+        ;;
       *)
         >&2 echo ":: No GUID for board '$board'"
         exit 1
@@ -73,7 +83,8 @@ in runCommand "steamdeck-bios-fwupd-${version}" {
 
     export model
     export board
-    export guid
+    export hwid
+    export uefi_guid
     export filename=$(basename "$biosFile")
     export sha1=$(sha1sum "$biosFile" | awk '{ print $1 }')
     export sha256=$(sha1sum "$biosFile" | awk '{ print $1 }')

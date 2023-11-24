@@ -2,8 +2,12 @@
 <component type="firmware">
   <id>unofficial.valve.steamdeck.@board@.BIOS</id>
   <name>Steam Deck (@model@)</name>
+  <requires>
+    <id compare="ge" version="1.0.1">org.freedesktop.fwupd</id>
+    <hardware>@hwid@</hardware>
+  </requires>
   <provides>
-    <firmware type="flashed">@guid@</firmware>
+    <firmware type="flashed">@uefi_guid@</firmware>
   </provides>
   <custom>
     <value key="LVFS::UpdateProtocol">org.uefi.capsule</value>
