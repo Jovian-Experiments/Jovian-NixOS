@@ -91,6 +91,10 @@ rec {
     };
   });
 
+  wireplumber-jovian = final.callPackage ./pkgs/wireplumber { 
+    wireplumber' = super.wireplumber;
+  };
+
   sdgyrodsu = final.callPackage ./pkgs/sdgyrodsu { };
 
   decky-loader = final.callPackage ./pkgs/decky-loader { };

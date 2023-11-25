@@ -12,6 +12,11 @@ let
     # remove more specific upstream symlink so Valve acp5x config is picked
     rm $out/share/alsa/ucm2/conf.d/acp5x/Valve-Jupiter-1.conf
   '';
+
+  mkDspEtc = path: {
+    name = path;
+    value.source = "${pkgs.steamdeck-dsp}/share/${path}";
+  };
 in
 {
   options = {
@@ -27,47 +32,31 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.enableSoundSupport) (lib.mkMerge [
-    {
-      hardware.pulseaudio.enable = lib.mkDefault false;
+  config = let
+    systemWide = config.services.pipewire.systemWide;
 
-      services.pipewire = {
-        enable = lib.mkDefault true;
-        pulse.enable = lib.mkDefault true;
-        alsa.enable = lib.mkDefault true;
-      };
+    extraEnv = {
+      ALSA_CONFIG_UCM2 = "${alsa-ucm-conf'}/share/alsa/ucm2";
+      LV2_PATH = "${pkgs.steamdeck-dsp}/lib/lv2";
+    };
+  in lib.mkIf cfg.enableSoundSupport {
+    hardware.pulseaudio.enable = false;
 
-      environment.variables.ALSA_CONFIG_UCM2 = "${alsa-ucm-conf'}/share/alsa/ucm2";
-    }
+    services.pipewire = {
+      enable = true;
+      pulse.enable = true;
+      alsa.enable = true;
+      wireplumber.package = pkgs.wireplumber-jovian;
+    };
 
-    # Pulseaudio
-    (lib.mkIf (config.hardware.pulseaudio.enable) (let
-      systemWide = config.hardware.pulseaudio.systemWide;
-    in {
-      systemd.services.pulseaudio = lib.mkIf systemWide {
-        environment.ALSA_CONFIG_UCM2 = config.environment.variables.ALSA_CONFIG_UCM2;
-      };
-      systemd.user.services.pulseaudio = lib.mkIf (!systemWide) {
-        environment.ALSA_CONFIG_UCM2 = config.environment.variables.ALSA_CONFIG_UCM2;
-      };
-    }))
+    environment.etc = builtins.listToAttrs (map mkDspEtc pkgs.steamdeck-dsp.passthru.filesInstalledToEtc);
 
-    # Pipewire
-    (lib.mkIf (config.services.pipewire.enable) (let
-      systemWide = config.services.pipewire.systemWide;
-    in {
-      systemd.services.pipewire = lib.mkIf systemWide {
-        environment.ALSA_CONFIG_UCM2 = config.environment.variables.ALSA_CONFIG_UCM2;
-      };
-      systemd.user.services.pipewire = lib.mkIf (!systemWide) {
-        environment.ALSA_CONFIG_UCM2 = config.environment.variables.ALSA_CONFIG_UCM2;
-      };
-      systemd.services.wireplumber = lib.mkIf systemWide {
-        environment.ALSA_CONFIG_UCM2 = config.environment.variables.ALSA_CONFIG_UCM2;
-      };
-      systemd.user.services.wireplumber = lib.mkIf (!systemWide) {
-        environment.ALSA_CONFIG_UCM2 = config.environment.variables.ALSA_CONFIG_UCM2;
-      };
-    }))
-  ]);
+    environment.variables = extraEnv;
+    
+    systemd.services.pipewire.environment = lib.mkIf systemWide extraEnv;
+    systemd.user.services.pipewire.environment = lib.mkIf (!systemWide) extraEnv;
+
+    systemd.services.wireplumber.environment = lib.mkIf systemWide extraEnv;
+    systemd.user.services.wireplumber.environment = lib.mkIf (!systemWide) extraEnv;
+  };
 }
