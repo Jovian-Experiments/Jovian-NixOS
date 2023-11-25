@@ -23,6 +23,13 @@ in
         source = "${pkgs.gamescope}/bin/gamescope";
         capabilities = "cap_sys_nice+pie";
       };
+
+      security.wrappers.galileo-mura-extractor = {
+        owner = "root";
+        group = "root";
+        source = "${pkgs.galileo-mura}/bin/galileo-mura-extractor";
+        setuid = true;
+      };
     }
     {
       # Enable MTU probing, as vendor does
