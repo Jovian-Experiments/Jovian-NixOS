@@ -51,9 +51,8 @@ stdenv.mkDerivation(finalAttrs: {
       | sort >etc.expected.txt
 
     for dir in wireplumber pipewire; do
-      find $out/share/$dir -type f -printf "$dir/%P\n" >>etc.unsorted.txt
-    done
-    sort <etc.unsorted.txt >etc.actual.txt
+      find $out/share/$dir -type f -printf "$dir/%P\n"
+    done | sort >etc.actual.txt
 
     if ! cmp --silent etc.{expected,actual}.txt; then
       >&2 echo "!! passthru.filesInstalledToEtc needs to be updated. The actual list of config files:"
