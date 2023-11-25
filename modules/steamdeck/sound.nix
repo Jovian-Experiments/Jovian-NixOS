@@ -12,6 +12,11 @@ let
     # remove more specific upstream symlink so Valve acp5x config is picked
     rm $out/share/alsa/ucm2/conf.d/acp5x/Valve-Jupiter-1.conf
   '';
+
+  mkDspEtc = path: {
+    name = path;
+    value.source = "${pkgs.steamdeck-dsp}/share/${path}";
+  };
 in
 {
   options = {
@@ -44,8 +49,7 @@ in
       wireplumber.package = pkgs.wireplumber-jovian;
     };
 
-    environment.etc."pipewire/pipewire.conf.d".source = "${pkgs.steamdeck-dsp}/share/pipewire/pipewire.conf.d";
-    environment.etc."wireplumber".source = "${pkgs.steamdeck-dsp}/share/wireplumber";
+    environment.etc = builtins.listToAttrs (map mkDspEtc pkgs.steamdeck-dsp.passthru.filesInstalledToEtc);
 
     environment.variables = extraEnv;
     
