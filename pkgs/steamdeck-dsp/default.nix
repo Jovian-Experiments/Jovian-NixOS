@@ -44,11 +44,39 @@ stdenv.mkDerivation(finalAttrs: {
   postInstall = ''
     mv -vt $out $out/usr/*
     rmdir -v $out/usr
+
+    >&2 echo "Checking configuration files"
+
+    echo -e "${builtins.concatStringsSep "\n" finalAttrs.passthru.filesInstalledToEtc}" \
+      | sort >etc.expected.txt
+
+    for dir in wireplumber pipewire; do
+      find $out/share/$dir -type f -printf "$dir/%P\n" >>etc.unsorted.txt
+    done
+    sort <etc.unsorted.txt >etc.actual.txt
+
+    if ! cmp --silent etc.{expected,actual}.txt; then
+      >&2 echo "!! passthru.filesInstalledToEtc needs to be updated. The actual list of config files:"
+      cat etc.actual.txt
+      false
+    fi
   '';
 
   # ¯\_(ツ)_/¯
   # Leaky wrappers I guess.
   dontWrapQtApps = true;
+
+  passthru.filesInstalledToEtc = [
+    "pipewire/pipewire.conf.d/filter-chain-sink.conf"
+    "pipewire/pipewire.conf.d/filter-chain.conf"
+    "pipewire/pipewire.conf.d/virtual-sink.conf"
+    "pipewire/pipewire.conf.d/virtual-source.conf"
+    "wireplumber/bluetooth.lua.d/60-bluez-jupiter.lua"
+    "wireplumber/main.lua.d/60-alsa-acp5x-config.lua"
+    "wireplumber/main.lua.d/60-alsa-card0-config.lua"
+    "wireplumber/main.lua.d/60-alsa-ps-controller-config.lua"
+    "wireplumber/scripts/open-alsa-acp-dsm-node.lua"
+  ];
 
   meta = {
     description = "Steamdeck Audio Processing";
