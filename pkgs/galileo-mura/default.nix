@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , meson
 , ninja
+, wrappersDir ? "/run/wrappers/bin"
 }:
 
 stdenv.mkDerivation rec {
@@ -20,6 +21,10 @@ stdenv.mkDerivation rec {
     meson
     ninja
   ];
+
+  postInstall = ''
+    sed -i 's|/usr/bin/galileo-mura-extractor|${wrappersDir}/galileo-mura-extractor|g' $out/bin/galileo-mura-setup
+  '';
 
   meta = with lib; {
     description = "";
