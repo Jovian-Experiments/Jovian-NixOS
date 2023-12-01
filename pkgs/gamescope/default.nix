@@ -1,8 +1,8 @@
 { gamescope'
-, fetchpatch
 , fetchFromGitHub
 , glm
 , gbenchmark
+, xorg
 }:
 
 # NOTE: vendoring gamescope for the time being since we want to match the
@@ -17,14 +17,14 @@ let
   };
 in
 gamescope'.overrideAttrs(old: rec {
-  version = "3.13.7";
+  version = "3.13.12";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-Q9pUU0L9d5nAQDgsMqFx2oj38chouRLk2tFGiRqvp/k=";
+    hash = "sha256-z3bTtHMPFLUMSSOXxl8VNYIxh6zx6/gID5YTfRtu2qE=";
   };
 
   # Clobber unvendoring vkroots, nixpkgs version is too old
@@ -32,10 +32,6 @@ gamescope'.overrideAttrs(old: rec {
 
   # (We are purposefully clobbering the patches from Nixpkgs here)
   patches = [
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/NixOS/nixpkgs/770f6182ac3084eb9ed836e1f34fce0595c905db/pkgs/applications/window-managers/gamescope/use-pkgconfig.patch";
-      sha256 = "sha256-BqP20qoVH47xT/Pn4P9V5wUvHK/AJivam0Xenr8AbGk=";
-    })
     ./jovian.patch
   ];
 
@@ -48,7 +44,11 @@ gamescope'.overrideAttrs(old: rec {
   buildInputs = old.buildInputs ++ [
     gbenchmark
     glm
+    xorg.xcbutilerrors
+    xorg.xcbutilwm
   ];
+
+  mesonInstallFlags = ["--skip-subprojects"];
 
   postInstall = old.postInstall + ''
     mkdir -p $out/share/gamescope/reshade
