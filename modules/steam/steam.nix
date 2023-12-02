@@ -25,7 +25,15 @@ in
       };
     }
     {
-      hardware.opengl.driSupport32Bit = true;
+      hardware.opengl = {
+        driSupport32Bit = true;
+        extraPackages = [ pkgs.gamescope.lib ];
+        extraPackages32 = [ (pkgs.pkgsi686Linux.gamescope.overrideAttrs(old: {
+          mesonFlags = old.mesonFlags or [] ++ ["-Denable_gamescope=false"];
+          postInstall = null;
+        })).lib ];
+      };
+
       hardware.pulseaudio.support32Bit = true;
       hardware.steam-hardware.enable = mkDefault true;
 
