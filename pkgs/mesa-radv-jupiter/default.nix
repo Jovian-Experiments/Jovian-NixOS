@@ -78,6 +78,7 @@
 , zstd
 , directx-headers
 , udev
+, mesa
 }:
 
 /** Packaging design:
@@ -97,7 +98,7 @@ let
 
   withLibdrm = lib.meta.availableOn stdenv.hostPlatform libdrm;
 
-  llvmPackages = llvmPackages_16;
+  llvmPackages = mesa.llvmPackages;
   # Align all the Mesa versions used. Required to prevent explosions when
   # two different LLVMs are loaded in the same process.
   # FIXME: these should really go into some sort of versioned LLVM package set
