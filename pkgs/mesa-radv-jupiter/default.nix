@@ -1,11 +1,13 @@
 # Corresponds to the `vulkan-radeon` package (source package `mesa-radv`)
 # in SteamOS 3. Only the radv driver is provided by this package.
 
-{ stdenv, lib, fetchFromGitHub, fetchpatch
+# Matches <https://github.com/NixOS/nixpkgs/blob/6247bd08f7db9abaa63fbd8122f2cb6179630da0/pkgs/development/libraries/mesa/default.nix>
+
+{ stdenv, lib, fetchFromGitHub, fetchpatch, buildPackages
 , meson, pkg-config, ninja
 , intltool, bison, flex, file, python3Packages, wayland-scanner
 , expat, libdrm, xorg, wayland, wayland-protocols, openssl
-, llvmPackages_15, libffi, libomxil-bellagio, libva-minimal
+, llvmPackages_16, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau
 , libglvnd, libunwind, lm_sensors
 , vulkan-loader, glslang
@@ -70,10 +72,8 @@
 , enableOSMesa ? /* stdenv.isLinux */ false # SteamOS mesa-radv
 , enableOpenCL ? /* stdenv.isLinux && stdenv.isx86_64 */ false # SteamOS mesa-radv
 , enablePatentEncumberedCodecs ? true
-, libclc
 , jdupes
 , rustc
-, rust-bindgen
 , spirv-llvm-translator
 , zstd
 , directx-headers
@@ -97,13 +97,13 @@ let
 
   withLibdrm = lib.meta.availableOn stdenv.hostPlatform libdrm;
 
-  llvmPackages = llvmPackages_15;
+  llvmPackages = llvmPackages_16;
   # Align all the Mesa versions used. Required to prevent explosions when
   # two different LLVMs are loaded in the same process.
   # FIXME: these should really go into some sort of versioned LLVM package set
-  rust-bindgen' = rust-bindgen.override {
-    rust-bindgen-unwrapped = rust-bindgen.unwrapped.override {
-      clang = llvmPackages.clang;
+  rust-bindgen' = buildPackages.rust-bindgen.override {
+    rust-bindgen-unwrapped = buildPackages.rust-bindgen.unwrapped.override {
+      clang = buildPackages.llvmPackages_15.clang;
     };
   };
   spirv-llvm-translator' = spirv-llvm-translator.override {
@@ -199,7 +199,9 @@ self = stdenv.mkDerivation {
 
     /* SteamOS mesa-radv (this ends-up creating a dep in libclc)
     # Enable RT for Intel hardware
+    # https://gitlab.freedesktop.org/mesa/mesa/-/issues/9080
     "-Dintel-clc=enabled"
+    (lib.mesonEnable "intel-clc" (stdenv.buildPlatform == stdenv.hostPlatform)
     */
   ] ++ lib.optionals enableOpenCL [
     # Clover, old OpenCL frontend
@@ -243,26 +245,29 @@ self = stdenv.mkDerivation {
   ;
 
   buildInputs = with xorg; [
-    expat llvmPackages.libllvm libglvnd xorgproto
+    expat glslang llvmPackages.libllvm libglvnd xorgproto
     libX11 libXext libxcb libXt libXfixes libxshmfence libXrandr
     libffi libvdpau libelf libXvMC
     libpthreadstubs openssl /*or another sha1 provider*/
     zstd libunwind
+    python3Packages.python # for shebang
   ] ++ lib.optionals haveWayland [ wayland wayland-protocols ]
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal udev lm_sensors ]
-    ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped rustc rust-bindgen' spirv-llvm-translator' ]
+    ++ lib.optionals enableOpenCL [ llvmPackages.libclc llvmPackages.clang llvmPackages.clang-unwrapped spirv-llvm-translator' ]
     ++ lib.optional withValgrind valgrind-light
     ++ lib.optional haveZink vulkan-loader
     ++ lib.optional haveDozen directx-headers;
 
-  depsBuildBuild = [ pkg-config ];
+  depsBuildBuild = [ pkg-config ]
+    ++ lib.optional enableOpenCL buildPackages.stdenv.cc;
 
   nativeBuildInputs = [
     meson pkg-config ninja
     intltool bison flex file
     python3Packages.python python3Packages.mako python3Packages.ply
     jdupes glslang
-  ] ++ lib.optional haveWayland wayland-scanner;
+  ] ++ lib.optionals enableOpenCL [ rust-bindgen' rustc ]
+    ++ lib.optional haveWayland wayland-scanner;
 
   propagatedBuildInputs = with xorg; [
     libXdamage libXxf86vm
@@ -344,6 +349,9 @@ self = stdenv.mkDerivation {
         mv $dev/$pc $driversdev/$pc
       fi
     done
+
+    # Don't depend on build python
+    patchShebangs --host --update $out/bin/*
 
     # NAR doesn't support hard links, so convert them to symlinks to save space.
     jdupes --hard-links --link-soft --recurse "$drivers"
