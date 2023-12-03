@@ -17,14 +17,14 @@ let
   };
 in
 gamescope'.overrideAttrs(old: rec {
-  version = "3.13.12";
+  version = "3.13.13";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-z3bTtHMPFLUMSSOXxl8VNYIxh6zx6/gID5YTfRtu2qE=";
+    hash = "sha256-m4YsmYsA8f5OZDQfnaBe5Dr579S9BY91rXOAJ1DgjEQ=";
   };
 
   # Clobber unvendoring vkroots, nixpkgs version is too old
