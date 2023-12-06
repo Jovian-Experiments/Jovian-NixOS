@@ -17,14 +17,14 @@ let
   };
 in
 gamescope'.overrideAttrs(old: rec {
-  version = "3.13.16";
+  version = "3.13.17";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-VxZSRTqsEyEc8C2gNdRxik3Jx1NxB9ktQ3ALUFkDjo0=";
+    hash = "sha256-cafmZdYqg4a2M4JEZcN+tYzJ/Uw5dnZD99oS9cl8ZUc=";
   };
 
   # Clobber unvendoring vkroots, nixpkgs version is too old
@@ -46,6 +46,7 @@ gamescope'.overrideAttrs(old: rec {
     glm
     xorg.xcbutilerrors
     xorg.xcbutilwm
+    xorg.libXcursor
   ];
 
   mesonInstallFlags = ["--skip-subprojects"];
