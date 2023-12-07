@@ -7,13 +7,13 @@
 }:
 
 let
-  version = "20231205.1";
+  version = "20231206.1";
 in (applyPatches {
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "jupiter-hw-support";
     rev = "jupiter-${version}";
-    hash = "sha256-UqfvfJbK82aqHidsra4OTXSmsd40xTyfx9ARKlFAjBM=";
+    hash = "sha256-D/L2anyRJzHZhMcGFKIWvnevuuiZdQ4ovxOJuMzPky4=";
   };
 
   patches = [
