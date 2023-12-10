@@ -127,7 +127,7 @@ let
       mkdir $out/bin
       cat << EOF >$out/bin/decky-loader
       #!/bin/sh
-      export PATH=${pythonEnv}/bin:$PATH
+      export PATH=${pythonEnv}/bin:\$PATH
       export DECKY_VERSION=v${version}
       exec ${pythonEnv}/bin/python3 $out/lib/decky-loader/main.py
       EOF
