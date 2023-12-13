@@ -1,14 +1,15 @@
 { 
-  applyPatches, 
+  stdenv, 
   fetchFromGitHub, 
   substituteAll, 
   jovian-steam-protocol-handler, 
   systemd,
 }:
 
-let
+stdenv.mkDerivation rec {
+  pname = "jupiter-hw-support-source";
   version = "20231206.1";
-in (applyPatches {
+
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "jupiter-hw-support";
@@ -23,6 +24,8 @@ in (applyPatches {
       src = ./jovian.patch;
     })
   ];
-}) // {
-  inherit version;
+
+  installPhase = ''
+    cp -r . $out
+  '';
 }
