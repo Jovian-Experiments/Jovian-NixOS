@@ -1,19 +1,20 @@
 { 
-  applyPatches, 
+  stdenv, 
   fetchFromGitHub, 
   substituteAll, 
   jovian-steam-protocol-handler, 
   systemd,
 }:
 
-let
-  version = "20231206.1";
-in (applyPatches {
+stdenv.mkDerivation rec {
+  pname = "jupiter-hw-support-source";
+  version = "20231212.1";
+
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "jupiter-hw-support";
     rev = "jupiter-${version}";
-    hash = "sha256-D/L2anyRJzHZhMcGFKIWvnevuuiZdQ4ovxOJuMzPky4=";
+    hash = "sha256-pwIq8Fu1Q8oS/SB6Lu8B6Wgqbvz33mOriezZ2auF+t8=";
   };
 
   patches = [
@@ -23,6 +24,8 @@ in (applyPatches {
       src = ./jovian.patch;
     })
   ];
-}) // {
-  inherit version;
+
+  installPhase = ''
+    cp -r . $out
+  '';
 }
