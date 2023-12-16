@@ -8,9 +8,9 @@
 , python3
 }:
 let
-  version = "2.10.5";
-  hash = "sha256-TSw7Vc6Gnl2G7WIu8nElqjY54eY+LPrGF+k5Fl7hCPw=";
-  npmHash = "sha256-tJ/psoByV7ySrE/Z4K0mGZAy2clsiiruUZ8tICUhDM8=";
+  version = "2.10.10";
+  hash = "sha256-FY2vSEgkaF9vGyt0VxtofAViifMbJlM9bfI+c7rX82c=";
+  npmHash = "sha256-4AC+mza7ya3wqVQYUe+wT311BT21aLHcBDBkpCxc3ZU=";
 
   src = fetchFromGitHub {
     owner = "SteamDeckHomebrew";
@@ -98,16 +98,8 @@ let
     inherit version src;
 
     patches = [
-      # Patches submitted upstream: https://github.com/SteamDeckHomebrew/decky-loader/pull/528
-      # FIXME: remove when merged
-      (fetchpatch {
-        url = "https://github.com/SteamDeckHomebrew/decky-loader/commit/e3a8de2490fea942edad4c0a8971a3958cc01d9b.patch";
-        hash = "sha256-0klVKBvywCXfak8rdB3k4sK/eN/fcY42C29+J1W4pOM=";
-      })
-      (fetchpatch {
-        url = "https://github.com/SteamDeckHomebrew/decky-loader/commit/89f37f4f547ff0d78783899df80a046bc864c48e.patch";
-        hash = "sha256-9+shHrOJntHrqFbdsuBMD5GCQSx7DH3L1FLJihW9xCg=";
-      })
+      # hacks to make Decky behave on NixOS
+      ./jovian.patch
     ];
 
     buildInputs = [ pythonEnv ];
