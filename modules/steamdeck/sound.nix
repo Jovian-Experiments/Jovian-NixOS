@@ -17,6 +17,10 @@ let
     name = path;
     value.source = "${pkgs.steamdeck-dsp}/share/${path}";
   };
+  mkWpEtc = path: {
+    name = "wireplumber/${path}";
+    value.source = "/run/wireplumber/${path}";
+  };
 in
 {
   options = {
@@ -49,14 +53,20 @@ in
       wireplumber.package = pkgs.wireplumber-jovian;
     };
 
-    environment.etc = builtins.listToAttrs (map mkDspEtc pkgs.steamdeck-dsp.passthru.filesInstalledToEtc);
+    environment.etc =
+      (builtins.listToAttrs (map mkDspEtc pkgs.steamdeck-dsp.passthru.filesInstalledToEtc)) //
+      (builtins.listToAttrs (map mkWpEtc pkgs.steamdeck-dsp.passthru.filesInstalledToRun));
 
     environment.variables = extraEnv;
-    
+
+    systemd.packages = [ pkgs.steamdeck-dsp ];
+
     systemd.services.pipewire.environment = lib.mkIf systemWide extraEnv;
     systemd.user.services.pipewire.environment = lib.mkIf (!systemWide) extraEnv;
 
     systemd.services.wireplumber.environment = lib.mkIf systemWide extraEnv;
     systemd.user.services.wireplumber.environment = lib.mkIf (!systemWide) extraEnv;
+
+    systemd.services.wireplumber-sysconf.wantedBy = ["multi-user.target"];
   };
 }
