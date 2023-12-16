@@ -39,6 +39,10 @@ in
       ALSA_CONFIG_UCM2 = "${alsa-ucm-conf'}/share/alsa/ucm2";
       LV2_PATH = "${pkgs.steamdeck-dsp}/lib/lv2";
     };
+
+    wpEnv = extraEnv // {
+      XDG_CONFIG_DIR = "/run";
+    };
   in lib.mkIf cfg.enableSoundSupport {
     hardware.pulseaudio.enable = false;
 
@@ -52,11 +56,13 @@ in
     environment.etc = builtins.listToAttrs (map mkDspEtc pkgs.steamdeck-dsp.passthru.filesInstalledToEtc);
 
     environment.variables = extraEnv;
-    
+
+    systemd.packages = [ pkgs.steamdeck-dsp ];
+
     systemd.services.pipewire.environment = lib.mkIf systemWide extraEnv;
     systemd.user.services.pipewire.environment = lib.mkIf (!systemWide) extraEnv;
 
-    systemd.services.wireplumber.environment = lib.mkIf systemWide extraEnv;
-    systemd.user.services.wireplumber.environment = lib.mkIf (!systemWide) extraEnv;
+    systemd.services.wireplumber.environment = lib.mkIf systemWide wpEnv;
+    systemd.user.services.wireplumber.environment = lib.mkIf (!systemWide) wpEnv;
   };
 }
