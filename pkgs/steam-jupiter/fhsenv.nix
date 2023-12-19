@@ -58,6 +58,9 @@ let
       export PATH=${jovian-stubs}/bin:$PATH
     '';
 
+    # Force using host /tmp so gamescope-session can find the magic files
+    extraBwrapArgs = ["--bind /tmp /tmp"];
+
     # We need to add this flag when Steam is started directly (e.g., desktop mode)
     # so we have the correct client version. This is important even for desktop
     # use because only the Steam Deck branch of the client has the new on-screen
