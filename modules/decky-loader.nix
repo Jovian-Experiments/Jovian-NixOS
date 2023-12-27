@@ -11,6 +11,10 @@ let
   cfg = config.jovian.decky-loader;
 in
 {
+  imports = [
+    ./decky-loader
+  ];
+
   options = {
     jovian = {
       decky-loader = {
