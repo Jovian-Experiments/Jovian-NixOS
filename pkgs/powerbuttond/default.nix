@@ -14,8 +14,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "powerbuttond";
-    rev = "v2";
-    hash = "sha256-syeVkiD42QM3wkE0iqfS5+Z3hqh1reqCWGnTR3BGXV4=";
+    rev = "d31bbe457f6e4ae641f555b48b9d64b6c6311191"; # jovian/v2
+    hash = "sha256-T/9AhRYw6v/WvtUaTegBdvR3HWTUFDY6ztQtol9YDwI=";
   };
 
   patches = [
