@@ -14,8 +14,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "powerbuttond";
-    rev = "v2";
-    hash = "sha256-syeVkiD42QM3wkE0iqfS5+Z3hqh1reqCWGnTR3BGXV4=";
+    rev = "ef6d214295a38f186bba9a80cc6f48c055700e3a"; # jovian/multi
+    hash = "sha256-SD8NpiBIIvI59/HtV19lsJ8/SdBOoyO2rH1OVmDX5Q8=";
   };
 
   patches = [
@@ -25,16 +25,18 @@ stdenv.mkDerivation {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace '/usr/lib/hwsupport/powerbuttond' '/usr/bin/powerbuttond' \
+      --replace '/usr/' '/'
+  '';
+
   nativeBuildInputs = [pkg-config];
   buildInputs = [libevdev];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -m 555 powerbuttond $out/bin/powerbuttond
-
-    runHook postInstall
-  '';
+  makeFlags = [
+    "DESTDIR=$(out)"
+  ];
 
   meta = with lib; {
     description = "Steam Deck power button daemon";
