@@ -53,6 +53,10 @@ in
         HandlePowerKey=ignore
       '';
 
+      services.udev.packages = [
+        pkgs.powerbuttond
+      ];
+
       # This rule allows the user to configure Wi-Fi in Deck UI.
       #
       # Steam modifies the system network configs via
