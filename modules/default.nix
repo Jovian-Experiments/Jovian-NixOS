@@ -3,7 +3,7 @@
     ./decky-loader.nix
     ./devices
     ./overlay.nix
-    ./steam/default.nix
+    ./steam
     ./workarounds.nix
   ];
 }
