@@ -28,7 +28,7 @@ in
         defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
         type = types.bool;
         description = ''
-          Whether to enable stock kernel command line flags.
+          Whether to enable Steam Deck command line flags.
         '';
       };
       enableDefaultStage1Modules = mkOption {
@@ -93,11 +93,9 @@ in
     })
     (mkIf (cfg.enableDefaultCmdlineConfig) {
       boot.kernelParams = [
-        # From grub-steamos
-        "amd_iommu=off"
-        "amdgpu.gttsize=8128"
+        # From grub-steamos in jupiter-hw-support
+        #  - https://github.com/Jovian-Experiments/jupiter-hw-support/blob/jupiter-20231212.1/etc/default/grub-steamos
         "spi_amd.speed_dev=1"
-        "audit=0"
       ];
     })
     (mkIf (cfg.enableDefaultSysctlConfig) {
