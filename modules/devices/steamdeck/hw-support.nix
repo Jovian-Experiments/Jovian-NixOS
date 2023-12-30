@@ -31,16 +31,6 @@ in
           Whether to enable essential kernel modules in initrd.
         '';
       };
-      enableProductSerialAccess = mkOption {
-        default = cfg.enable;
-        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
-        type = types.bool;
-        description = lib.mdDoc ''
-          > Loosen the product_serial node to `440 / root:wheel`, rather than `400 / root:root`
-          > to allow the physical users to read S/N without auth.
-          — holo-dmi-rules 1.0
-        '';
-      };
     };
   };
 
@@ -56,11 +46,6 @@ in
         memoryPercent = lib.mkDefault 50;
         algorithm = lib.mkDefault "zstd";
       };
-    })
-    (mkIf (cfg.enableProductSerialAccess) {
-      systemd.tmpfiles.rules = [
-        "z /sys/class/dmi/id/product_serial 440 root wheel - -"
-      ];
     })
     (mkIf (cfg.enableDefaultStage1Modules) {
       boot.initrd.kernelModules = [
