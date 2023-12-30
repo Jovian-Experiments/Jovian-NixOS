@@ -10,6 +10,7 @@ in
   imports = [
     ./boot.nix
     ./mesa.nix
+    ./sysctl.nix
   ];
   options = {
     jovian.steamos = {
