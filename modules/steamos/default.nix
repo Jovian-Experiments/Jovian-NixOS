@@ -10,6 +10,7 @@ in
   imports = [
     ./boot.nix
     ./mesa.nix
+    ./misc.nix
     ./sysctl.nix
   ];
   options = {
