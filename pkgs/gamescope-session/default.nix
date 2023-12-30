@@ -61,6 +61,9 @@ let
     fake = {
       # we're using wrappers for these
       external = [ "sudo" "gamescope" ];
+      source = [
+        "/etc/xdg/gamescope-session/environment"
+      ];
     };
     fix = {
       "/usr/bin/ibus-daemon" = true;
@@ -73,6 +76,7 @@ let
       # if you've somehow managed to get devkit Steam on your NixOS,
       # everything that happens beyond this point is entirely your fault
       "$HOME/devkit-game/devkit-steam" = true;
+      "source:/etc/xdg/gamescope-session/environment" = true;
     };
 
     prologue = "${writeText "gamescope-session-prologue" ''
@@ -107,9 +111,11 @@ in stdenv.mkDerivation(finalAttrs: {
     hash = "sha256-NOpTVCSSufqsnjccEVAx9aQ4/eKcDsryjB7SI1rf3HA=";
   };
 
-  patchPhase = ''
-    runHook prePatch
+  patches = [
+    ./0001-gamescope-session-Add-xdg-environment-overrides.patch
+  ];
 
+  postPatch = ''
     patchShebangs steam-http-loader
 
     substituteInPlace gamescope-session \
@@ -118,8 +124,6 @@ in stdenv.mkDerivation(finalAttrs: {
 
     substituteInPlace gamescope-session.service \
       --replace /usr/bin $out/bin
-
-    runHook postPatch
   '';
 
   nativeBuildInputs = [python3];
