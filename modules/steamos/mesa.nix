@@ -58,8 +58,8 @@ in
     jovian.steamos = {
       enableVendorRadv = lib.mkOption {
         type = types.bool;
-        default = cfg.useSteamOSConfig;
-        defaultText = lib.literalExpression "config.jovian.steamos.useSteamOSConfig";
+        default = cfg.useSteamOSConfig && config.jovian.hardware.has.amd.gpu;
+        defaultText = lib.literalExpression "config.jovian.steamos.useSteamOSConfig && config.jovian.hardware.has.amd.gpu";
         description = ''
           Whether to enable the vendor branch of Mesa RADV.
         '';
