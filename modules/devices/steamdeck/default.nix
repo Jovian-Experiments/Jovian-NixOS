@@ -6,9 +6,11 @@
 
 let
   inherit (lib)
+    mkIf
     mkOption
     types
   ;
+  cfg = config.jovian.devices.steamdeck;
 in
 {
   imports = [
@@ -32,6 +34,11 @@ in
           Whether to enable Steam Deck-specific configurations.
         '';
       };
+    };
+  };
+  config = mkIf cfg.enable {
+    jovian.hardware.has = {
+      amd.gpu = true;
     };
   };
 }
