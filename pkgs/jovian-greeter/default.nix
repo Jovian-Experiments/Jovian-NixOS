@@ -1,4 +1,4 @@
-{ stdenv, python3, shellcheck, nodePackages, makeWrapper }:
+{ stdenv, python3, shellcheck, nodePackages }:
 
 stdenv.mkDerivation {
   name = "jovian-greeter";
@@ -7,29 +7,31 @@ stdenv.mkDerivation {
 
   src = ./.;
 
-  buildInputs = [ python3 shellcheck nodePackages.pyright makeWrapper ];
+  nativeBuildInputs = [ python3.pkgs.wrapPython ];
+  buildInputs = [ python3 ];
+  pythonPath = [ python3.pkgs.systemd ];
 
-  dontConfigure = true;
+  nativeCheckInputs = [
+    shellcheck
+    nodePackages.pyright
+  ];
 
-  buildPhase = ''
-    runHook preBuild
+  checkPhase = ''
+    runHook preCheck
 
     shellcheck ./consume-session
     pyright *.py
 
-    runHook postBuild
+    runHook postCheck
   '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib/jovian-greeter}
-    cp *.py $out/lib/jovian-greeter
-    makeWrapper ${python3}/bin/python $out/bin/jovian-greeter \
-      --add-flags "$out/lib/jovian-greeter/greeter.py"
+    install -Dm555 greeter.py $out/bin/jovian-greeter
+    wrapPythonPrograms
 
-    mkdir -p $helper/lib/jovian-greeter
-    cp ./consume-session $helper/lib/jovian-greeter
+    install -Dm555 ./consume-session $helper/lib/jovian-greeter/consume-session
 
     runHook postInstall
   '';

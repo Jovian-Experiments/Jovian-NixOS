@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # A minimal greetd greeter that runs a user's preferred session
 # in $HOME/.local/state/steamos-session-select
 
@@ -11,6 +12,8 @@ import subprocess
 import sys
 from pathlib import Path
 from typing import Any, Optional, Iterable, Mapping, List
+
+from systemd.journal import JournalHandler
 
 DEFAULT_SESSION = 'gamescope-wayland'
 HELPER_PREFIX = Path('/run/current-system/sw/lib/jovian-greeter')
@@ -175,6 +178,9 @@ class Context:
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
+    logging.root.handlers = [
+        JournalHandler(SYSLOG_IDENTIFIER="jovian-greeter")
+    ]
 
     if len(sys.argv) != 2:
         logging.error("Usage: jovian-greeter <user>")
