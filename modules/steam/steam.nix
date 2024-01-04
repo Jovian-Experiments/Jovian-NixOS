@@ -48,10 +48,14 @@ in
 
       services.xserver.displayManager.sessionPackages = [ pkgs.gamescope-session ];
 
-      # Conflicts with power-button-handler
+      # Conflicts with powerbuttond
       services.logind.extraConfig = ''
         HandlePowerKey=ignore
       '';
+
+      services.udev.packages = [
+        pkgs.powerbuttond
+      ];
 
       # This rule allows the user to configure Wi-Fi in Deck UI.
       #
