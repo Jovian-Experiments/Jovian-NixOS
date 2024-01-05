@@ -10,6 +10,7 @@ in
   imports = [
     ./steam.nix
     ./autostart.nix
+    ./environment.nix
   ];
   options = {
     jovian = {
