@@ -56,6 +56,14 @@ in
     (mkIf (cfg.enable) {
       # Firmware is required in stage-1 for early KMS.
       hardware.enableRedistributableFirmware = true;
+
+      # Match vendor settings: https://github.com/Jovian-Experiments/PKGBUILDs-mirror/blob/holo-main/holo-zram-swap-0.1-0/zram-generator.conf
+      zramSwap = {
+        enable = lib.mkDefault true;
+        priority = lib.mkDefault 100;
+        memoryPercent = lib.mkDefault 50;
+        algorithm = lib.mkDefault "zstd";
+      };
     })
     (mkIf (cfg.enableProductSerialAccess) {
       systemd.tmpfiles.rules = [
