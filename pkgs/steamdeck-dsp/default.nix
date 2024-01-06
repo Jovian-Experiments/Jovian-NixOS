@@ -6,17 +6,30 @@
 , faust2lv2
 , rnnoise-plugin
 , which
+, resholve
+, bash
+, coreutils
+, dmidecode
 }:
 
-stdenv.mkDerivation(finalAttrs: {
+let
+  wireplumber-hwconfig-solution = {
+    scripts = [ "share/wireplumber/hardware-profiles/wireplumber-hwconfig" ];
+    interpreter = "${bash}/bin/bash";
+    inputs = [
+      coreutils
+      dmidecode
+    ];
+  };
+in stdenv.mkDerivation(finalAttrs: {
   pname = "steamdeck-dsp";
-  version = "0.39";
+  version = "0.42";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "steamdeck-dsp";
     rev = finalAttrs.version;
-    sha256 = "sha256-t/Px0PpTrzZIpxii8J5jD141uLpMKvrnZRxZODPMK+I=";
+    hash = "sha256-A0O6whz6S/izYv9dMORjYTlpg8LwKKFyXw0CTHPIi/s=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +48,13 @@ stdenv.mkDerivation(finalAttrs: {
     # Stop trying to run `echo`, we don't have it
     substituteInPlace ucm2/conf.d/*/*.conf \
       --replace "exec" "# exec"
+
+    # Fix paths
+    substituteInPlace wireplumber/hardware-profiles/wireplumber-hwconfig \
+      --replace "/usr/share" "$out/share"
+
+    substituteInPlace wireplumber/systemd/system/wireplumber-sysconf.service \
+      --replace "/usr/share" "$out/share"
   '';
 
   preInstall = ''
@@ -45,6 +65,8 @@ stdenv.mkDerivation(finalAttrs: {
     mv -vt $out $out/usr/*
     rmdir -v $out/usr
 
+    ${resholve.phraseSolution "wireplumber-hwconfig" wireplumber-hwconfig-solution}
+
     >&2 echo "Checking configuration files"
 
     echo -e "${builtins.concatStringsSep "\n" finalAttrs.passthru.filesInstalledToEtc}" \
@@ -52,11 +74,24 @@ stdenv.mkDerivation(finalAttrs: {
 
     for dir in wireplumber pipewire; do
       find $out/share/$dir -type f -printf "$dir/%P\n"
-    done | sort >etc.actual.txt
+    done | grep -v wireplumber/hardware-profiles | sort >etc.actual.txt
 
     if ! cmp --silent etc.{expected,actual}.txt; then
       >&2 echo "!! passthru.filesInstalledToEtc needs to be updated. The actual list of config files:"
       cat etc.actual.txt
+      false
+    fi
+
+    echo -e "${builtins.concatStringsSep "\n" finalAttrs.passthru.filesInstalledToRun}" \
+      | sort >run.expected.txt
+
+    for dir in valve-galileo valve-jupiter; do
+      find $out/share/wireplumber/hardware-profiles/$dir -type f -printf "%P\n"
+    done | sort | uniq >run.actual.txt
+
+    if ! cmp --silent run.{expected,actual}.txt; then
+      >&2 echo "!! passthru.filesInstalledToRun needs to be updated. The actual list of config files:"
+      cat run.actual.txt
       false
     fi
   '';
@@ -65,17 +100,21 @@ stdenv.mkDerivation(finalAttrs: {
   # Leaky wrappers I guess.
   dontWrapQtApps = true;
 
-  passthru.filesInstalledToEtc = [
-    "pipewire/pipewire.conf.d/filter-chain-sink.conf"
-    "pipewire/pipewire.conf.d/filter-chain.conf"
-    "pipewire/pipewire.conf.d/virtual-sink.conf"
-    "pipewire/pipewire.conf.d/virtual-source.conf"
-    "wireplumber/bluetooth.lua.d/60-bluez-jupiter.lua"
-    "wireplumber/main.lua.d/60-alsa-acp5x-config.lua"
-    "wireplumber/main.lua.d/60-alsa-card0-config.lua"
-    "wireplumber/main.lua.d/60-alsa-ps-controller-config.lua"
-    "wireplumber/scripts/open-alsa-acp-dsm-node.lua"
-  ];
+  passthru = {
+    filesInstalledToEtc = [
+      "pipewire/pipewire.conf.d/filter-chain-sink.conf"
+      "pipewire/pipewire.conf.d/filter-chain.conf"
+      "pipewire/pipewire.conf.d/virtual-sink.conf"
+      "pipewire/pipewire.conf.d/virtual-source.conf"
+      "wireplumber/main.lua.d/60-alsa-acp5x-config.lua"
+      "wireplumber/main.lua.d/60-alsa-card0-config.lua"
+      "wireplumber/main.lua.d/60-alsa-ps-controller-config.lua"
+      "wireplumber/scripts/open-alsa-acp-dsm-node.lua"
+    ];
+    filesInstalledToRun = [
+      "bluetooth.lua.d/60-bluez.lua"
+    ];
+  };
 
   meta = {
     description = "Steamdeck Audio Processing";
