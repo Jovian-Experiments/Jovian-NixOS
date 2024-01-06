@@ -85,9 +85,28 @@ in
       systemd.user.services.gamescope-session = {
         overrideStrategy = "asDropin";
 
-        environment = lib.mkForce {
-          JOVIAN_DESKTOP_SESSION = cfg.desktopSession;
-        };
+        environment = mkMerge (
+          [
+            {
+              JOVIAN_DESKTOP_SESSION = cfg.desktopSession;
+              PATH = lib.mkForce null;
+            }
+          ]
+          # Add any globally defined well-known XKB_DEFAULT environment variables to the session
+          # This is the closest wayland sessions have to generic keyboard configurations.
+          ++ (map (var:
+            (mkIf (config.environment.variables ? "${var}") {
+              "${var}" = mkDefault config.environment.variables."${var}";
+            })
+          ) [
+              "XKB_DEFAULT_LAYOUT"
+              "XKB_DEFAULT_OPTIONS"
+              "XKB_DEFAULT_MODEL"
+              "XKB_DEFAULT_RULES"
+              "XKB_DEFAULT_VARIANT"
+            ]
+          )
+        );
 
         # upstream unit redirects to a file, but this seems unnecessary now?
         # see https://github.com/Jovian-Experiments/PKGBUILDs-mirror/blob/76aa4a564094dc656aa1b1daa0f116a7b93b0d7b/gamescope-session.service#L10
