@@ -35,15 +35,6 @@ in
   };
 
   config = mkMerge [
-    (mkIf (cfg.enable) {
-      # Match vendor settings: https://github.com/Jovian-Experiments/PKGBUILDs-mirror/blob/holo-main/holo-zram-swap-0.1-0/zram-generator.conf
-      zramSwap = {
-        enable = lib.mkDefault true;
-        priority = lib.mkDefault 100;
-        memoryPercent = lib.mkDefault 50;
-        algorithm = lib.mkDefault "zstd";
-      };
-    })
     (mkIf (cfg.enableDefaultStage1Modules) {
       boot.initrd.kernelModules = [
         "hid-generic"
