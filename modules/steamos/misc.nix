@@ -31,5 +31,14 @@ in
         "z /sys/class/dmi/id/product_serial 440 root wheel - -"
       ];
     })
+    (mkIf (cfg.useSteamOSConfig) {
+      # Match vendor settings: https://github.com/Jovian-Experiments/PKGBUILDs-mirror/blob/holo-main/holo-zram-swap-0.1-0/zram-generator.conf
+      zramSwap = {
+        enable = lib.mkDefault true;
+        priority = lib.mkDefault 100;
+        memoryPercent = lib.mkDefault 50;
+        algorithm = lib.mkDefault "zstd";
+      };
+    })
   ];
 }
