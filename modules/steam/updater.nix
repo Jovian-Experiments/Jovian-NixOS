@@ -17,6 +17,7 @@ in
       splash = mkOption {
         type = types.enum [
           "steamos"
+          "jovian"
           "bgrt"
           "vendor"
         ];
@@ -25,6 +26,8 @@ in
           Configures the source of the splash screen used by the updater (preloader) step when launching Steam.
 
           When `steamos`, this will use the vendor-selected image, scaled appropriately.
+
+          When `jovian`, this will use the Jovian Experiments logo, scaled appropriately.
 
           When `bgrt`, the BGRT (UEFI vendor logo) will be used.
 
@@ -66,6 +69,20 @@ in
                   esac
                 )
               )
+
+              ${optionalString (cfg.updater.splash == "jovian") ''
+                ARGS+=(
+                  # Rotate the canvas, only
+                  "''${ROTATE_SNIPPET[@]}"
+
+                  # Add the logo steam selected
+                  "${../../artwork/logo/splash.png}"
+                  # Centered
+                  -gravity center
+                  # (This means 'add')
+                  -composite
+                )
+              ''}
 
               ${optionalString (cfg.updater.splash == "steamos") ''
                 ARGS+=(
