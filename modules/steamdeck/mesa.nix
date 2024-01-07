@@ -41,6 +41,12 @@ let
         hash = "sha256-KZNud0rlg/qRbbVb3+x2+eroHUcIegOJPct2yfR5NPo=";
       })
     ];
+    "23.3" = [
+      (pkgs.fetchpatch {
+        url = "https://github.com/Jovian-Experiments/mesa/commit/9ca7d7775f34bca9578306b139ddd03e4f176e01.patch";
+        hash = "sha256-dVqt0x0yDyNfpBKOo/tRk8394PPVOooNTpCLsFqZwUE=";
+      })
+    ];
   };
   mesaBranchOf = mesa: lib.versions.majorMinor mesa.version;
   patchMesa = mesa: mesa.overrideAttrs (old: {
@@ -91,9 +97,7 @@ in
     })
     (lib.mkIf (cfg.enableMesaPatches && !cfg.hasMesaPatches) {
       warnings = [
-        ''
-          Mesa patches for improved gamescope integration missing for Mesa version "${pkgs.mesa.version}"
-        ''
+        ''Mesa patches for improved gamescope integration missing for Mesa version "${pkgs.mesa.version}"''
       ];
     })
 
