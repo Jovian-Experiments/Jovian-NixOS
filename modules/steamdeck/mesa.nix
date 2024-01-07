@@ -91,9 +91,7 @@ in
     })
     (lib.mkIf (cfg.enableMesaPatches && !cfg.hasMesaPatches) {
       warnings = [
-        ''
-          Mesa patches for improved gamescope integration missing for Mesa version "${pkgs.mesa.version}"
-        ''
+        ''Mesa patches for improved gamescope integration missing for Mesa version "${pkgs.mesa.version}"''
       ];
     })
 
