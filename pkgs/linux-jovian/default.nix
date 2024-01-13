@@ -3,8 +3,8 @@
 let
   inherit (lib) versions;
 
-  kernelVersion = "6.1.52";
-  vendorVersion = "valve14";
+  kernelVersion = "6.5.0";
+  vendorVersion = "valve1";
 in
 buildLinux (args // rec {
   version = "${kernelVersion}-${vendorVersion}";
@@ -86,10 +86,8 @@ buildLinux (args // rec {
     SND_SOC_SOF_INTEL_IPC4 = yes;
 
     SND_SOC_SOF_AMD_TOPLEVEL = module;
-    SND_SOC_SOF_AMD_COMMON = module;
     SND_SOC_SOF_AMD_RENOIR = no;
     SND_SOC_SOF_AMD_REMBRANDT = no;
-    SND_SOC_SOF_AMD_VANGOGH = module;
 
     # Enable Ambient Light Sensor
     LTRF216A = module;
@@ -117,9 +115,6 @@ buildLinux (args // rec {
     # Build as module to experiment with toggling
     TCG_TPM = module;
 
-    # Galileo Analogix I2C magic module thing
-    DRM_ANALOGIX_ANX7580 = module;
-
     # Per Colin at Quectel
     CFG80211_CERTIFICATION_ONUS = yes;
     ATH_REG_DYNAMIC_USER_REG_HINTS = yes;
@@ -138,7 +133,7 @@ buildLinux (args // rec {
     owner = "Jovian-Experiments";
     repo = "linux";
     rev = version;
-    hash = "sha256-/RAvac3jiyTLecfdmcjfFHWqyll30tWUD8/BEFQqDd8=";
+    hash = "sha256-8WHzaExZEOIw8S6gFRrPK5NyMW/jS7tSg4kfgcpJVF8=";
 
     # Sometimes the vendor doesn't update the EXTRAVERSION tag.
     # Let's fix it up in post.
