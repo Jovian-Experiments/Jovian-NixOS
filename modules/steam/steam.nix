@@ -32,11 +32,8 @@ in
 
       hardware.opengl = {
         driSupport32Bit = true;
-        extraPackages = [ pkgs.gamescope.lib ];
-        extraPackages32 = [ (pkgs.pkgsi686Linux.gamescope.overrideAttrs(old: {
-          mesonFlags = old.mesonFlags or [] ++ ["-Denable_gamescope=false"];
-          postInstall = null;
-        })).lib ];
+        extraPackages = [ pkgs.gamescope-wsi ];
+        extraPackages32 = [ pkgs.pkgsi686Linux.gamescope-wsi ];
       };
 
       hardware.pulseaudio.support32Bit = true;
