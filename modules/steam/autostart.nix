@@ -107,6 +107,9 @@ in
         };
       };
 
+      # allows the user to configure Wi-Fi in Deck UI, see `./steam.nix`
+      users.users.${cfg.user}.extraGroups = [ "users" ];
+
       users.users.jovian-greeter = {
         isSystemUser = true;
         group = "jovian-greeter";
