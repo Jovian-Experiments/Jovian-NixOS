@@ -4,7 +4,7 @@ let
   inherit (lib) versions;
 
   kernelVersion = "6.1.52";
-  vendorVersion = "valve14";
+  vendorVersion = "valve15";
 in
 buildLinux (args // rec {
   version = "${kernelVersion}-${vendorVersion}";
@@ -91,6 +91,10 @@ buildLinux (args // rec {
     SND_SOC_SOF_AMD_REMBRANDT = no;
     SND_SOC_SOF_AMD_VANGOGH = module;
 
+    # Steam Deck HID driver
+    HID_STEAM = module;
+    STEAM_FF = yes;
+
     # Enable Ambient Light Sensor
     LTRF216A = module;
 
@@ -138,7 +142,7 @@ buildLinux (args // rec {
     owner = "Jovian-Experiments";
     repo = "linux";
     rev = version;
-    hash = "sha256-/RAvac3jiyTLecfdmcjfFHWqyll30tWUD8/BEFQqDd8=";
+    hash = "sha256-6ZIKYeJDou1uZ7huKHDVRwEMYIQCvzFvgVWfmU0B0oI=";
 
     # Sometimes the vendor doesn't update the EXTRAVERSION tag.
     # Let's fix it up in post.

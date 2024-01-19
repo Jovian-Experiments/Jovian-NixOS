@@ -2,17 +2,14 @@
 
 stdenv.mkDerivation(finalAttrs: {
   pname = "jupiter-fan-control";
-  version = "20231229.1";
+  version = "20240118.1";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "jupiter-fan-control";
     rev = finalAttrs.version;
-    hash = "sha256-CSRhx5mh204t97qZahv6AOzQt8WWut6i47iVJoWElBY=";
+    hash = "sha256-YxzZMZf+MKCpR8EROaSV7aJzZN09qOg3IiJwjCCAwns=";
   };
-
-  # FIXME: remove when fixed upstream
-  patches = [ ./add-missing-value.patch ];
 
   buildInputs = [
     (python3.withPackages (py: with py; [
