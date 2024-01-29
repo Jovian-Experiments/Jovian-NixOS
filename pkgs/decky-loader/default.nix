@@ -8,9 +8,9 @@
 , python3
 }:
 let
-  version = "2.10.10";
-  hash = "sha256-FY2vSEgkaF9vGyt0VxtofAViifMbJlM9bfI+c7rX82c=";
-  npmHash = "sha256-4AC+mza7ya3wqVQYUe+wT311BT21aLHcBDBkpCxc3ZU=";
+  version = "2.10.14";
+  hash = "sha256-ydD5hcTNLsBteipdiJGWqK9TGqE1uvP2pMp+HfBUkxk=";
+  npmHash = "sha256-UYfZDgDjgYTqe/IxAet+NkjfaeYhJIoCg368ykaMxSE=";
 
   src = fetchFromGitHub {
     owner = "SteamDeckHomebrew";
