@@ -12,6 +12,7 @@ let
 in
 {
   imports = [
+    ./bluetooth.nix
     ./controller.nix
     ./fan-control.nix
     ./firmware.nix
