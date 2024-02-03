@@ -41,8 +41,8 @@ in
         extraPythonPackages = mkOption {
           type = types.functionTo (types.listOf types.package);
           example = lib.literalExpression "pythonPackages: with pythonPackages; [ hid ]";
-          default = [];
-          defaultText = lib.literalExpression "[]";
+          default = _: [];
+          defaultText = lib.literalExpression "pythonPackages: []";
           description = lib.mdDoc ''
             Extra Python packages to add to the PYTHONPATH of the loader.
           '';
