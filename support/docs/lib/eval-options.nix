@@ -1,6 +1,4 @@
-{ lib
-, nixos
-}:
+{ nixos }:
 
 # Given a directory path, evaluates the options in combination with NixOS options.
 { path }:

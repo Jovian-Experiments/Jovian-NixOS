@@ -69,7 +69,7 @@ let
   ;
   overlayData =
     mapAttrs (
-      name: entry:
+      _: entry:
       if isDerivation entry
       then
         documentDerivation entry

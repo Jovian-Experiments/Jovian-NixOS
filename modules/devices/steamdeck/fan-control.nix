@@ -4,9 +4,7 @@
 
 let
   inherit (lib)
-    mkDefault
     mkIf
-    mkMerge
     mkOption
     types
   ;

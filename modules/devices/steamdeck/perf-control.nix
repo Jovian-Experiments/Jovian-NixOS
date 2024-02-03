@@ -2,9 +2,7 @@
 
 let
   inherit (lib)
-    mkDefault
     mkIf
-    mkMerge
     mkOption
     types
   ;
@@ -29,12 +27,6 @@ in
   };
   config = mkIf (cfg.enablePerfControlUdevRules) {
     services.udev.extraRules = ''
-      # Enables brightness slider in Steam
-      # - /sys/class/backlight/amdgpu_bl0/brightness
-      # - /sys/devices/platform/AMDI0010:02/i2c-2/i2c-ANX7580A:00/{brightness,bmode} (Galileo?)
-      ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="amdgpu_bl0", RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/class/backlight/%k/brightness"
-      ACTION=="add", SUBSYSTEM=="i2c", KERNEL=="i2c-ANX7580A:00", RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/%p/brightness /sys/%p/bmode"
-
       # Enables manual GPU clock control in Steam
       # - /sys/class/drm/card0/device/power_dpm_force_performance_level
       # - /sys/class/drm/card0/device/pp_od_clk_voltage

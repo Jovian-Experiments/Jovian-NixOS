@@ -6,9 +6,11 @@
 
 let
   inherit (lib)
+    mkIf
     mkOption
     types
   ;
+  cfg = config.jovian.devices.steamdeck;
 in
 {
   imports = [
@@ -18,7 +20,6 @@ in
     ./graphical.nix
     ./hw-support.nix
     ./kernel.nix
-    ./mesa.nix
     ./perf-control.nix
     ./sdgyrodsu.nix
     ./sound.nix
@@ -33,6 +34,11 @@ in
           Whether to enable Steam Deck-specific configurations.
         '';
       };
+    };
+  };
+  config = mkIf cfg.enable {
+    jovian.hardware.has = {
+      amd.gpu = true;
     };
   };
 }

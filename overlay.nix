@@ -84,7 +84,7 @@ rec {
 
   jovian-hardware-survey = final.callPackage ./pkgs/jovian-hardware-survey { };
 
-  steamPackages = super.steamPackages.overrideScope (scopeFinal: scopeSuper: {
+  steamPackages = super.steamPackages.overrideScope (_: scopeSuper: {
     steam = final.callPackage ./pkgs/steam-jupiter/unwrapped.nix {
       steam-original = scopeSuper.steam;
     };

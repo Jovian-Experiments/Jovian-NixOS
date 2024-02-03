@@ -2,9 +2,7 @@
 
 let
   inherit (lib)
-    mkDefault
     mkIf
-    mkMerge
     mkOption
     types
   ;
@@ -43,8 +41,8 @@ in
         extraPythonPackages = mkOption {
           type = types.functionTo (types.listOf types.package);
           example = lib.literalExpression "pythonPackages: with pythonPackages; [ hid ]";
-          default = pythonPackages: with pythonPackages; [];
-          defaultText = lib.literalExpression "pythonPackages: with pythonPackages; []";
+          default = [];
+          defaultText = lib.literalExpression "[]";
           description = lib.mdDoc ''
             Extra Python packages to add to the PYTHONPATH of the loader.
           '';

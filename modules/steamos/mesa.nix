@@ -3,7 +3,7 @@
 let
   inherit (lib) types;
 
-  cfg = config.jovian.devices.steamdeck;
+  cfg = config.jovian.steamos;
 
   #
   # NOTE: to test the patch works, you can `strace` something using mesa.
@@ -55,19 +55,19 @@ let
 in
 {
   options = {
-    jovian.devices.steamdeck = {
+    jovian.steamos = {
       enableVendorRadv = lib.mkOption {
         type = types.bool;
-        default = cfg.enable;
-        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
+        default = cfg.useSteamOSConfig && config.jovian.hardware.has.amd.gpu;
+        defaultText = lib.literalExpression "config.jovian.steamos.useSteamOSConfig && config.jovian.hardware.has.amd.gpu";
         description = ''
           Whether to enable the vendor branch of Mesa RADV.
         '';
       };
       enableMesaPatches = lib.mkOption {
         type = types.bool;
-        default = cfg.enable;
-        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
+        default = cfg.useSteamOSConfig;
+        defaultText = lib.literalExpression "config.jovian.steamos.useSteamOSConfig";
         description = ''
           Whether to apply the Mesa patches if available.
 
@@ -89,7 +89,7 @@ in
   config = lib.mkMerge [
     # Mesa gamescope patches
     {
-      jovian.devices.steamdeck.hasMesaPatches = lib.hasAttr (mesaBranchOf pkgs.mesa) mesaPatches;
+      jovian.steamos.hasMesaPatches = lib.hasAttr (mesaBranchOf pkgs.mesa) mesaPatches;
     }
     (lib.mkIf (cfg.enableMesaPatches && cfg.hasMesaPatches) {
       hardware.opengl.package = (patchMesa pkgs.mesa).drivers;

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   inherit (lib)
@@ -10,14 +10,6 @@ in
 {
   options = {
     jovian.devices.steamdeck = {
-      enableEarlyModesetting = lib.mkOption {
-        default = cfg.enable;
-        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
-        type = lib.types.bool;
-        description = ''
-          Whether to enable early kernel modesetting.
-        '';
-      };
       enableXorgRotation = lib.mkOption {
         default = cfg.enable;
         defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
@@ -30,11 +22,6 @@ in
   };
 
   config = mkMerge [
-    (mkIf cfg.enableEarlyModesetting {
-      boot.initrd.kernelModules = [
-        "amdgpu"
-      ];
-    })
     (mkIf cfg.enableXorgRotation {
       environment.etc."X11/xorg.conf.d/90-jovian.conf".text = ''
         Section "Monitor"
