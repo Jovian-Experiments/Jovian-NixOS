@@ -33,6 +33,6 @@ Options mirroring generic configuration from SteamOS.
 Any non-device-specific opinionated configuration should be defined here.
 
 
-## `support/`
+## `jovian/`
 
 Misc. mostly internal options to make Jovian NixOS work.
