@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 let
   cfg = config.jovian.workarounds;
 in
@@ -19,10 +19,10 @@ in
 
   config = {
     nixpkgs.overlays = lib.mkIf (cfg.ignoreMissingKernelModules) [
-      (final: super: {
+      (_: prev: {
         # Workaround for modules expected by NixOS not being built
         # (vmw_balloon, among most likely other)
-        makeModulesClosure = x: super.makeModulesClosure (x // { allowMissing = true; });
+        makeModulesClosure = x: prev.makeModulesClosure (x // { allowMissing = true; });
       })
     ];
   };

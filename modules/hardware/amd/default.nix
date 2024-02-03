@@ -4,7 +4,6 @@ let
   inherit (lib)
     mkIf
     mkMerge
-    mkEnableOption
     mkOption
     types
   ;
@@ -12,7 +11,7 @@ let
   hardware = config.jovian.hardware;
   mkHasOption = description: mkOption {
     default = false;
-    type = lib.types.bool;
+    type = types.bool;
     description = ''
       Whether the device has ${description}.
     '';

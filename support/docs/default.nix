@@ -1,8 +1,5 @@
 # This package provides the documentation
-{ stdenv
-, callPackage
-, runCommand
-, writeText
+{ callPackage
 , documentationPath ? ../../docs
 , pagefind
 , pkgs

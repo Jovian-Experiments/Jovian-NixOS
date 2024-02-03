@@ -1,13 +1,11 @@
 # A wrapped version of Steam with shims to satisfy the SteamOS-only
 # dependencies of the Steam Deck UI
 
-{ lib
-, runCommand
-, writeShellScriptBin
+{ writeShellScriptBin
 , dmidecode
 , jovian-stubs
 , steam-fhsenv
-, steamos-polkit-helpers
+# , steamos-polkit-helpers
 , ...
 } @ args:
 

@@ -1,8 +1,7 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   inherit (lib)
-    mkDefault
     mkIf
     mkMerge
     mkOption
