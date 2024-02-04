@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildLinux, ... } @ args:
+{ lib, fetchFromGitHub, fetchpatch, buildLinux, ... } @ args:
 
 let
   inherit (lib) versions;
@@ -12,7 +12,17 @@ buildLinux (args // rec {
   # branchVersion needs to be x.y
   extraMeta.branch = versions.majorMinor version;
 
-  kernelPatches = (args.kernelPatches or []) ++ [];
+  kernelPatches = (args.kernelPatches or []) ++ [
+    {
+      # Enable all Bluetooth LE PHYs by default
+      # See comment in https://github.com/Jovian-Experiments/PKGBUILDs-mirror/blob/d594fbf6bea8f0bace6dafca1799632579cd772b/PKGBUILD
+      name = "enable-all-ble-phys";
+      patch = fetchpatch {
+        url = "https://github.com/Jovian-Experiments/linux/commit/288c90224eec55d13e786844b7954ef060752089.patch";
+        hash = "sha256-iDEZBowNsfeECzM6AWVOGBKurbEGSiWWa9PQIV6kVVY=";
+      };
+    }
+  ];
 
   structuredExtraConfig = with lib.kernel; {
     #
