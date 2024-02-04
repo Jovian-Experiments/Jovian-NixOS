@@ -102,5 +102,6 @@ rec {
 
   sdgyrodsu = final.callPackage ./pkgs/sdgyrodsu { };
 
-  decky-loader = final.callPackage ./pkgs/decky-loader { };
+  decky-loader = final.callPackage ./pkgs/decky-loader/stable.nix { };
+  decky-loader-prerelease = final.callPackage ./pkgs/decky-loader/prerelease.nix { };
 }
