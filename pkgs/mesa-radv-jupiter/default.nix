@@ -1,7 +1,7 @@
 { lib, mesa, fetchFromGitHub }:
 let
   version = "23.3.0";
-  jupiterVersion = "steamos-23.9.6";
+  jupiterVersion = "steamos-23.9.8";
 in (mesa.override {
   galliumDrivers = [];
   vulkanDrivers = ["amd"];
@@ -16,7 +16,7 @@ in (mesa.override {
     owner = "Jovian-Experiments";
     repo = "mesa";
     rev = jupiterVersion;
-    hash = "sha256-UG9kWPZFtEaPvukys1uoxBuKYakkAjM317SqgrVBTtw=";
+    hash = "sha256-HGNVtwJS+rLssB4ATwAFQ0CezWqnGD2y1SMe4Q2J+U4=";
   };
 
   # Clobber all the existing patches
