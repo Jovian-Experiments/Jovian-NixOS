@@ -1,7 +1,7 @@
-{ lib, mesa, fetchFromGitHub }:
+{ mesa, fetchFromGitHub }:
 let
   version = "23.3.0";
-  jupiterVersion = "steamos-23.9.8";
+  jupiterVersion = "steamos-23.9.9";
 in (mesa.override {
   galliumDrivers = [];
   vulkanDrivers = ["amd"];
@@ -16,14 +16,14 @@ in (mesa.override {
     owner = "Jovian-Experiments";
     repo = "mesa";
     rev = jupiterVersion;
-    hash = "sha256-HGNVtwJS+rLssB4ATwAFQ0CezWqnGD2y1SMe4Q2J+U4=";
+    hash = "sha256-mVo5KZw3P8HQ4U7ykIY9rmWlSwLQI0G1bjPQpTh9ZkI=";
   };
 
   # Clobber all the existing patches
   patches = [];
 
   # Filter out nixpkgs disk cache key, we trust vendor here
-  mesonFlags = builtins.filter (opt: !lib.hasPrefix "-Ddisk-cache-key" opt) old.mesonFlags ++ [
+  mesonFlags = old.mesonFlags ++ [
     # Disable all the Gallium stuff that we don't need because no drivers
     "-Degl=disabled"
     "-Dglvnd=false"
@@ -40,10 +40,4 @@ in (mesa.override {
     # Vendor sets this
     "-Dradv-build-id=0fc57c2cf625a235fe81e41877a40609c43e451a"
   ];
-
-  # FIXME: temporary workaround for https://github.com/NixOS/nixpkgs/pull/286015
-  preFixup = ''
-    mkdir -p $dev/lib/pkgconfig
-    touch $dev/lib/pkgconfig/dri.pc
-  '';
 })
