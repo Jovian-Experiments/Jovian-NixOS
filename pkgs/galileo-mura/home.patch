@@ -1,0 +1,13 @@
+diff --git a/galileo-mura-setup b/galileo-mura-setup
+index ee4efd9..afec99e 100755
+--- a/galileo-mura-setup
++++ b/galileo-mura-setup
+@@ -14,7 +14,7 @@ display_serial=$(cat /tmp/mura/info.txt | sed -n 's/.*Display Serial: \(.*\)/\1/
+ deck_serial=$(cat /tmp/mura/info.txt | sed -n 's/.*Deck Serial: \(.*\)/\1/p')
+ manufacturer=$(cat /tmp/mura/info.txt | sed -n 's/.*Manufacturer: \(.*\)/\1/p')
+ 
+-mura_base_path=/home/deck/.config/gamescope/mura
++mura_base_path=~/.config/gamescope/mura
+ mkdir -p "$mura_base_path"
+ 
+ if ./galileo-mura-download "$display_serial" "$deck_serial" "$mura_base_path"; then
