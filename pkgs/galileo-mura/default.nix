@@ -33,8 +33,7 @@ let
 
     execer = [
       "cannot:${wget}/bin/wget"
-      "cannot:${placeholder "out"}/bin/./galileo-mura-download"
-                                     # ^ hack for resholve - FIXME
+      "cannot:${placeholder "out"}/bin/galileo-mura-download"
     ];
 
     fake.external = ["galileo-mura-extractor"];
@@ -46,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "galileo-mura";
-  version = "0.7";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "galileo-mura";
     rev = "v${version}";
-    hash = "sha256-4dDdmzhPSXkgjBHRjlrCphfwYgMkHBGdkqgTcSQU6EI=";
+    hash = "sha256-eM4UHYCgj2vwK8cxh6KKta7gpFjX/7bwS7VJaKsBG7c=";
   };
 
   patches = [./home.patch];
