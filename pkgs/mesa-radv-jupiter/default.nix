@@ -1,7 +1,7 @@
 { mesa, fetchFromGitHub }:
 let
-  version = "23.3.0";
-  jupiterVersion = "steamos-23.9.9";
+  version = "24.1.0";
+  jupiterVersion = "steamos-24.1.2";
 in (mesa.override {
   galliumDrivers = [];
   vulkanDrivers = ["amd"];
@@ -16,17 +16,11 @@ in (mesa.override {
     owner = "Jovian-Experiments";
     repo = "mesa";
     rev = jupiterVersion;
-    hash = "sha256-mVo5KZw3P8HQ4U7ykIY9rmWlSwLQI0G1bjPQpTh9ZkI=";
+    hash = "sha256-nTEmtP1pjpWeaXQsXn0sHeFKkhNIBTLoJClkAPakkT4=";
   };
 
   # Clobber all the existing patches
   patches = [];
-
-  # HACK: create some stub files to make nixpkgs postPatch work
-  prePatch = ''
-    mkdir -p subprojects/packagefiles/{proc-macro2,quote,syn,unicode-ident}
-    touch subprojects/packagefiles/{proc-macro2,quote,syn,unicode-ident}/empty
-  '';
 
   # Filter out nixpkgs disk cache key, we trust vendor here
   mesonFlags = old.mesonFlags ++ [
@@ -44,9 +38,6 @@ in (mesa.override {
     "-Dintel-clc=disabled"
 
     # Vendor sets this
-    "-Dradv-build-id=0fc57c2cf625a235fe81e41877a40609c43e451a"
-
-    # HACK: override nixpkgs default of "all", which is not supported on Mesa 23.3
-    "-Dvideo-codecs=vc1dec,h264dec,h264enc,h265dec,h265enc"
+    "-Dradv-build-id=e60f3bf3a400d3b96b0ce331633fd21e9bafd2a8"
   ];
 })
