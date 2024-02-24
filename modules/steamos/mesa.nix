@@ -16,42 +16,6 @@ let
   #
   # By using `-P` we can limit the logs to access to that (bogus) path only.
   #
-  mesaPatches = {
-    "22.2" = [
-      (pkgs.fetchpatch {
-        url = "https://github.com/Mesa3D/mesa/compare/mesa-22.2.0...Jovian-Experiments:mesa:radeonsi-3.4.0.diff";
-        hash = "sha256-civjqKlTiVjcb/MI5v9AEon52YSvw7iDRLm1tji9pKo=";
-      })
-    ];
-    "22.3" = [
-      (pkgs.fetchpatch {
-        url = "https://github.com/Jovian-Experiments/mesa/commit/787d60ad89a733157919366e8ecaee9aa1d5d554.patch";
-        hash = "sha256-zjb9DAAC+Qg+CeSkdcjgSarHeUJwuArHL/VMy+Fik6g=";
-      })
-    ];
-    "23.0" = [
-      (pkgs.fetchpatch {
-        url = "https://github.com/Jovian-Experiments/mesa/commit/de07ed63dc9e41f3ab5a3324f7cca712107ee6a5.patch";
-        hash = "sha256-X+Lvl35DOyT+nGurqmi8zYOPAzP+zZsvDV6CyNqh8Os=";
-      })
-    ];
-    "23.1" = [
-      (pkgs.fetchpatch {
-        url = "https://github.com/Jovian-Experiments/mesa/commit/d75fe6a435ff780694668a582b0ddb594ba052c0.patch";
-        hash = "sha256-KZNud0rlg/qRbbVb3+x2+eroHUcIegOJPct2yfR5NPo=";
-      })
-    ];
-    "23.3" = [
-      (pkgs.fetchpatch {
-        url = "https://github.com/Jovian-Experiments/mesa/commit/9ca7d7775f34bca9578306b139ddd03e4f176e01.patch";
-        hash = "sha256-dVqt0x0yDyNfpBKOo/tRk8394PPVOooNTpCLsFqZwUE=";
-      })
-    ];
-  };
-  mesaBranchOf = mesa: lib.versions.majorMinor mesa.version;
-  patchMesa = mesa: mesa.overrideAttrs (old: {
-    patches = (old.patches or []) ++ mesaPatches.${mesaBranchOf mesa};
-  });
 in
 {
   options = {
@@ -75,30 +39,14 @@ in
           the framerate limiter in gamescope.
         '';
       };
-      hasMesaPatches = lib.mkOption {
-        type = types.bool;
-        internal = true;
-        default = false;
-        description = ''
-          Interface between modules to describe whether Mesa patches are available.
-        '';
-      };
     };
   };
 
   config = lib.mkMerge [
-    # Mesa gamescope patches
-    {
-      jovian.steamos.hasMesaPatches = lib.hasAttr (mesaBranchOf pkgs.mesa) mesaPatches;
-    }
-    (lib.mkIf (cfg.enableMesaPatches && cfg.hasMesaPatches) {
-      hardware.opengl.package = (patchMesa pkgs.mesa).drivers;
-      hardware.opengl.package32 = (patchMesa pkgs.pkgsi686Linux.mesa).drivers;
-    })
-    (lib.mkIf (cfg.enableMesaPatches && !cfg.hasMesaPatches) {
-      warnings = [
-        ''Mesa patches for improved gamescope integration missing for Mesa version "${pkgs.mesa.version}"''
-      ];
+    # Jupiter Gamescope + radeonsi patches
+    (lib.mkIf (cfg.enableMesaPatches) {
+      hardware.opengl.package = pkgs.mesa-radeonsi-jupiter.drivers;
+      hardware.opengl.package32 = pkgs.pkgsi686Linux.mesa-radeonsi-jupiter.drivers;
     })
 
     # Jupiter RADV

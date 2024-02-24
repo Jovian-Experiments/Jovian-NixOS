@@ -38,6 +38,7 @@ rec {
     inherit (final.python3Packages) mako;
   };
 
+  mesa-radeonsi-jupiter = final.callPackage ./pkgs/mesa-radeonsi-jupiter {};
   mesa-radv-jupiter = final.callPackage ./pkgs/mesa-radv-jupiter {};
 
   jupiter-fan-control = final.callPackage ./pkgs/jupiter-fan-control { };
