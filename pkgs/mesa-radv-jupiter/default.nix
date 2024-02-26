@@ -22,6 +22,12 @@ in (mesa.override {
   # Clobber all the existing patches
   patches = [];
 
+  # HACK: create some stub files to make nixpkgs postPatch work
+  prePatch = ''
+    mkdir -p subprojects/packagefiles/{proc-macro2,quote,syn,unicode-ident}
+    touch subprojects/packagefiles/{proc-macro2,quote,syn,unicode-ident}/empty
+  '';
+
   # Filter out nixpkgs disk cache key, we trust vendor here
   mesonFlags = old.mesonFlags ++ [
     # Disable all the Gallium stuff that we don't need because no drivers
@@ -39,5 +45,8 @@ in (mesa.override {
 
     # Vendor sets this
     "-Dradv-build-id=0fc57c2cf625a235fe81e41877a40609c43e451a"
+
+    # HACK: override nixpkgs default of "all", which is not supported on Mesa 23.3
+    "-Dvideo-codecs=vc1dec,h264dec,h264enc,h265dec,h265enc"
   ];
 })
