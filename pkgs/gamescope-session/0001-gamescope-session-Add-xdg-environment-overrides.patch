@@ -1,0 +1,29 @@
+From f309bbee6de87dac8e96e99aa6fbb9af434bc8aa Mon Sep 17 00:00:00 2001
+From: Samuel Dionne-Riel <samuel@dionne-riel.com>
+Date: Fri, 5 Jan 2024 16:14:21 -0500
+Subject: [PATCH] gamescope-session: Add xdg environment overrides
+
+Signed-off-by: Samuel Dionne-Riel <samuel@dionne-riel.com>
+---
+ gamescope-session | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/gamescope-session b/gamescope-session
+index 2305288..53b5e79 100755
+--- a/gamescope-session
++++ b/gamescope-session
+@@ -300,6 +300,11 @@ short_session_duration=60
+ short_session_count_before_reset=3
+ SECONDS=0
+ 
++# Jovian NixOS environment overrides hook
++if test -e /etc/xdg/gamescope-session/environment; then
++	. /etc/xdg/gamescope-session/environment;
++fi
++
+ short_session_count=$(< "$short_session_tracker_file" wc -l)
+ 
+ if [[ "$short_session_count" -ge "$short_session_count_before_reset" ]]; then
+-- 
+2.42.0
+
