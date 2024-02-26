@@ -1,5 +1,5 @@
 import ./generic.nix {
-  version = "2.10.16";
-  hash = "sha256-EGH49Zbs06iFw2tXJUCfY2Bx8EnahQ04zY3Heb2Jt6A=";
-  npmHash = "sha256-uXQ4jUdkvexD3l1I0nBDr1Xa5o9+CCOzMYD0gAQxnGA=";
+  version = "2.11.1";
+  hash = "sha256-Jf4P7w43MlDo+o7kNZYagMn0UbJfhp4L7Xwjbep9AUQ=";
+  npmHash = "sha256-GJ+isvwi0wfMfQusH5F3mUA9hEdZO9Pvw9Qm5+Iv34w=";
 }
