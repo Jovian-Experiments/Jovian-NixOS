@@ -12,15 +12,6 @@ let
     # remove more specific upstream symlink so Valve acp5x config is picked
     rm $out/share/alsa/ucm2/conf.d/acp5x/Valve-Jupiter-1.conf
   '';
-
-  mkDspEtc = path: {
-    name = path;
-    value.source = "${pkgs.steamdeck-dsp}/share/${path}";
-  };
-  mkWpEtc = path: {
-    name = "wireplumber/${path}";
-    value.source = "/run/wireplumber/${path}";
-  };
 in
 {
   options = {
@@ -39,10 +30,7 @@ in
   config = let
     systemWide = config.services.pipewire.systemWide;
 
-    extraEnv = {
-      ALSA_CONFIG_UCM2 = "${alsa-ucm-conf'}/share/alsa/ucm2";
-      LV2_PATH = "${pkgs.steamdeck-dsp}/lib/lv2";
-    };
+    extraEnv.ALSA_CONFIG_UCM2 = "${alsa-ucm-conf'}/share/alsa/ucm2";
   in lib.mkIf cfg.enableSoundSupport {
     hardware.pulseaudio.enable = false;
 
@@ -50,12 +38,12 @@ in
       enable = true;
       pulse.enable = true;
       alsa.enable = true;
-      wireplumber.package = pkgs.wireplumber-jovian;
+      configPackages = [ pkgs.steamdeck-dsp ];
+      wireplumber = {
+        package = pkgs.wireplumber-jovian;
+        configPackages = [ pkgs.steamdeck-dsp ];
+      };
     };
-
-    environment.etc =
-      (builtins.listToAttrs (map mkDspEtc pkgs.steamdeck-dsp.passthru.filesInstalledToEtc)) //
-      (builtins.listToAttrs (map mkWpEtc pkgs.steamdeck-dsp.passthru.filesInstalledToRun));
 
     environment.variables = extraEnv;
 
