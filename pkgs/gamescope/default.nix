@@ -7,14 +7,14 @@
 #       version shipped by the vendor, ensuring feature level is equivalent.
 
 gamescope'.overrideAttrs(old: rec {
-  version = "3.14.2";
+  version = "3.14.2-unstable-2024-02-28";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
-    rev = "refs/tags/${version}";
+    rev = "14a1db3a57612e5cfbba6d4c19688eafdc6c4043";
     fetchSubmodules = true;
-    hash = "sha256-Ym1kl9naAm1MGlxCk32ssvfiOlstHiZPy7Ga8EZegus=";
+    hash = "sha256-Lz2kXsxlFmYhsjH8KrapPJlsIJWxOShtCdKbpmgFBwc=";
   };
 
   mesonFlags = old.mesonFlags ++ ["-Davif_screenshots=disabled"];
