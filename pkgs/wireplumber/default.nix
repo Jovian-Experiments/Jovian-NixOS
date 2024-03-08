@@ -8,7 +8,4 @@ wireplumber'.overrideAttrs(_: rec {
     rev = "refs/tags/${version}";
     hash = "sha256-J4gU3jr4IuCU5y40t4mEPKjeBmm0TQDVgqFTR3xoXRU=";
   };
-
-  # HACK: override postFixup from Wireplumber 0.5 PR
-  postFixup = null;
 })
