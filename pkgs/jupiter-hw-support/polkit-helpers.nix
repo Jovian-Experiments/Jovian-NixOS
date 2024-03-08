@@ -46,6 +46,8 @@ let
       "cannot:${jupiter-hw-support}/lib/hwsupport/format-sdcard.sh"
       "cannot:${jupiter-hw-support}/lib/hwsupport/trim-devices.sh"
       "cannot:${steamdeck-firmware}/bin/jupiter-biosupdate"
+      "cannot:${systemd}/bin/poweroff"
+      "cannot:${systemd}/bin/reboot"
       "cannot:${systemd}/bin/systemctl"
       "cannot:${systemd}/bin/systemd-cat"
     ];
