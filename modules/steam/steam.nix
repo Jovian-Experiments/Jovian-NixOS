@@ -57,8 +57,15 @@ in
         HandlePowerKey=ignore
       '';
 
+      # Required by automount scripts
+      services.udisks2.enable = true;
+      systemd.tmpfiles.rules = [
+        "d /run/media 0755 root root"
+      ];
+
       services.udev.packages = [
         pkgs.powerbuttond
+        pkgs.jupiter-hw-support
       ];
 
       # This rule allows the user to configure Wi-Fi in Deck UI.
@@ -79,13 +86,6 @@ in
           }
         });
       '';
-
-      jovian.steam.environment = {
-        # We don't support adopting a drive, yet.
-        STEAM_ALLOW_DRIVE_ADOPT = mkDefault "0";
-        # Ejecting doesn't work, either.
-        STEAM_ALLOW_DRIVE_UNMOUNT = mkDefault "0";
-      };
     }
   ]);
 }

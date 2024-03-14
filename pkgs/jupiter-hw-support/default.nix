@@ -22,7 +22,7 @@ let
   src = callPackage ./src.nix { };
 
   solution = {
-    scripts = [ "bin/*" "lib/hwsupport/*.sh" ];
+    scripts = [ "bin/*" "lib/hwsupport/*.sh" "lib/hwsupport/common-functions" ];
     interpreter = "${bash}/bin/bash";
     inputs = [
       coreutils
@@ -66,6 +66,8 @@ let
       # FIXME: why do we need to discard string context here?
       "${builtins.unsafeDiscardStringContext "${systemd}/bin/systemd-run"}" = true;
       "source:${placeholder "out"}/lib/hwsupport/common-functions" = true;
+      "${placeholder "out"}/lib/hwsupport/format-device.sh" = true;
+      "${placeholder "out"}/lib/hwsupport/steamos-automount.sh" = true;
     };
   };
 in
@@ -85,10 +87,10 @@ stdenv.mkDerivation {
     cp usr/bin/jupiter-check-support $out/bin
 
     mkdir -p $out/lib
-    cp -r usr/lib/hwsupport $out/lib
+    cp -r usr/lib/{hwsupport,udev} $out/lib
 
-    substituteInPlace $out/lib/hwsupport/* \
-      --replace-warn ". /usr/lib/hwsupport" ". $out/lib/hwsupport"
+    substituteInPlace $out/lib/{hwsupport/*,udev/rules.d/*} \
+      --replace-warn "/usr/lib/hwsupport" "$out/lib/hwsupport"
 
     ${resholve.phraseSolution "jupiter-hw-support" solution}
 
