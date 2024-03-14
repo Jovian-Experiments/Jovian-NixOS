@@ -9,6 +9,7 @@
 , f3
 , findutils
 , gawk
+, gnugrep
 , gnused
 , jq
 , parted
@@ -30,6 +31,7 @@ let
       f3
       findutils
       gawk
+      gnugrep
       gnused
       jq
       parted
