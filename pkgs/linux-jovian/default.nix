@@ -122,6 +122,7 @@ buildLinux (args // rec {
     # kernel as a guest, so this also clears out a whole bunch of
     # virtualization-specific drivers.
     HYPERVISOR_GUEST = lib.mkForce no;
+    PARAVIRT_TIME_ACCOUNTING = lib.mkForce (option no);
 
     # Disable some options enabled in ArchLinux 6.1.12-arch1 config
     X86_AMD_PSTATE = lib.mkForce no;
