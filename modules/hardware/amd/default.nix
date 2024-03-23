@@ -52,8 +52,7 @@ in
     (mkIf (cfg.gpu.enableBacklightControl) {
       # Enables brightness slider in Steam
       services.udev.extraRules = ''
-        # - /sys/class/backlight/amdgpu_bl0/brightness
-        ACTION=="add", SUBSYSTEM=="backlight", KERNEL=="amdgpu_bl0", RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/class/backlight/%k/brightness"
+        ACTION=="add", SUBSYSTEM=="backlight", RUN+="${pkgs.coreutils}/bin/chmod a+w /sys/class/backlight/%k/brightness"
       '';
     })
   ];
