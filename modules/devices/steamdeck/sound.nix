@@ -55,6 +55,9 @@ in
     systemd.services.wireplumber.environment = lib.mkIf systemWide extraEnv;
     systemd.user.services.wireplumber.environment = lib.mkIf (!systemWide) extraEnv;
 
-    systemd.services.wireplumber-sysconf.wantedBy = ["multi-user.target"];
+    systemd.services.wireplumber-sysconf = {
+      wantedBy = ["multi-user.target"];
+      before = ["display-manager.service"];
+    };
   };
 }
