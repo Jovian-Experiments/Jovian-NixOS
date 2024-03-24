@@ -11,6 +11,7 @@ in
     ./steam.nix
     ./autostart.nix
     ./environment.nix
+    ./updater.nix
   ];
   options = {
     jovian = {
