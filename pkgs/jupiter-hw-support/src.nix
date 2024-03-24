@@ -3,7 +3,9 @@
   fetchFromGitHub, 
   substituteAll, 
   jovian-steam-protocol-handler, 
+  coreutils,
   systemd,
+  util-linux,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +22,9 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       handler = jovian-steam-protocol-handler;
+      coreutils = coreutils;
       systemd = systemd;
+      utilLinux = util-linux;
       src = ./jovian.patch;
     })
     # Fix controller updates with python-hid >= 1.0.6

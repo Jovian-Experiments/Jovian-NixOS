@@ -1,5 +1,5 @@
 diff --git a/usr/lib/hwsupport/steamos-automount.sh b/usr/lib/hwsupport/steamos-automount.sh
-index 386f4d8..cf79351 100755
+index 386f4d8..d9ae25e 100755
 --- a/usr/lib/hwsupport/steamos-automount.sh
 +++ b/usr/lib/hwsupport/steamos-automount.sh
 @@ -22,8 +22,9 @@ fi
@@ -23,3 +23,54 @@ index 386f4d8..cf79351 100755
        echo "Sent URL to steam: steam://${command}/${arg} (steam://${command}/${encoded})"
    else
        echo "Could not send steam URL steam://${command}/${arg} (steam://${command}/${encoded}) -- steam not running"
+@@ -90,12 +91,12 @@ do_mount()
+                                  "block_devices/${DEVBASE}"      \
+                                  Filesystem Mount                \
+                                  'a{sv}' 3                       \
+-                                 as-user s deck                  \
++                                 as-user s "$(id -nu ${DECK_UID})" \
+                                  auth.no_user_interaction b true \
+                                  options s "$OPTS")
+ 
+     # Ensure that the deck user can write to the root directory
+-    if ! setpriv --clear-groups --reuid "${DECK_UID}" --regid "${DECK_GID}" test -w "${mount_point}"; then
++    if ! setpriv --clear-groups --reuid "${DECK_UID}" --regid "${DECK_GID}" @coreutils@/bin/test -w "${mount_point}"; then
+         chmod 777 "${mount_point}" || true
+     fi
+ 
+diff --git a/usr/lib/udev/rules.d/80-gpu-reset.rules b/usr/lib/udev/rules.d/80-gpu-reset.rules
+index 19727ba..7b4de4b 100644
+--- a/usr/lib/udev/rules.d/80-gpu-reset.rules
++++ b/usr/lib/udev/rules.d/80-gpu-reset.rules
+@@ -1,5 +1,6 @@
+ # If a GPU crash is caused by a specific process, kill the PID
+-ACTION=="change", ENV{DEVNAME}=="/dev/dri/card0", ENV{RESET}=="1", ENV{PID}!="0", RUN+="/sbin/kill -9 %E{PID}"
++ACTION=="change", ENV{DEVNAME}=="/dev/dri/card0", ENV{RESET}=="1", ENV{PID}!="0", RUN+="@utilLinux@/bin/kill -9 %E{PID}"
+ 
+ # Kill SDDM and Gamescope if the GPU crashes and VRAM is lost
+-ACTION=="change", ENV{DEVNAME}=="/dev/dri/card0", ENV{RESET}=="1", ENV{FLAGS}=="1", RUN+="/usr/sbin/systemctl restart sddm"
++# Jovian: also kill greetd
++ACTION=="change", ENV{DEVNAME}=="/dev/dri/card0", ENV{RESET}=="1", ENV{FLAGS}=="1", RUN+="@systemd@/bin/systemctl restart display-manager greetd"
+diff --git a/usr/lib/udev/rules.d/99-sdcard-rescan.rules b/usr/lib/udev/rules.d/99-sdcard-rescan.rules
+index 05b6167..7cc487e 100644
+--- a/usr/lib/udev/rules.d/99-sdcard-rescan.rules
++++ b/usr/lib/udev/rules.d/99-sdcard-rescan.rules
+@@ -1,3 +1,3 @@
+ # Work around the misdetection of some SanDisk microSD cards
+ 
+-ACTION=="add", SUBSYSTEM=="mmc", ENV{MMC_NAME}=="SD032", RUN+="/bin/systemd-run --no-block --collect /usr/lib/hwsupport/sdcard-rescan.sh %k"
++ACTION=="add", SUBSYSTEM=="mmc", ENV{MMC_NAME}=="SD032", RUN+="@systemd@/bin/systemd-run --no-block --collect /usr/lib/hwsupport/sdcard-rescan.sh %k"
+diff --git a/usr/lib/udev/rules.d/99-steamos-automount.rules b/usr/lib/udev/rules.d/99-steamos-automount.rules
+index 49a5968..1344fa5 100644
+--- a/usr/lib/udev/rules.d/99-steamos-automount.rules
++++ b/usr/lib/udev/rules.d/99-steamos-automount.rules
+@@ -5,7 +5,7 @@ KERNEL!="mmcblk*|sd*",          GOTO="steamos_automount_end"
+ ENV{ID_FS_USAGE}!="filesystem", GOTO="steamos_automount_end"
+ 
+ # The service expects to be asynchronous and shouldn't block udev rules
+-ACTION=="add",    RUN+="/bin/systemd-run --no-block --collect /usr/lib/hwsupport/block-device-event.sh add %k"
+-ACTION=="remove", RUN+="/bin/systemd-run --no-block --collect /usr/lib/hwsupport/block-device-event.sh remove %k"
++ACTION=="add",    RUN+="@systemd@/bin/systemd-run --no-block --collect /usr/lib/hwsupport/block-device-event.sh add %k"
++ACTION=="remove", RUN+="@systemd@/bin/systemd-run --no-block --collect /usr/lib/hwsupport/block-device-event.sh remove %k"
+ 
+ LABEL="steamos_automount_end"
