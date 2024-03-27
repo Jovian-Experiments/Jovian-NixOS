@@ -82,7 +82,9 @@ in
       # run plugins. Running as non-root is unsupported and currently breaks:
       #
       # <https://github.com/SteamDeckHomebrew/decky-loader/issues/446#issuecomment-1637177368>
-      systemd.services.decky-loader = {
+      systemd.services.decky-loader = let
+        pathPkgs = with pkgs; [ coreutils gawk ] ++ cfg.extraPackages;
+      in {
         description = "Steam Deck Plugin Loader";
 
         wantedBy = [ "multi-user.target" ];
@@ -94,9 +96,10 @@ in
           UNPRIVILEGED_PATH = cfg.stateDir;
           PLUGIN_PATH = "${cfg.stateDir}/plugins";
           PYTHONPATH = "${python.withPackages cfg.extraPythonPackages}/${python.sitePackages}";
+          LD_LIBRARY_PATH = lib.makeLibraryPath pathPkgs;
         };
 
-        path = with pkgs; [ coreutils gawk ] ++ cfg.extraPackages;
+        path = pathPkgs;
 
         preStart = ''
           mkdir -p "${cfg.stateDir}"
