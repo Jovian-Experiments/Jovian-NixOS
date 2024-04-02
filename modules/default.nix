@@ -4,6 +4,7 @@
     ./devices
     ./jovian
     ./hardware
+    ./opensd.nix
     ./steam
     ./steamos
   ];
