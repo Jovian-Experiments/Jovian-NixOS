@@ -36,7 +36,7 @@ in
           MatchDriver        "libinput"
 
           # 90° Clock-wise
-          Option "CalibrationMatrix" "0 1 0 -1 0 1 0 0 1"
+          Option "TransformationMatrix" "0 1 0 -1 0 1 0 0 1"
         EndSection
       '';
     })
