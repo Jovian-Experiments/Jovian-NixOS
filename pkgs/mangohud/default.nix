@@ -1,7 +1,8 @@
 { callPackage, fetchFromGitHub, git, ... }@args:
 
 (callPackage ./upstream (removeAttrs args ["callPackage" "git"])).overrideAttrs (old: {
-  version = "0.7.0.r78";
+  version = "0.7.0.r78.gc5c82db";
+
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";

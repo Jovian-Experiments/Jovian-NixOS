@@ -1,0 +1,323 @@
+# This file contains mappings used by the `compare.py` script
+# to match versions between upstream packages and ours.
+#
+# Each package can be marked as "ignore", "check" or "map".
+# - "ignore"d packages will simply be excluded from all comparisons
+# - "check"ed packages are checked against a fixed version string,
+#     and generate an alert when the version is out of date.
+# - "map"ped packages are checked against a version of a package
+#     in the repository; the package name can be specified by
+#     providing a string (or a list of strings) instead of "true"
+#
+# In addition, packages can set "pkgrel" to automatically add a pkgrel
+# to the downstream version for the purposes of checking - this should
+# be updated when our packaging is verified against an upstream update.
+#
+# "map"ped packages can also specify a "fixup" - a special hardcoded
+# workaround that post-processes the version strings. See `compare.py`
+# for the current list of fixups, and try not to add more to it.
+#
+# As a general guideline, we ignore things we don't expect to ever use,
+# check things that may be relevant but aren't currently, or that aren't
+# packaged, and map things that are packaged.
+#
+# This list is roughly sorted, but probably doesn't need to be maintained
+# that way.
+
+[packages]
+# we use our own upstream version
+alsa-ucm-conf.check = "1.2.9-1.2"
+
+# Valve A/B stuff
+atomupd-daemon-git.ignore = true
+
+# we apply similar workarounds in other ways
+bluez.check = "5.71-2.1"
+
+# more A/B stuff
+bmap-tools.ignore = true
+
+breakpad = { map = true, pkgrel = 1, fixup = "v" }
+
+# Installer???
+calamares.ignore = true
+calamares-settings-steamos-git.ignore = true
+
+# more A/B stuff
+casync.ignore = true
+
+# why?
+ckbcomp.ignore = true
+
+# just disables tests
+clang.check = "16.0.6-2.1"
+
+# unused
+debos-git.ignore = true
+
+# backports
+discover.check = "5.27.10.1-1.1"
+
+# we don't need this
+dkms.ignore = true
+
+# non-critical
+# FIXME: package
+ds-inhibit.ignore = true
+
+# FIXME: dev tool, not packaged currently
+drm_info.ignore = true
+drm_info-git.ignore = true
+
+# backports already in nixpkgs
+e2fsprogs.check = "1.47.0-1.2"
+
+# we use nixpkgs version
+f3.ignore = true
+
+# Arch stuff
+filesystem.ignore = true
+
+# FIXME: some internal Valve thing, investigate?
+foxnet.ignore = true
+foxnetstatsd.ignore = true
+
+galileo-mura = { map = true, pkgrel = 1, fixup = "v" }
+
+gamescope.map = ["gamescope", "gamescope-session"]
+
+# grub build dep
+gnu-efi.ignore = true
+
+# FIXME: dev tool
+gpu-trace.ignore = true
+
+# we don't use it
+grub.ignore = true
+
+# we use nixos config
+holo-dmi-rules.check = "1.0-1"
+
+# unused, check in case it ever becomes used again
+holo-fstab-repair.check = "0.1-1"
+
+# we don't use those repos
+holo-keyring.ignore = true
+
+# immutable root stuff
+holo-nfs-utils-tmpfiles.ignore = true
+
+# lul
+holo-nix-offload.ignore = true
+
+# FIXME: investigate
+holo-rust-packaging-tools.ignore = true
+
+# applied as NixOS config
+holo-zram-swap.check = "0.2-0"
+
+# FIXME: IME stuff
+ibus-anthy.ignore = true
+ibus-table-cangjie-lite.ignore = true
+
+jupiter-dock-updater-bin = { map = true, pkgrel = 1 }
+
+jupiter-fan-control = { map = true, pkgrel = 1 }
+
+# we have our own, better one
+jupiter-firewall.ignore = true
+
+jupiter-hw-support = { map = ["jupiter-hw-support", "steamdeck-hw-theme", "steamdeck-firmware", "steamos-polkit-helpers"], pkgrel = 2 }
+
+jupiter-legacy-support.check = "1.147-1"
+
+# devkit stuff
+jupiter-resolved-nomdns.ignore = true
+
+# Valve telemetry stuff
+jupiter-steamos-log-submitter.ignore = true
+
+# FIXME: what is this?
+jupiter-validation-tools.ignore = true
+
+# debug stuff
+kdump-steamos.ignore = true
+kdumpst.ignore = true
+
+# just packaging changes
+kmod.check = "30-1.6"
+
+# backports
+kpmcore.check = "23.04.2-2.1"
+
+libdrm = { map = true, pkgrel = 1 }
+
+# DisplayLink stuff
+libevdi.ignore = true
+
+# some mainline kernel build
+linux.ignore = true
+
+linux-firmware-neptune = { map = "linux-firmware-jupiter", pkgrel = 1 }
+
+# some other mainline kernel build
+linux-lts.ignore = true
+
+# old kernel
+linux-neptune.ignore = true
+
+# current kernel
+linux-neptune-61 = { map = "linux_jovian", pkgrel = 1 }
+
+# too new kernel
+linux-neptune-65.ignore = true
+
+# debug kernel
+linux-neptune-rtw-debug.ignore = true
+
+# we don't identify as SteamOS
+lsb-release.ignore = true
+
+# packaging changes, removes a heavy dependency
+maliit-keyboard.check = "2.3.1-2.1"
+
+mangohud = { map = true, pkgrel = 1 }
+
+# we take upstream patches and apply on top of our mesa
+mesa.check = "24.0.0.183256.radeonsi_24.0.0-2"
+
+mesa-radv = { map = "mesa-radv-jupiter", pkgrel = 2, fixup = "mesa" }
+
+# some old test thing
+mesa-unstable.ignore = true
+
+# some other old test thing
+neptune-ctl.ignore = true
+
+# we don't actually apply any of this, but it's worth checking
+# FIXME?
+networkmanager.check = "1.44.2-3.2"
+
+# Arch stuff
+pacman-contrib.ignore = true
+paru.ignore = true
+
+# way too old, way too jank
+# FIXME?
+pipewire.ignore = true
+
+# backports a change that's already in our 5.27.11
+plasma-remotecontrollers.check = "5.27.10-1.1"
+
+# some weird patches, but nothing too relevant
+plymouth.check = "22.02.122-1.5"
+
+# packaging changes only, will probably not be relevant ever
+podman.ignore = true
+
+# we're tracking our fork but want to merge stuff into it
+powerbuttond.check = "2-1"
+
+# more A/B stuff
+rauc.ignore = true
+
+# debugging tools
+renderdoc.ignore = true
+renderdoc-minimal.ignore = true
+
+# unused
+rtl88x2ce-dkms.ignore = true
+
+# big mess, our SDDM is much newer
+sddm-wayland.ignore = true
+
+# FIXME: package this
+steam-im-modules.ignore = true
+
+steam-jupiter-oobe.map = "steamPackages.steam"
+
+# this will auto-update anyway
+steam-jupiter-stable.ignore = true
+
+steam_notif_daemon = { map = true, pkgrel = 1, fixup = "v" }
+
+steamdeck-dsp = { map = true, pkgrel = 1 }
+
+# we don't ship those
+steamdeck-kde-presets.ignore = true
+
+# very old, unused, but might be interesting? 
+steamfs-git.ignore = true
+
+# more A/B stuff
+steamos-atomupd-client-git.ignore = true
+
+# applied as NixOS modules instead
+# check both to make sure we get the latest changes
+steamos-customizations-git.check = "20240212.1-3"
+steamos-customizations-jupiter.check = "20240212.1-2"
+
+# devkit stuff
+steamos-devkit-service.ignore = true
+
+# A/B bootloader
+steamos-efi.ignore = true
+
+# debug stuff
+steamos-kdumpst-layer.ignore = true
+steamos-log-submitter.ignore = true
+
+# unused
+# FIXME: package when wired up on Steam side
+steamos-manager.ignore = true
+
+# not relevant to us
+steamos-media-creation-git.ignore = true
+
+# Allows switching between iwd and wpa_supplicant wifi backends from Steam
+# FIXME: doesn't seem to be wired up?
+steamos-networking-tools.check = "1.0-1"
+
+# more A/B stuff
+steamos-repair-backend-git.ignore = true
+steamos-repair-tool-git.ignore = true
+steamos-reset.ignore = true
+
+# more telemetry
+steamos-systemreport.ignore = true
+
+# applied as NixOS config
+steamos-tweak-mtu-probing.check = "1-1"
+
+# lul
+ttf-twemoji-default.ignore = true
+
+# debug tool
+umr.ignore = true
+
+# just disables tests, but may have stuff later
+upower.check = "0.99.15.jupiter-1.1"
+
+# non-critical but would be nice to have
+# FIXME: package these
+usbhid-gadget-passthru.ignore = true
+
+# benchmark tool
+vkmark-git.ignore = true
+
+# non-critical but would be nice to have
+# FIXME: package these
+vpower.ignore = true
+wakehook.ignore = true
+
+# we use upstream
+wayland-protocols.ignore = true
+
+wireplumber = { map = "wireplumber-jovian", pkgrel = 1 }
+
+# ours is newer
+xdg-desktop-portal-gtk.ignore = true
+
+# looks non-critical, but should be investigated
+# FIXME: actually investigate
+xorg-xwayland-jupiter.ignore = true
