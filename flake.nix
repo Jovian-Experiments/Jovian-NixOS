@@ -47,5 +47,18 @@
     githubActions = nix-github-actions.lib.mkGithubMatrix {
       inherit (self) checks;
     };
+
+    devShells = eachSupportedSystem (pkgs: {
+      default = pkgs.mkShell {
+        packages = let
+          pyenv = pkgs.python3.withPackages (ps: [
+            ps.colorama
+            ps.httpx
+            ps.toml
+            (ps.callPackage ./support/manifest/pyalpm.nix {})
+          ]); 
+        in [ pyenv ];
+      };
+    });
   };
 }
