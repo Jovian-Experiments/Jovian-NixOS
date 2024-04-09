@@ -53,7 +53,7 @@ in
 
       systemd.packages = [ pkgs.gamescope-session ];
 
-      services.xserver.displayManager.sessionPackages = [ pkgs.gamescope-session ];
+      services.displayManager.sessionPackages = [ pkgs.gamescope-session ];
 
       # Conflicts with powerbuttond
       services.logind.extraConfig = ''

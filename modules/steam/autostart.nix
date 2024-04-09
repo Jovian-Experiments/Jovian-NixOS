@@ -34,10 +34,10 @@ in
         desktopSession = mkOption {
           type = with types ; nullOr str // {         
             check = userProvidedDesktopSession:
-              lib.assertMsg (userProvidedDesktopSession != null -> (str.check userProvidedDesktopSession && lib.elem userProvidedDesktopSession config.services.xserver.displayManager.sessionData.sessionNames)) ''
+              lib.assertMsg (userProvidedDesktopSession != null -> (str.check userProvidedDesktopSession && lib.elem userProvidedDesktopSession config.services.displayManager.sessionData.sessionNames)) ''
                   Desktop session '${userProvidedDesktopSession}' not found.
                   Valid values for 'jovian.steam.desktopSession' are:
-                    ${lib.concatStringsSep "\n  " config.services.xserver.displayManager.sessionData.sessionNames}
+                    ${lib.concatStringsSep "\n  " config.services.displayManager.sessionData.sessionNames}
                   If you don't want a desktop session to switch to, set 'jovian.steam.desktopSession' to 'gamescope-wayland'.
               '';
           };
@@ -61,7 +61,7 @@ in
           message = ''
             Traditional Display Managers cannot be enabled when jovian.steam.autoStart is used
 
-            Hint: check `services.xserver.displaymanager.*.enable` options in your configuration.
+            Hint: check `services.displayManager.*.enable` options in your configuration.
           '';
         }
       ];
