@@ -76,11 +76,7 @@ in
         to keep this behavior.
       '';
 
-      services.xserver = {
-        enable = true;
-        displayManager.lightdm.enable = false;
-        displayManager.startx.enable = true;
-      };
+      services.displayManager.enable = true;
 
       systemd.user.services.gamescope-session = {
         overrideStrategy = "asDropin";
