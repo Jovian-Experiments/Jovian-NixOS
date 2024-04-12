@@ -24,6 +24,7 @@
   steamos-polkit-helpers,
   systemd,
   util-linux,
+  wakehook,
   xbindkeys,
 }:
 
@@ -47,6 +48,7 @@ let
       "${steamos-polkit-helpers}/bin/steamos-polkit-helpers"
       steamPackages.steam-fhsenv
       util-linux
+      wakehook
       xbindkeys
     ];
     execer = [
@@ -71,6 +73,7 @@ let
       "/usr/bin/steamos-polkit-helpers/steamos-reboot-now" = true;
       "/usr/bin/steamos-polkit-helpers/steamos-retrigger-automounts" = true;
       "/usr/lib/hwsupport/powerbuttond" = true;
+      "/usr/lib/hwsupport/wakehook" = true;
     };
     keep = {
       # if you've somehow managed to get devkit Steam on your NixOS,
@@ -102,13 +105,13 @@ let
   };
 in stdenv.mkDerivation(finalAttrs: {
   pname = "gamescope-session";
-  version = "3.14.2-2";
+  version = "3.14.3-3";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "PKGBUILDs-mirror";
     rev = "jupiter-main/gamescope-${finalAttrs.version}";
-    hash = "sha256-dihMf/z/BtUn2oLLmajr2PDjHQtZphtTHmJxnoIhl/8=";
+    hash = "sha256-I/O5F0yuRhX+tAFN5aUsgokF3qlT7/db6MUZe3TRD0c=";
   };
 
   patches = [
