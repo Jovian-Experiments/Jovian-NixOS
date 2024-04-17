@@ -17,7 +17,7 @@ in
         autoStart = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Whether to automatically launch the Steam Deck UI on boot.
 
             Traditional Display Managers cannot be enabled in conjunction with this option.
@@ -26,7 +26,7 @@ in
 
         user = mkOption {
           type = types.str;
-          description = lib.mdDoc ''
+          description = ''
             The user to run Steam with.
           '';
         };
@@ -43,7 +43,7 @@ in
           };
           default = null;
           example = "plasma";
-          description = lib.mdDoc ''
+          description = ''
             The session to launch for Desktop Mode.
 
             By default, attempting to switch to the desktop will launch Gaming Mode again.
