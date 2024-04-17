@@ -306,9 +306,10 @@ usbhid-gadget-passthru.ignore = true
 vkmark-git.ignore = true
 
 # non-critical but would be nice to have
-# FIXME: package these
+# FIXME: package this
 vpower.ignore = true
-wakehook.ignore = true
+
+wakehook.map = true
 
 # we use upstream
 wayland-protocols.ignore = true

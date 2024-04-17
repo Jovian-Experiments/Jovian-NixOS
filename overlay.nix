@@ -23,7 +23,7 @@ rec {
 
   gamescope = import ./pkgs/gamescope {
     gamescope' = super.gamescope;
-    fetchFromGitHub = final.fetchFromGitHub;
+    inherit (final) fetchFromGitHub;
   };
   gamescope-wsi = gamescope.override {
     enableExecutable = false;
@@ -43,6 +43,7 @@ rec {
   jupiter-fan-control = final.callPackage ./pkgs/jupiter-fan-control { };
   powerbuttond = final.callPackage ./pkgs/powerbuttond { };
   steam_notif_daemon = final.callPackage ./pkgs/steam_notif_daemon { };
+  wakehook = final.callPackage ./pkgs/wakehook { };
 
   jupiter-hw-support = final.callPackage ./pkgs/jupiter-hw-support { };
   steamdeck-hw-theme = final.callPackage ./pkgs/jupiter-hw-support/theme.nix { };
