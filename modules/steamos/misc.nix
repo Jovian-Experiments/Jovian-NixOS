@@ -16,7 +16,7 @@ in
         default = cfg.useSteamOSConfig;
         defaultText = lib.literalExpression "config.jovian.steamos.useSteamOSConfig";
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           > Loosen the product_serial node to `440 / root:wheel`, rather than `400 / root:root`
           > to allow the physical users to read S/N without auth.
           — holo-dmi-rules 1.0

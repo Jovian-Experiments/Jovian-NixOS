@@ -15,7 +15,7 @@ in
         default = cfg.useSteamOSConfig;
         defaultText = lib.literalExpression "config.jovian.steamos.useSteamOSConfig";
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Adjust default BlueZ settings to match SteamOS.
         '';
       };

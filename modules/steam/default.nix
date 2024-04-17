@@ -18,7 +18,7 @@ in
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = lib.mdDoc ''
+          description = ''
             Whether to enable the Steam Deck UI.
 
             When enabled, you can either use the `autoStart` option (preferred),
