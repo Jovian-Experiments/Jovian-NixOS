@@ -120,6 +120,9 @@ holo-zram-swap.check = "0.2-0"
 ibus-anthy.ignore = true
 ibus-table-cangjie-lite.ignore = true
 
+# backport from newer version than what we have
+iwd.check = "2.14-1.1"
+
 jupiter-dock-updater-bin = { map = true, pkgrel = 1 }
 
 jupiter-fan-control = { map = true, pkgrel = 1 }
@@ -196,7 +199,7 @@ neptune-ctl.ignore = true
 
 # we don't actually apply any of this, but it's worth checking
 # FIXME?
-networkmanager.check = "1.44.2-3.2"
+networkmanager.check = "1.44.2-3.3"
 
 # Arch stuff
 pacman-contrib.ignore = true
@@ -207,7 +210,7 @@ paru.ignore = true
 pipewire.ignore = true
 
 # backports a change that's already in our 5.27.11
-plasma-remotecontrollers.check = "5.27.10-1.1"
+plasma-remotecontrollers.check = "5.27.10-1.2"
 
 # some weird patches, but nothing too relevant
 plymouth.check = "22.02.122-1.5"
@@ -254,8 +257,8 @@ steamos-atomupd-client-git.ignore = true
 
 # applied as NixOS modules instead
 # check both to make sure we get the latest changes
-steamos-customizations-git.check = "20240212.1-3"
-steamos-customizations-jupiter.check = "20240212.1-2"
+steamos-customizations-git.check = "20240328.1-3"
+steamos-customizations-jupiter.check = "20240328.1-2"
 
 # devkit stuff
 steamos-devkit-service.ignore = true
@@ -313,6 +316,9 @@ wakehook.map = true
 
 # we use upstream
 wayland-protocols.ignore = true
+
+# dependency of pipewire
+webrtc-audio-processing-1.ignore = true
 
 wireplumber = { map = "wireplumber-jovian", pkgrel = 1 }
 
