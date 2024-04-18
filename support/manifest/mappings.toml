@@ -130,7 +130,7 @@ jupiter-fan-control = { map = true, pkgrel = 1 }
 # we have our own, better one
 jupiter-firewall.ignore = true
 
-jupiter-hw-support = { map = ["jupiter-hw-support", "steamdeck-hw-theme", "steamdeck-firmware", "steamos-polkit-helpers"], pkgrel = 2 }
+jupiter-hw-support = { map = ["jupiter-hw-support", "steamdeck-hw-theme", "steamdeck-firmware", "steamos-polkit-helpers"], pkgrel = 1 }
 
 jupiter-legacy-support.check = "1.147-1"
 
