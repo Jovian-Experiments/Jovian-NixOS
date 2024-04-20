@@ -26,6 +26,9 @@ in
   };
   config = mkIf (cfg.enableKernelPatches) (mkMerge [
     {
+      # HACK: block simpledrm from loading, so that the real GPU always gets card0,
+      # as that's where Steam currently assumes it's going to be. Bad Steam, bad.
+      boot.kernelParams = ["initcall_blacklist=simpledrm_platform_driver_init"];
       boot.kernelPackages = mkDefault pkgs.linuxPackages_jovian;
     }
   ]);
