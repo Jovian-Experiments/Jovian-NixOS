@@ -39,10 +39,7 @@ in
       pulse.enable = true;
       alsa.enable = true;
       configPackages = [ pkgs.steamdeck-dsp ];
-      wireplumber = {
-        package = pkgs.wireplumber-jovian;
-        configPackages = [ pkgs.steamdeck-dsp ];
-      };
+      wireplumber.configPackages = [ pkgs.steamdeck-dsp ];
     };
 
     environment.variables = extraEnv;
@@ -54,6 +51,11 @@ in
 
     systemd.services.wireplumber.environment = lib.mkIf systemWide extraEnv;
     systemd.user.services.wireplumber.environment = lib.mkIf (!systemWide) extraEnv;
+
+    systemd.services.pipewire-sysconf = {
+      wantedBy = ["multi-user.target"];
+      before = ["display-manager.service"];
+    };
 
     systemd.services.wireplumber-sysconf = {
       wantedBy = ["multi-user.target"];

@@ -13,6 +13,14 @@
 }:
 
 let
+  pipewire-hwconfig-solution = {
+    scripts = [ "share/pipewire/hardware-profiles/pipewire-hwconfig" ];
+    interpreter = "${bash}/bin/bash";
+    inputs = [
+      coreutils
+      dmidecode
+    ];
+  };
   wireplumber-hwconfig-solution = {
     scripts = [ "share/wireplumber/hardware-profiles/wireplumber-hwconfig" ];
     interpreter = "${bash}/bin/bash";
@@ -23,13 +31,13 @@ let
   };
   self = stdenv.mkDerivation(finalAttrs: {
     pname = "steamdeck-dsp";
-    version = "0.42";
+    version = "0.43";
 
     src = fetchFromGitHub {
       owner = "Jovian-Experiments";
       repo = "steamdeck-dsp";
       rev = finalAttrs.version;
-      hash = "sha256-A0O6whz6S/izYv9dMORjYTlpg8LwKKFyXw0CTHPIi/s=";
+      hash = "sha256-jA8ZsKXUTQl0Kse27W47Zkl36aZ2piPJOJiPqRj9kU8=";
     };
 
     nativeBuildInputs = [
@@ -39,22 +47,22 @@ let
 
     postPatch = ''
       substituteInPlace Makefile \
-        --replace /usr/include/boost "${boost.dev}/include/boost" \
-        --replace /usr/include/lv2 "${lv2.dev}/include/lv2"
+        --replace-fail /usr/include/boost "${boost.dev}/include/boost" \
+        --replace-fail /usr/include/lv2 "${lv2.dev}/include/lv2"
 
-      substituteInPlace pipewire-confs/filter-chain-mic.conf \
-        --replace "/usr/lib/ladspa/librnnoise_ladspa.so" "${rnnoise-plugin}/lib/ladspa/librnnoise_ladspa.so"
+      substituteInPlace pipewire-confs/hardware-profiles/valve-{jupiter,galileo}/pipewire.conf.d/filter-chain.conf \
+        --replace-fail "/usr/lib/ladspa/librnnoise_ladspa.so" "${rnnoise-plugin}/lib/ladspa/librnnoise_ladspa.so"
 
-      # Stop trying to run `echo`, we don't have it
-      substituteInPlace ucm2/conf.d/*/*.conf \
-        --replace "exec" "# exec"
+      substituteInPlace ucm2/conf.d/acp5x/*.conf \
+        --replace-warn "exec" "# exec"
 
       # Fix paths
-      substituteInPlace wireplumber/hardware-profiles/wireplumber-hwconfig \
-        --replace "/usr/share" "$out/share"
-
-      substituteInPlace wireplumber/systemd/system/wireplumber-sysconf.service \
-        --replace "/usr/share" "$out/share"
+      substituteInPlace \
+        pipewire-confs/hardware-profiles/pipewire-hwconfig \
+        pipewire-confs/systemd/system/pipewire-sysconf.service \
+        wireplumber/hardware-profiles/wireplumber-hwconfig \
+        wireplumber/systemd/system/wireplumber-sysconf.service \
+        --replace-fail "/usr/share" "$out/share"
     '';
 
     preInstall = ''
@@ -65,11 +73,14 @@ let
       mv -vt $out $out/usr/*
       rmdir -v $out/usr
 
+      ${resholve.phraseSolution "pipewire-hwconfig" pipewire-hwconfig-solution}
       ${resholve.phraseSolution "wireplumber-hwconfig" wireplumber-hwconfig-solution}
 
-      for i in $(find $out/share/wireplumber/hardware-profiles/{valve-jupiter,valve-galileo} -type f -printf "%P\n" | sort | uniq); do 
-        mkdir -p $(dirname "$out/share/wireplumber/$i")
-        ln -s /run/wireplumber/$i $out/share/wireplumber/$i
+      for pkg in pipewire wireplumber; do
+        for i in $(find $out/share/$pkg/hardware-profiles/{valve-jupiter,valve-galileo} -type f -printf "%P\n" | sort | uniq); do 
+          mkdir -p $(dirname "$out/share/$pkg/$i")
+          ln -s /run/$pkg/$i $out/share/$pkg/$i
+        done
       done
     '';
 
