@@ -31,8 +31,8 @@ alsa-ucm-conf.check = "1.2.9-1.2"
 # Valve A/B stuff
 atomupd-daemon-git.ignore = true
 
-# we apply similar workarounds in other ways
-bluez.check = "5.71-2.1"
+# FIXME: has some not-yet-upstream patches, maybe we want them in nixpkgs?
+bluez.check = "5.73-5"
 
 # more A/B stuff
 bmap-tools.ignore = true
@@ -78,6 +78,9 @@ f3.ignore = true
 # Arch stuff
 filesystem.ignore = true
 
+# security backports we already have
+flatpak.check = "1:1.15.6-2.1"
+
 # FIXME: some internal Valve thing, investigate?
 foxnet.ignore = true
 foxnetstatsd.ignore = true
@@ -85,6 +88,9 @@ foxnetstatsd.ignore = true
 galileo-mura = { map = true, pkgrel = 1, fixup = "v" }
 
 gamescope.map = ["gamescope", "gamescope-session"]
+
+# only there to split out locales
+glibc.check = "2.39-1"
 
 # grub build dep
 gnu-efi.ignore = true
@@ -100,6 +106,9 @@ holo-dmi-rules.check = "1.0-1"
 
 # unused, check in case it ever becomes used again
 holo-fstab-repair.check = "0.1-1"
+
+# the split out locales
+holo-glibc-locales.check = "2.39-1"
 
 # we don't use those repos
 holo-keyring.ignore = true
