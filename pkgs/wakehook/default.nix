@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wakehook";
-  version = "1";
+  version = "2";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "wakehook";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3eCGxA3nexlaVl5M1OOa5i2hYObwUIze4zslLUaofIE=";
+    hash = "sha256-uM4jh69V0hvMXdqIr9Y3sp/SNoTHU9KF+gQLAmzLr18=";
   };
 
   nativeBuildInputs = [pkg-config];
