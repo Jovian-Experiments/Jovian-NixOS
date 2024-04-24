@@ -32,7 +32,7 @@ alsa-ucm-conf.check = "1.2.9-1.2"
 atomupd-daemon-git.ignore = true
 
 # FIXME: has some not-yet-upstream patches, maybe we want them in nixpkgs?
-bluez.check = "5.73-5"
+bluez.check = "5.73-6"
 
 # more A/B stuff
 bmap-tools.ignore = true
@@ -90,7 +90,7 @@ galileo-mura = { map = true, pkgrel = 1, fixup = "v" }
 gamescope.map = ["gamescope", "gamescope-session"]
 
 # only there to split out locales
-glibc.check = "2.39-1"
+glibc.check = "2.39-1.1"
 
 # grub build dep
 gnu-efi.ignore = true
@@ -219,7 +219,7 @@ paru.ignore = true
 pipewire.ignore = true
 
 # backports a change that's already in our 5.27.11
-plasma-remotecontrollers.check = "5.27.10-1.2"
+plasma-remotecontrollers.check = "5.27.10-1.3"
 
 # some weird patches, but nothing too relevant
 plymouth.check = "22.02.122-1.5"
@@ -334,6 +334,8 @@ wireplumber = { map = true, pkgrel = 1 }
 # ours is newer
 xdg-desktop-portal-gtk.ignore = true
 
-# looks non-critical, but should be investigated
-# FIXME: actually investigate
-xorg-xwayland-jupiter.ignore = true
+# upstream backport
+xorg-xwayland.check = "23.2.6-2"
+
+# build dependency
+xorgproto.ignore = true
