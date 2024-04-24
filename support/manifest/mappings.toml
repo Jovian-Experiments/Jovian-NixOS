@@ -321,7 +321,7 @@ vkmark-git.ignore = true
 # FIXME: package this
 vpower.ignore = true
 
-wakehook.map = true
+wakehook = { map = true, pkgrel = 2 }
 
 # we use upstream
 wayland-protocols.ignore = true
