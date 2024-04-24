@@ -30,5 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "SteamOS CEC power management daemon";
     license = licenses.mit;
+    mainProgram = "wakehook";
   };
 })
