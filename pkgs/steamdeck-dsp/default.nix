@@ -53,7 +53,7 @@ let
       substituteInPlace pipewire-confs/hardware-profiles/valve-{jupiter,galileo}/pipewire.conf.d/filter-chain.conf \
         --replace-fail "/usr/lib/ladspa/librnnoise_ladspa.so" "${rnnoise-plugin}/lib/ladspa/librnnoise_ladspa.so"
 
-      substituteInPlace ucm2/conf.d/acp5x/*.conf \
+      substituteInPlace ucm2/conf.d/*/*.conf \
         --replace-warn "exec" "# exec"
 
       # Fix paths
