@@ -53,6 +53,16 @@ in
 
       systemd.packages = [ pkgs.gamescope-session ];
 
+      # Vendor patch: https://raw.githubusercontent.com/Jovian-Experiments/PKGBUILDs-mirror/cdaeca26642d59fc9109e98ac9ce2efe5261df1b/0001-Add-systemd-service.patch
+      systemd.user.services.wakehook = {
+        wantedBy = ["gamescope-session.service"];
+        after = ["gamescope-session.service"];
+        serviceConfig = {
+          ExecStart = lib.getExe pkgs.wakehook;
+          Restart = "always";
+        };
+      };
+
       services.displayManager.sessionPackages = [ pkgs.gamescope-session ];
 
       # Conflicts with powerbuttond
