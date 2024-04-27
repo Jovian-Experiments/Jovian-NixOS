@@ -198,7 +198,7 @@ mangohud = { map = true, pkgrel = 1 }
 # we take upstream patches and apply on top of our mesa
 mesa.check = "24.0.0.183256.radeonsi_24.0.0-2"
 
-mesa-radv = { map = "mesa-radv-jupiter", pkgrel = 2, fixup = "mesa" }
+mesa-radv = { map = "mesa-radv-jupiter", pkgrel = 1, fixup = "mesa" }
 
 # some old test thing
 mesa-unstable.ignore = true
