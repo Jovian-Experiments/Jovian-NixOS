@@ -32,7 +32,7 @@ alsa-ucm-conf.check = "1.2.9-1.2"
 atomupd-daemon-git.ignore = true
 
 # FIXME: has some not-yet-upstream patches, maybe we want them in nixpkgs?
-bluez.check = "5.73-6"
+bluez.check = "5.73-7"
 
 # more A/B stuff
 bmap-tools.ignore = true
@@ -196,9 +196,9 @@ maliit-keyboard.check = "2.3.1-2.1"
 mangohud = { map = true, pkgrel = 1 }
 
 # we take upstream patches and apply on top of our mesa
-mesa.check = "24.0.0.183256.radeonsi_24.0.0-2"
+mesa.check = "24.0.5.183656.radeonsi_24.0.1-1"
 
-mesa-radv = { map = "mesa-radv-jupiter", pkgrel = 2, fixup = "mesa" }
+mesa-radv = { map = "mesa-radv-jupiter", pkgrel = 1, fixup = "mesa" }
 
 # some old test thing
 mesa-unstable.ignore = true
@@ -220,6 +220,9 @@ pipewire.ignore = true
 
 # backports a change that's already in our 5.27.11
 plasma-remotecontrollers.check = "5.27.10-1.3"
+
+# just a backport from Arch?
+plasma-workspace.check = "5.27.10-2.1"
 
 # some weird patches, but nothing too relevant
 plymouth.check = "22.02.122-1.5"

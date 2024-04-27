@@ -1,7 +1,7 @@
 { mesa, fetchFromGitHub }:
 let
   version = "24.1.0";
-  jupiterVersion = "steamos-24.1.2";
+  jupiterVersion = "steamos-24.4.0";
 in (mesa.override {
   galliumDrivers = [];
   vulkanDrivers = ["amd"];
@@ -16,7 +16,7 @@ in (mesa.override {
     owner = "Jovian-Experiments";
     repo = "mesa";
     rev = jupiterVersion;
-    hash = "sha256-nTEmtP1pjpWeaXQsXn0sHeFKkhNIBTLoJClkAPakkT4=";
+    hash = "sha256-fWtEH8Ln1QZKMa7Y8sLexWyQYhNIuMhIUQPy198Oopg=";
   };
 
   # Clobber all the existing patches
@@ -26,7 +26,7 @@ in (mesa.override {
   mesonFlags = old.mesonFlags ++ [
     # Disable all the Gallium stuff that we don't need because no drivers
     "-Degl=disabled"
-    "-Dglvnd=false"
+    "-Dglvnd=disabled"
     "-Dgallium-vdpau=disabled"
     "-Dgallium-va=disabled"
     "-Dgallium-xa=disabled"
@@ -35,9 +35,10 @@ in (mesa.override {
     "-Dgbm=disabled"
 
     # Disable intel-clc to avoid libclc dependency
-    "-Dintel-clc=disabled"
+    "-Dintel-clc=system"
+    "-Dintel-rt=disabled"
 
     # Vendor sets this
-    "-Dradv-build-id=e60f3bf3a400d3b96b0ce331633fd21e9bafd2a8"
+    "-Dradv-build-id=64474a6475eb8af2b44ef334793fd58ad89875f6"
   ];
 })
