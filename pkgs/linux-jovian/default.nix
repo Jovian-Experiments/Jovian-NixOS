@@ -1,28 +1,16 @@
-{ lib, fetchFromGitHub, fetchpatch, buildLinux, ... } @ args:
+{ lib, fetchFromGitHub, buildLinux, ... } @ args:
 
 let
   inherit (lib) versions;
 
-  kernelVersion = "6.1.52";
-  vendorVersion = "valve19";
+  kernelVersion = "6.5.0";
+  vendorVersion = "valve3";
 in
 buildLinux (args // rec {
   version = "${kernelVersion}-${vendorVersion}";
 
   # branchVersion needs to be x.y
   extraMeta.branch = versions.majorMinor version;
-
-  kernelPatches = (args.kernelPatches or []) ++ [
-    {
-      # Enable all Bluetooth LE PHYs by default
-      # See comment in https://github.com/Jovian-Experiments/PKGBUILDs-mirror/blob/d594fbf6bea8f0bace6dafca1799632579cd772b/PKGBUILD
-      name = "enable-all-ble-phys";
-      patch = fetchpatch {
-        url = "https://github.com/Jovian-Experiments/linux/commit/288c90224eec55d13e786844b7954ef060752089.patch";
-        hash = "sha256-iDEZBowNsfeECzM6AWVOGBKurbEGSiWWa9PQIV6kVVY=";
-      };
-    }
-  ];
 
   structuredExtraConfig = with lib.kernel; {
     #
@@ -93,7 +81,9 @@ buildLinux (args // rec {
     SND_SOC_SOF = module;
     SND_SOC_SOF_PROBE_WORK_QUEUE = yes;
     SND_SOC_SOF_IPC3 = yes;
-    SND_SOC_SOF_INTEL_IPC4 = yes;
+    # Jovian: renamed from _INTEL_
+    # https://github.com/Jovian-Experiments/linux/commit/e31b20c2f0c2e561e7b1bf671fe38bd5d83a496f
+    SND_SOC_SOF_IPC4 = yes;
 
     SND_SOC_SOF_AMD_TOPLEVEL = module;
     SND_SOC_SOF_AMD_COMMON = module;
@@ -132,9 +122,6 @@ buildLinux (args // rec {
     # Build as module to experiment with toggling
     TCG_TPM = module;
 
-    # Galileo Analogix I2C magic module thing
-    DRM_ANALOGIX_ANX7580 = module;
-
     # Per Colin at Quectel
     CFG80211_CERTIFICATION_ONUS = yes;
     ATH_REG_DYNAMIC_USER_REG_HINTS = yes;
@@ -153,7 +140,7 @@ buildLinux (args // rec {
     owner = "Jovian-Experiments";
     repo = "linux";
     rev = version;
-    hash = "sha256-uS/0RAaZt99EA3mn6Vso0kAGrqvnJovNEc1nfPLdey8=";
+    hash = "sha256-Ucl7/fwrCX4KFtG6C0icrYmv9d7WYViCSbBdrWhGZ3c=";
 
     # Sometimes the vendor doesn't update the EXTRAVERSION tag.
     # Let's fix it up in post.
