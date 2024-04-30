@@ -178,11 +178,11 @@ linux-lts.ignore = true
 # old kernel
 linux-neptune.ignore = true
 
-# current kernel
-linux-neptune-61 = { map = "linux_jovian", pkgrel = 1 }
+# old kernel
+linux-neptune-61.ignore = true
 
-# too new kernel
-linux-neptune-65.ignore = true
+# new kernel
+linux-neptune-65 = { map = "linux_jovian", pkgrel = 1 }
 
 # debug kernel
 linux-neptune-rtw-debug.ignore = true
