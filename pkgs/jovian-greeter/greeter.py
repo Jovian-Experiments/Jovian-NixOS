@@ -85,6 +85,11 @@ class GreetdClient:
         raise RuntimeError('Bad response', response)
 
     def start_session(self, command: List[str], environment: List[str]):
+        try:
+            subprocess.check_call(["plymouth", "quit", "--retain-splash", "--wait"])
+        except Exception as ex:
+            logging.debug("Failed to stop Plymouth", exc_info=ex)
+
         # greetd before 0.9.0 doesn't support env
         command_with_env = [ 'systemd-cat', '--identifier=jovian-session', '--', '/usr/bin/env' ] + environment + command
 
