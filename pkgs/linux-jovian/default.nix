@@ -126,6 +126,12 @@ buildLinux (args // rec {
     CFG80211_CERTIFICATION_ONUS = yes;
     ATH_REG_DYNAMIC_USER_REG_HINTS = yes;
 
+    # Enable ath11k tracing for wifi debugging
+    ATH11K_TRACING = yes;
+
+    # Disable simple-framebuffer to fix logo regression
+    SYSFB_SIMPLEFB = lib.mkForce no;
+
     # Jovian: fix fallout from the vendor-set options
     DRM_AMD_DC_SI = lib.mkForce (option no);
     DRM_AMD_DC_DCN = lib.mkForce (option no);

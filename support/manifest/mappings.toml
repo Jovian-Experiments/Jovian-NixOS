@@ -89,6 +89,9 @@ galileo-mura = { map = true, pkgrel = 1, fixup = "v" }
 
 gamescope.map = ["gamescope", "gamescope-session"]
 
+# ???
+gcc.ignore = true
+
 # only there to split out locales
 glibc.check = "2.39-1.1"
 
@@ -182,7 +185,7 @@ linux-neptune.ignore = true
 linux-neptune-61.ignore = true
 
 # new kernel
-linux-neptune-65 = { map = "linux_jovian", pkgrel = 1 }
+linux-neptune-65 = { map = "linux_jovian", pkgrel = 3 }
 
 # debug kernel
 linux-neptune-rtw-debug.ignore = true
