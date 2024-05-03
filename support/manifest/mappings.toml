@@ -89,6 +89,9 @@ galileo-mura = { map = true, pkgrel = 1, fixup = "v" }
 
 gamescope.map = ["gamescope", "gamescope-session"]
 
+# ???
+gcc.ignore = true
+
 # only there to split out locales
 glibc.check = "2.39-1.1"
 
