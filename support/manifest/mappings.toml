@@ -187,7 +187,8 @@ linux-neptune-61.ignore = true
 # new kernel
 linux-neptune-65 = { map = "linux_jovian", pkgrel = 3 }
 
-# debug kernel
+# debug kernels
+linux-neptune-65-kasan.ignore = true
 linux-neptune-rtw-debug.ignore = true
 
 # we don't identify as SteamOS
@@ -222,7 +223,7 @@ paru.ignore = true
 pipewire.ignore = true
 
 # backports a change that's already in our 5.27.11
-plasma-remotecontrollers.check = "5.27.10-1.3"
+plasma-remotecontrollers.check = "5.27.11-1.1"
 
 # just a backport from Arch?
 plasma-workspace.check = "5.27.10-2.1"
