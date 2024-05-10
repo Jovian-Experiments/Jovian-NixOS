@@ -1,15 +1,16 @@
-{ callPackage, fetchFromGitHub, git, ... }@args:
+{ callPackage, fetchFromGitHub, git, libxkbcommon, ... }@args:
 
-(callPackage ./upstream (removeAttrs args ["callPackage" "git"])).overrideAttrs (old: {
-  version = "0.7.0.r78.gc5c82db";
+(callPackage ./upstream (removeAttrs args ["callPackage" "git" "libxkbcommon"])).overrideAttrs (old: {
+  version = "0.7.2.rc3.r11.g31f2ca5";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
 
-    rev = "c5c82dbbae846b5ea2bf920810fa2ede4a6979f8";
-    hash = "sha256-386N+pzCAH+VCTCaMRID4VT9SxnlQuQ7vwmD2+sVsKs=";
+    rev = "31f2ca5e306d7bad502ae70d346f0309e1f4764b";
+    hash = "sha256-gqqSWbwKMepLVhG8kP00V/vIvVMjWeAezUg2TZzc9p0=";
   };
 
   nativeBuildInputs = old.nativeBuildInputs ++ [ git ];
+  buildInputs = old.buildInputs ++ [ libxkbcommon ];
 })

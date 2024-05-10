@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , fetchurl
 , substituteAll
+, fetchpatch
 , coreutils
 , curl
 , glxinfo
@@ -38,12 +39,26 @@
 let
   # Derived from subprojects/cmocka.wrap
   cmocka = {
-    version = "1.81";
     src = fetchFromGitLab {
       owner = "cmocka";
       repo = "cmocka";
       rev = "59dc0013f9f29fcf212fe4911c78e734263ce24c";
       hash = "sha256-IbAZOC0Q60PrKlKVWsgg/PFDV0PLb/yy+Iz/4Iziny0=";
+    };
+  };
+
+  # Derived from subprojects/implot.wrap
+  implot = rec {
+    version = "0.16";
+    src = fetchFromGitHub {
+      owner = "epezent";
+      repo = "implot";
+      rev = "refs/tags/v${version}";
+      hash = "sha256-/wkVsgz3wiUVZBCgRl2iDD6GWb+AoHN+u0aeqHHgem0=";
+    };
+    patch = fetchurl {
+      url = "https://wrapdb.mesonbuild.com/v2/implot_${version}-1/get_patch";
+      hash = "sha256-HGsUYgZqVFL6UMHaHdR/7YQfKCMpcsgtd48pYpNlaMc=";
     };
   };
 
@@ -68,7 +83,7 @@ let
     src = fetchFromGitHub {
       owner = "KhronosGroup";
       repo = "Vulkan-Headers";
-      rev = "v${version}";
+      rev = "refs/tags/v${version}";
       hash = "sha256-5uyk2nMwV1MjXoa3hK/WUeGLwpINJJEvY16kc5DEaks=";
     };
     patch = fetchurl {
@@ -76,31 +91,17 @@ let
       hash = "sha256-hgNYz15z9FjNHoj4w4EW0SOrQh1c4uQSnsOOrt2CDhc=";
     };
   };
-
-  implot = rec {
-    version = "0.16";
-    src = fetchFromGitHub {
-      owner = "epezent";
-      repo = "implot";
-      rev = "v${version}";
-      hash = "sha256-/wkVsgz3wiUVZBCgRl2iDD6GWb+AoHN+u0aeqHHgem0=";
-    };
-    patch = fetchurl {
-      url = "https://wrapdb.mesonbuild.com/v2/implot_${version}-1/get_patch";
-      hash = "sha256-HGsUYgZqVFL6UMHaHdR/7YQfKCMpcsgtd48pYpNlaMc=";
-    };
-  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangohud";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-KkMN7A3AcS/v+b9GCs0pI6MBBk3WwOMciaoiBzL5xOQ=";
+    hash = "sha256-Gnq+1j+PFbeipAfXGnTq7wZdVQeG9R9vLAKZnZj7Bvs=";
   };
 
   outputs = [ "out" "doc" "man" ];
@@ -108,12 +109,12 @@ stdenv.mkDerivation (finalAttrs: {
   # Unpack subproject sources
   postUnpack = ''(
     cd "$sourceRoot/subprojects"
-    ${lib.optionalString finalAttrs.doCheck ''
+    ${lib.optionalString finalAttrs.finalPackage.doCheck ''
       cp -R --no-preserve=mode,ownership ${cmocka.src} cmocka
     ''}
+    cp -R --no-preserve=mode,ownership ${implot.src} implot-${implot.version}
     cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
     cp -R --no-preserve=mode,ownership ${vulkan-headers.src} Vulkan-Headers-${vulkan-headers.version}
-    cp -R --no-preserve=mode,ownership ${implot.src} implot-${implot.version}
   )'';
 
   patches = [
@@ -153,16 +154,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     (
       cd subprojects
+      unzip ${implot.patch}
       unzip ${imgui.patch}
       unzip ${vulkan-headers.patch}
-      unzip ${implot.patch}
     )
   '';
 
   mesonFlags = [
     "-Dwith_wayland=enabled"
     "-Duse_system_spdlog=enabled"
-    "-Dtests=${if finalAttrs.doCheck then "enabled" else "disabled"}"
+    "-Dtests=${if finalAttrs.finalPackage.doCheck then "enabled" else "disabled"}"
   ] ++ lib.optionals gamescopeSupport [
     "-Dmangoapp=true"
     "-Dmangoapp_layer=true"
@@ -214,33 +215,36 @@ stdenv.mkDerivation (finalAttrs: {
     ''}
   '';
 
-  postFixup = let
-    archMap = {
-      "x86_64-linux" = "x86_64";
-      "i686-linux" = "x86";
-    };
-    layerPlatform = archMap."${stdenv.hostPlatform.system}" or null;
-    # We need to give the different layers separate names or else the loader
-    # might try the 32-bit one first, fail and not attempt to load the 64-bit
-    # layer under the same name.
-  in lib.optionalString (layerPlatform != null) ''
-    substituteInPlace $out/share/vulkan/implicit_layer.d/MangoHud.${layerPlatform}.json \
-      --replace "VK_LAYER_MANGOHUD_overlay" "VK_LAYER_MANGOHUD_overlay_${toString stdenv.hostPlatform.parsed.cpu.bits}"
-  '' + ''
-    # Add OpenGL driver path to RUNPATH to support NVIDIA cards
-    addOpenGLRunpath "$out/lib/mangohud/libMangoHud.so"
-  '' + lib.optionalString gamescopeSupport ''
-    addOpenGLRunpath "$out/bin/mangoapp"
-  '' + lib.optionalString finalAttrs.doCheck ''
-    # libcmocka.so is only used for tests
-    rm "$out/lib/libcmocka.so"
-  '';
+  postFixup =
+    let
+      archMap = {
+        "x86_64-linux" = "x86_64";
+        "i686-linux" = "x86";
+      };
+      layerPlatform = archMap."${stdenv.hostPlatform.system}" or null;
+      # We need to give the different layers separate names or else the loader
+      # might try the 32-bit one first, fail and not attempt to load the 64-bit
+      # layer under the same name.
+    in
+    lib.optionalString (layerPlatform != null) ''
+      substituteInPlace $out/share/vulkan/implicit_layer.d/MangoHud.${layerPlatform}.json \
+        --replace "VK_LAYER_MANGOHUD_overlay" "VK_LAYER_MANGOHUD_overlay_${toString stdenv.hostPlatform.parsed.cpu.bits}"
+    '' + ''
+      # Add OpenGL driver path to RUNPATH to support NVIDIA cards
+      addOpenGLRunpath "$out/lib/mangohud/libMangoHud.so"
+    '' + lib.optionalString gamescopeSupport ''
+      addOpenGLRunpath "$out/bin/mangoapp"
+    '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
+      # libcmocka.so is only used for tests
+      rm "$out/lib/libcmocka.so"
+    '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A Vulkan and OpenGL overlay for monitoring FPS, temperatures, CPU/GPU load and more";
     homepage = "https://github.com/flightlessmango/MangoHud";
+    changelog = "https://github.com/flightlessmango/MangoHud/releases/tag/v${finalAttrs.version}";
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = with maintainers; [ kira-bruneau zeratax ];
