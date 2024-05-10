@@ -185,7 +185,7 @@ linux-neptune.ignore = true
 linux-neptune-61.ignore = true
 
 # new kernel
-linux-neptune-65 = { map = "linux_jovian", pkgrel = 3 }
+linux-neptune-65 = { map = "linux_jovian", pkgrel = 1 }
 
 # debug kernels
 linux-neptune-65-kasan.ignore = true
@@ -197,10 +197,10 @@ lsb-release.ignore = true
 # packaging changes, removes a heavy dependency
 maliit-keyboard.check = "2.3.1-2.1"
 
-mangohud = { map = true, pkgrel = 1 }
+mangohud = { map = true, pkgrel = 2 }
 
 # we take upstream patches and apply on top of our mesa
-mesa.check = "24.0.5.183656.radeonsi_24.0.1-1"
+mesa.check = "24.0.5.183658.radeonsi_24.0.2-1"
 
 mesa-radv = { map = "mesa-radv-jupiter", pkgrel = 1, fixup = "mesa" }
 
@@ -222,8 +222,9 @@ paru.ignore = true
 # FIXME?
 pipewire.ignore = true
 
-# backports a change that's already in our 5.27.11
-plasma-remotecontrollers.check = "5.27.11-1.1"
+# a bunch of tweaks
+# FIXME: do we want this?
+plasma-remotecontrollers.check = "5.27.11-1.2"
 
 # just a backport from Arch?
 plasma-workspace.check = "5.27.10-2.1"
