@@ -200,7 +200,7 @@ maliit-keyboard.check = "2.3.1-2.1"
 mangohud = { map = true, pkgrel = 2 }
 
 # we take upstream patches and apply on top of our mesa
-mesa.check = "24.0.5.183656.radeonsi_24.0.1-1"
+mesa.check = "24.0.5.183658.radeonsi_24.0.2-1"
 
 mesa-radv = { map = "mesa-radv-jupiter", pkgrel = 1, fixup = "mesa" }
 
