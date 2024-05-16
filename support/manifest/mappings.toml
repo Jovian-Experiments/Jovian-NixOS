@@ -173,6 +173,9 @@ libdrm = { map = true, pkgrel = 1 }
 # DisplayLink stuff
 libevdi.ignore = true
 
+# some internal tooling, not shipped
+libversion.ignore = true
+
 # some mainline kernel build
 linux.ignore = true
 
@@ -240,6 +243,9 @@ podman.ignore = true
 
 # we're tracking our fork but want to merge stuff into it
 powerbuttond.check = "2-1"
+
+# some internal tooling, not shipped
+python-libversion.ignore = true
 
 # more A/B stuff
 rauc.ignore = true

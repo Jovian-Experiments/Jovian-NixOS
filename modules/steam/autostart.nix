@@ -116,17 +116,17 @@ in
         enable = true;
         settings = {
           default_session = {
-            user = "jovian-greeter";
+            user = "root";
             command = "${pkgs.jovian-greeter}/bin/jovian-greeter ${cfg.user}";
           };
         };
+        greeterManagesPlymouth = true;
       };
 
-      users.users.jovian-greeter = {
-        isSystemUser = true;
-        group = "jovian-greeter";
-      };
-      users.groups.jovian-greeter = {};
+      # We handle this ourselves in the greeter
+      systemd.services.plymouth-quit.enable = false;
+      # Remove multi-user.target dependency on plymouth-quit-wait
+      systemd.services.plymouth-quit-wait.wantedBy = lib.mkForce [];
 
       security.pam.services = {
         greetd.text = ''

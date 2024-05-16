@@ -1,4 +1,4 @@
-{ stdenv, python3, shellcheck, nodePackages }:
+{ lib, stdenv, python3, plymouth, shellcheck, nodePackages }:
 
 stdenv.mkDerivation {
   name = "jovian-greeter";
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     runHook preInstall
 
     install -Dm555 greeter.py $out/bin/jovian-greeter
-    wrapPythonPrograms
+    wrapPythonPrograms --prefix PATH : ${lib.makeBinPath [ plymouth ]}
 
     install -Dm555 ./consume-session $helper/lib/jovian-greeter/consume-session
 

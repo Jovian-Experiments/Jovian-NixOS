@@ -65,7 +65,11 @@ let
     // (if drv ? version then { inherit (drv) version; } else { version = getVersion drv; })
     // optionalAttrs (drv ? meta.description)      { inherit (drv.meta) description; }
     // optionalAttrs (drv ? meta.longDescription)  { inherit (drv.meta) longDescription; }
-    // optionalAttrs (drv ? meta.license)          { inherit (drv.meta) license; }
+    // optionalAttrs (drv ? meta.license)          { 
+      license = if builtins.isList drv.meta.license 
+                then builtins.head drv.meta.license
+                else drv.meta.license;
+    }
   ;
   overlayData =
     mapAttrs (
