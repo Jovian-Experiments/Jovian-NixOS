@@ -125,8 +125,6 @@ in
 
       # We handle this ourselves in the greeter
       systemd.services.plymouth-quit.enable = false;
-      # Remove multi-user.target dependency on plymouth-quit-wait
-      systemd.services.plymouth-quit-wait.wantedBy = lib.mkForce [];
 
       security.pam.services = {
         greetd.text = ''
