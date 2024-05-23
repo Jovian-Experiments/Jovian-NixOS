@@ -92,8 +92,11 @@ gamescope.map = ["gamescope", "gamescope-session"]
 # ???
 gcc.ignore = true
 
+# patches out flaky tests
+glib2.check = "2.78.6-1.1"
+
 # only there to split out locales
-glibc.check = "2.39-1.1"
+glibc.check = "2.39-1.2"
 
 # grub build dep
 gnu-efi.ignore = true
@@ -197,6 +200,9 @@ linux-neptune-65 = { map = "linux_jovian", pkgrel = 1 }
 linux-neptune-65-kasan.ignore = true
 linux-neptune-rtw-debug.ignore = true
 
+# too new kernel
+linux-neptune-68.ignore = true
+
 # we don't identify as SteamOS
 lsb-release.ignore = true
 
@@ -206,9 +212,9 @@ maliit-keyboard.check = "2.3.1-2.1"
 mangohud = { map = true, pkgrel = 2 }
 
 # we take upstream patches and apply on top of our mesa
-mesa.check = "24.0.5.183658.radeonsi_24.0.2-1"
+mesa.check = "24.0.5.183658.radeonsi_24.0.2-1.1"
 
-mesa-radv = { map = "mesa-radv-jupiter", pkgrel = 1, fixup = "mesa" }
+mesa-radv = { map = "mesa-radv-jupiter", pkgrel = "1.1", fixup = "mesa" }
 
 # some old test thing
 mesa-unstable.ignore = true
@@ -317,6 +323,9 @@ steamos-systemreport.ignore = true
 
 # applied as NixOS config
 steamos-tweak-mtu-probing.check = "1-1"
+
+# SteamOS A/B specific patch
+systemd.check = "255.3-1.1"
 
 # lul
 ttf-twemoji-default.ignore = true
