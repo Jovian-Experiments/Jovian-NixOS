@@ -268,10 +268,10 @@ sddm-wayland.ignore = true
 # FIXME: package this
 steam-im-modules.ignore = true
 
-steam-jupiter-oobe.map = "steamPackages.steam"
+steam-jupiter-stable.map = "steamPackages.steam"
 
-# this will auto-update anyway
-steam-jupiter-stable.ignore = true
+# we don't use this
+steam-jupiter-oobe.ignore = true
 
 steam_notif_daemon = { map = true, pkgrel = 1, fixup = "v" }
 
