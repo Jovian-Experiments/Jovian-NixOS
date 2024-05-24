@@ -39,6 +39,7 @@ in
       pulse.enable = true;
       alsa.enable = true;
       configPackages = [ pkgs.steamdeck-dsp ];
+      wireplumber.package = pkgs.wireplumber-jupiter;
       wireplumber.configPackages = [ pkgs.steamdeck-dsp ];
     };
 

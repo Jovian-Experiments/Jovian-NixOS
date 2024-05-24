@@ -28,8 +28,8 @@ in
       General = {
         MultiProfile = "multiple";
         FastConnectable = true;
-        # enable experimental LL privacy
-        KernelExperimental = "15c0a148-c273-11ea-b3de-0242ac130004";
+        # enable experimental LL privacy, experimental offload codecs
+        KernelExperimental = "15c0a148-c273-11ea-b3de-0242ac130004,a6695ace-ee7f-4fb9-881a-5fac66c629af";
       };
       LE = {
         ScanIntervalSuspend = 2240;

@@ -32,7 +32,7 @@ alsa-ucm-conf.check = "1.2.9-1.2"
 atomupd-daemon-git.ignore = true
 
 # FIXME: has some not-yet-upstream patches, maybe we want them in nixpkgs?
-bluez.check = "5.73-8"
+bluez.check = "5.73-9"
 
 # more A/B stuff
 bmap-tools.ignore = true
@@ -230,9 +230,8 @@ networkmanager.check = "1.44.2-3.3"
 pacman-contrib.ignore = true
 paru.ignore = true
 
-# way too old, way too jank
-# FIXME?
-pipewire.ignore = true
+# we ship a newer version, but patches may be valuable
+pipewire.check = "1:1.0.3-3"
 
 # a bunch of tweaks
 # FIXME: do we want this?
@@ -269,10 +268,10 @@ sddm-wayland.ignore = true
 # FIXME: package this
 steam-im-modules.ignore = true
 
-steam-jupiter-oobe.map = "steamPackages.steam"
+steam-jupiter-stable.map = "steamPackages.steam"
 
-# this will auto-update anyway
-steam-jupiter-stable.ignore = true
+# we don't use this
+steam-jupiter-oobe.ignore = true
 
 steam_notif_daemon = { map = true, pkgrel = 1, fixup = "v" }
 
@@ -355,7 +354,7 @@ wayland-protocols.ignore = true
 # dependency of pipewire
 webrtc-audio-processing-1.ignore = true
 
-wireplumber = { map = true, pkgrel = 1 }
+wireplumber = { map = "wireplumber-jupiter", pkgrel = 1 }
 
 # ours is newer
 xdg-desktop-portal-gtk.ignore = true
