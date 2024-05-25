@@ -77,6 +77,7 @@ def get_local_version(package: str):
             "--raw",
             "--option", "warn-dirty", "false"
         ],
+        stderr=subprocess.DEVNULL
     ).decode()
 
 
