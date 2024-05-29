@@ -1,0 +1,15 @@
+diff --git a/src/daemon/root.rs b/src/daemon/root.rs
+index a950833..f19e109 100644
+--- a/src/daemon/root.rs
++++ b/src/daemon/root.rs
+@@ -47,8 +47,8 @@ pub async fn daemon() -> Result<()> {
+     };
+     let mut daemon = Daemon::new(subscriber, connection.clone()).await?;
+
+-    let ftrace = Ftrace::init(connection.clone()).await?;
+-    daemon.add_service(ftrace);
++    // let ftrace = Ftrace::init(connection.clone()).await?;
++    // daemon.add_service(ftrace);
+
+     let inhibitor = Inhibitor::init().await?;
+     daemon.add_service(inhibitor);

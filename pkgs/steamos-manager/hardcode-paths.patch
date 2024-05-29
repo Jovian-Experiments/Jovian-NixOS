@@ -1,0 +1,71 @@
+diff --git a/src/hardware.rs b/src/hardware.rs
+index 09f8dc8..7b443c4 100644
+--- a/src/hardware.rs
++++ b/src/hardware.rs
+@@ -118,7 +118,7 @@ pub(crate) async fn variant() -> Result<HardwareVariant> {
+ pub(crate) async fn check_support() -> Result<HardwareCurrentlySupported> {
+     // Run jupiter-check-support note this script does exit 1 for "Support: No" case
+     // so no need to parse output, etc.
+-    let res = script_exit_code("/usr/bin/jupiter-check-support", &[] as &[String; 0]).await?;
++    let res = script_exit_code("@hwsupport@/bin/jupiter-check-support", &[] as &[String; 0]).await?;
+ 
+     Ok(match res {
+         0 => HardwareCurrentlySupported::Supported,
+diff --git a/src/manager/root.rs b/src/manager/root.rs
+index 6d945fe..4a440c9 100644
+--- a/src/manager/root.rs
++++ b/src/manager/root.rs
+@@ -60,7 +60,7 @@ const ALS_INTEGRATION_PATH: &str = "/sys/devices/platform/AMDI0010:00/i2c-0/i2c-
+ impl SteamOSManager {
+     async fn prepare_factory_reset(&self) -> u32 {
+         // Run steamos factory reset script and return true on success
+-        let res = run_script("/usr/bin/steamos-factory-reset-config", &[""]).await;
++        let res = run_script("@stubs@/bin/steamos-factory-reset-config", &[""]).await;
+         match res {
+             Ok(_) => PrepareFactoryReset::RebootRequired as u32,
+             Err(_) => PrepareFactoryReset::Unknown as u32,
+@@ -120,7 +120,7 @@ impl SteamOSManager {
+     async fn als_calibration_gain(&self) -> f64 {
+         // Run script to get calibration value
+         let result = script_output(
+-            "/usr/bin/steamos-polkit-helpers/jupiter-get-als-gain",
++            "@polkitHelpers@/bin/steamos-polkit-helpers/jupiter-get-als-gain",
+             &[] as &[String; 0],
+         )
+         .await;
+@@ -148,7 +148,7 @@ impl SteamOSManager {
+     async fn update_bios(&mut self) -> fdo::Result<zbus::zvariant::OwnedObjectPath> {
+         // Update the bios as needed
+         self.process_manager
+-            .get_command_object_path("/usr/bin/jupiter-biosupdate", &["--auto"], "updating BIOS")
++            .get_command_object_path("@steamDeckFirmware@/bin/jupiter-biosupdate", &["--auto"], "updating BIOS")
+             .await
+     }
+ 
+@@ -156,7 +156,7 @@ impl SteamOSManager {
+         // Update the dock firmware as needed
+         self.process_manager
+             .get_command_object_path(
+-                "/usr/lib/jupiter-dock-updater/jupiter-dock-updater.sh",
++                "@jupiterDockUpdaterBin@/jupiter-dock-updater/jupiter-dock-updater.sh",
+                 &[] as &[String; 0],
+                 "updating dock",
+             )
+@@ -167,7 +167,7 @@ impl SteamOSManager {
+         // Run steamos-trim-devices script
+         self.process_manager
+             .get_command_object_path(
+-                "/usr/lib/hwsupport/trim-devices.sh",
++                "@hwsupport@/lib/hwsupport/trim-devices.sh",
+                 &[] as &[String; 0],
+                 "trimming devices",
+             )
+@@ -186,7 +186,7 @@ impl SteamOSManager {
+         }
+         self.process_manager
+             .get_command_object_path(
+-                "/usr/lib/hwsupport/format-device.sh",
++                "@hwsupport@/lib/hwsupport/format-device.sh",
+                 args.as_ref(),
+                 format!("formatting {device}").as_str(),
+             )
