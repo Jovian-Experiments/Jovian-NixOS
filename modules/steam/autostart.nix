@@ -103,13 +103,6 @@ in
             ]
           )
         );
-
-        # upstream unit redirects to a file, but this seems unnecessary now?
-        # see https://github.com/Jovian-Experiments/PKGBUILDs-mirror/blob/76aa4a564094dc656aa1b1daa0f116a7b93b0d7b/gamescope-session.service#L10
-        serviceConfig = {
-          StandardOutput = "journal";
-          StandardError = "journal";
-        };
       };
 
       services.greetd = {
