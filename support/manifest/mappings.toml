@@ -171,6 +171,9 @@ kpmcore.check = "23.04.2-2.1"
 # security backports
 less.check = "1:643-1.1"
 
+# security backports
+libarchive.check = "3.7.2-1.1"
+
 libdrm = { map = true, pkgrel = 1 }
 
 # DisplayLink stuff
@@ -238,7 +241,7 @@ pipewire.check = "1:1.0.3-3"
 plasma-remotecontrollers.check = "5.27.11-1.2"
 
 # just a backport from Arch?
-plasma-workspace.check = "5.27.10-2.1"
+plasma-workspace.check = "5.27.10-2.2"
 
 # some weird patches, but nothing too relevant
 plymouth.check = "22.02.122-1.5"
