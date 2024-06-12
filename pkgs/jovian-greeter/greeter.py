@@ -137,6 +137,7 @@ class Context:
         helper = HELPER_PREFIX.joinpath('consume-session')
         if helper.exists():
             logging.debug('Using pkexec helper')
+            logging.debug('Helper path: {}'.format(helper))
             res = subprocess.run(
                 ['/run/wrappers/bin/pkexec', helper, self.user],
                 stdin=subprocess.DEVNULL,
@@ -145,6 +146,7 @@ class Context:
                 env={'SHELL': '/bin/sh'}
             )
             next_session = res.stdout.decode('utf-8').strip()
+            logging.debug('STDERR: {}'.format(res.stderr.decode('utf-8').strip()))
 
             if not next_session:
                 return None
