@@ -127,6 +127,7 @@ class Context:
 
     def next_session(self) -> Optional[Session]:
         sessions = [ DEFAULT_SESSION ]
+        logging.debug("Sessions: {}".format(sessions))
 
         if next_session := self._consume_session():
             sessions = [ next_session ] + sessions
@@ -171,6 +172,7 @@ class Context:
         for data_dir in self.xdg_data_dirs + [ '/usr/share' ]:
             data_dir = Path(data_dir)
             for session in sessions:
+                logging.debug("Examining session: {}".format(session))
                 desktop_file = f'{session}.desktop'
                 wayland_session = data_dir.joinpath('wayland-sessions').joinpath(desktop_file)
                 x_session = data_dir.joinpath('xsessions').joinpath(desktop_file)
