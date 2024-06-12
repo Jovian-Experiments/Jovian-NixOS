@@ -172,7 +172,7 @@ class Context:
         return next_session
 
     def _find_sessions(self, sessions: Iterable[str]) -> Optional[Session]:
-        for data_dir in self.xdg_data_dirs + [ '/usr/share', '/run/current-system/sw/share/xsessions/' ]:
+        for data_dir in self.xdg_data_dirs + [ '/usr/share', '/run/current-system/sw/share' ]:
             data_dir = Path(data_dir)
             for session in sessions:
                 logging.debug("Examining session: {}".format(session))
@@ -180,7 +180,7 @@ class Context:
                 wayland_session = data_dir.joinpath('wayland-sessions').joinpath(desktop_file)
                 x_session = data_dir.joinpath('xsessions').joinpath(desktop_file)
 
-                logging.debug("Checking wayland session path: {}".format(wayland_session))
+                logging.debug("Checking Wayland session path: {}".format(wayland_session))
                 if wayland_session.exists():
                     return WaylandSession(session, wayland_session)
 
