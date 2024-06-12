@@ -87,6 +87,9 @@ class GreetdClient:
     def start_session(self, command: List[str], environment: List[str]):
         try:
             subprocess.check_call(["plymouth", "quit", "--retain-splash", "--wait"])
+        except FileNotFoundError:
+            logging.debug("Failed to stop Plymouth: could not find executable")
+            logging.debug("If you are not using Plymouth, this failure is benign and expected")
         except Exception as ex:
             logging.debug("Failed to stop Plymouth", exc_info=ex)
 
@@ -122,7 +125,9 @@ class GreetdClient:
 class Context:
     def __init__(self, user: str, home: Path):
         self.user = user
+        logging.debug("USER: {}".format(self.user))
         self.home = home
+        logging.debug("HOME: {}".format(self.home))
         self.xdg_data_dirs = os.environ.get('XDG_DATA_DIRS', '').split(':')
         logging.debug("XDG_DATA_DIRS: {}".format(self.xdg_data_dirs))
 
@@ -151,7 +156,7 @@ class Context:
             stderr = res.stderr.decode('utf-8').strip()
             if stderr == "":
                 stderr = "<no STDERR found>"
-            logging.debug('STDERR: {}'.format(stderr))
+            logging.debug('STDERR for `consume-session`: {}'.format(stderr))
 
             if not next_session:
                 return None
