@@ -172,7 +172,7 @@ class Context:
         return next_session
 
     def _find_sessions(self, sessions: Iterable[str]) -> Optional[Session]:
-        for data_dir in self.xdg_data_dirs + [ '/usr/share' ]:
+        for data_dir in self.xdg_data_dirs + [ '/usr/share', '/run/current-system/sw/share/xsessions/' ]:
             data_dir = Path(data_dir)
             for session in sessions:
                 logging.debug("Examining session: {}".format(session))
