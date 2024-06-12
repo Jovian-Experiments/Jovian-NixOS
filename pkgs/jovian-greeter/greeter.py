@@ -124,6 +124,7 @@ class Context:
         self.user = user
         self.home = home
         self.xdg_data_dirs = os.environ.get('XDG_DATA_DIRS', '').split(':')
+        logging.debug("XDG_DATA_DIRS: {}".format(self.xdg_data_dirs))
 
     def next_session(self) -> Optional[Session]:
         sessions = [ DEFAULT_SESSION ]
