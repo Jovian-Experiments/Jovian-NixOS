@@ -147,7 +147,10 @@ class Context:
                 env={'SHELL': '/bin/sh'}
             )
             next_session = res.stdout.decode('utf-8').strip()
-            logging.debug('STDERR: {}'.format(res.stderr.decode('utf-8').strip()))
+            stderr = res.stderr.decode('utf-8').strip()
+            if stderr == "":
+                stderr = "<no STDERR found>"
+            logging.debug('STDERR: {}'.format(stderr))
 
             if not next_session:
                 return None
@@ -177,9 +180,11 @@ class Context:
                 wayland_session = data_dir.joinpath('wayland-sessions').joinpath(desktop_file)
                 x_session = data_dir.joinpath('xsessions').joinpath(desktop_file)
 
+                logging.debug("Checking wayland session path: {}".format(wayland_session))
                 if wayland_session.exists():
                     return WaylandSession(session, wayland_session)
 
+                logging.debug("Checking X session path: {}".format(x_session))
                 if x_session.exists():
                     return XSession(session, x_session)
 
