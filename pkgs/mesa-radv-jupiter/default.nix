@@ -19,9 +19,6 @@ in (mesa.override {
     hash = "sha256-fWtEH8Ln1QZKMa7Y8sLexWyQYhNIuMhIUQPy198Oopg=";
   };
 
-  # Clobber all the existing patches
-  patches = [];
-
   # Filter out nixpkgs disk cache key, we trust vendor here
   mesonFlags = old.mesonFlags ++ [
     # Disable all the Gallium stuff that we don't need because no drivers
