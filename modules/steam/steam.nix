@@ -40,8 +40,8 @@ in
       # See also: https://www.reddit.com/r/SteamDeck/comments/ymqvbz/ubisoft_connect_connection_lost_stuck/j36kk4w/?context=3
       boot.kernel.sysctl."net.ipv4.tcp_mtu_probing" = true;
 
-      hardware.opengl = {
-        driSupport32Bit = true;
+      hardware.graphics = {
+        enable32Bit = true;
         extraPackages = [ pkgs.gamescope-wsi ];
         extraPackages32 = [ pkgs.pkgsi686Linux.gamescope-wsi ];
       };
