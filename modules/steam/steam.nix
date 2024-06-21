@@ -8,6 +8,13 @@ let
   ;
 
   cfg = config.jovian.steam;
+  gamescope-session = pkgs.gamescope-session.override {
+    steamPackages = pkgs.steamPackages.overrideScope (_: scopeSuper: {
+      steam-fhsenv = scopeSuper.steam-fhsenv.override (prev: {
+        extraPkgs = pkgs: config.programs.steam.fontPackages ++ lib.optionals (prev ? extraPkgs) (pkgs: [ pkgs ]);
+      });
+    });
+  };
 in
 {
   config = mkIf cfg.enable (mkMerge [
@@ -49,9 +56,9 @@ in
       hardware.pulseaudio.support32Bit = true;
       hardware.steam-hardware.enable = mkDefault true;
 
-      environment.systemPackages = [ pkgs.gamescope-session pkgs.steamos-polkit-helpers pkgs.steamos-manager ];
+      environment.systemPackages = [ gamescope-session pkgs.steamos-polkit-helpers pkgs.steamos-manager ];
 
-      systemd.packages = [ pkgs.gamescope-session pkgs.steamos-manager ];
+      systemd.packages = [ gamescope-session pkgs.steamos-manager ];
 
       # Vendor patch: https://raw.githubusercontent.com/Jovian-Experiments/PKGBUILDs-mirror/cdaeca26642d59fc9109e98ac9ce2efe5261df1b/0001-Add-systemd-service.patch
       systemd.user.services.wakehook = {
@@ -70,7 +77,7 @@ in
 
       services.dbus.packages = [ pkgs.steamos-manager ];
 
-      services.displayManager.sessionPackages = [ pkgs.gamescope-session ];
+      services.displayManager.sessionPackages = [ gamescope-session ];
 
       # Conflicts with powerbuttond
       services.logind.extraConfig = ''
