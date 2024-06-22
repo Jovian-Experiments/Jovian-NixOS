@@ -7,14 +7,14 @@
 #       version shipped by the vendor, ensuring feature level is equivalent.
 
 gamescope'.overrideAttrs(old: rec {
-  version = "3.14.20";
+  version = "3.14.22";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-kpJUghNbcbXk2V64SkzYq0+aHK62clQGXTn532Nt9ck=";
+    hash = "sha256-/muitEE3LCU6Xnjbpczb/zy2JRvUbBPT5L13T/v3MvE=";
   };
 
   # Force vendored OpenVR
