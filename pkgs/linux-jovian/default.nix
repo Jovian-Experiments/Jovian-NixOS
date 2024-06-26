@@ -5,6 +5,7 @@ let
 
   kernelVersion = "6.5.0";
   vendorVersion = "valve11";
+  hash = "sha256-bbzXR2UV+aEBQBCB1/nrz8Hl2pFlt8t5Sec1rq3iQZ0=";
 in
 buildLinux (args // rec {
   version = "${kernelVersion}-${vendorVersion}";
@@ -146,7 +147,7 @@ buildLinux (args // rec {
     owner = "Jovian-Experiments";
     repo = "linux";
     rev = version;
-    hash = "sha256-bbzXR2UV+aEBQBCB1/nrz8Hl2pFlt8t5Sec1rq3iQZ0=";
+    inherit hash;
 
     # Sometimes the vendor doesn't update the EXTRAVERSION tag.
     # Let's fix it up in post.
