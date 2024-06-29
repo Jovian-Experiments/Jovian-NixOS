@@ -93,4 +93,6 @@ rec {
 
   decky-loader = final.callPackage ./pkgs/decky-loader { };
   decky-loader-prerelease = final.callPackage ./pkgs/decky-loader/prerelease.nix { };
+
+  deckbd = final.callPackage ./pkgs/deckbd { };
 }
