@@ -32,7 +32,7 @@ alsa-ucm-conf.check = "1.2.9-1.2"
 atomupd-daemon-git.ignore = true
 
 # FIXME: has some not-yet-upstream patches, maybe we want them in nixpkgs?
-bluez.check = "5.76-2.1"
+bluez.check = "5.76-2.2"
 
 # more A/B stuff
 bmap-tools.ignore = true
