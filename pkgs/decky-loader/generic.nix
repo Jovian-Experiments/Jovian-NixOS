@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , nodePackages
 , nodejs
+, pnpm
 , cacert
 , python3
 , psmisc
@@ -16,55 +17,28 @@ let
     inherit hash;
   };
 
-  frontendDeps = stdenv.mkDerivation {
-    name = "decky-loader-frontend-deps-${version}.tar.gz";
-    inherit src;
-
-    nativeBuildInputs = [ nodePackages.pnpm ];
-
-    dontConfigure = true;
-
-    buildPhase = ''
-      runHook preBuild
-
-      export SOURCE_DATE_EPOCH=1
-      export NODE_EXTRA_CA_CERTS="${cacert}/etc/ssl/certs/ca-bundle.crt"
-      cd frontend
-      pnpm i --ignore-scripts --ignore-pnpmfile --frozen-lockfile --node-linker=hoisted
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      rm node_modules/.modules.yaml
-      tar -czf $out --owner=0 --group=0 --numeric-owner --format=gnu \
-        --mtime="@$SOURCE_DATE_EPOCH" --sort=name --hard-dereference \
-        node_modules
-
-      runHook postInstall
-    '';
-
-    outputHashMode = "flat";
-    outputHashAlgo = "sha256";
-    outputHash = npmHash;
-  };
-
-  frontend = stdenv.mkDerivation {
+  frontend = stdenv.mkDerivation rec {
     pname = "decky-loader-frontend";
     inherit version src;
 
-    nativeBuildInputs = [ nodejs nodePackages.pnpm ];
+    pnpmDeps = pnpm.fetchDeps {
+      inherit pname version src;
+      sourceRoot = "${src.name}/frontend";
+      hash = npmHash;
+    };
 
-    dontConfigure = true;
+    pnpmRoot = "frontend";
+
+    nativeBuildInputs = [
+      nodejs
+      pnpm.configHook
+    ];
+
 
     buildPhase = ''
       runHook preBuild
 
       pushd frontend
-      tar xf ${frontendDeps}
-      patchShebangs --build node_modules
       pnpm build
       popd
 
@@ -126,10 +100,7 @@ let
       runHook postInstall
     '';
 
-    passthru = {
-      inherit frontendDeps;
-      python = python3;
-    };
+    passthru.python = python3;
 
     meta = with lib; {
       description = "A plugin loader for the Steam Deck";
