@@ -374,7 +374,7 @@ wayland-protocols.ignore = true
 # dependency of pipewire
 webrtc-audio-processing-1.ignore = true
 
-wireplumber = { map = "wireplumber-jupiter", pkgrel = 1 }
+wireplumber.check = "0.5.3-1.2"
 
 # ours is newer
 xdg-desktop-portal-gtk.ignore = true
