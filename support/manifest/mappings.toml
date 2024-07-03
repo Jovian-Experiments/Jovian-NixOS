@@ -32,7 +32,7 @@ alsa-ucm-conf.check = "1.2.9-1.2"
 atomupd-daemon-git.ignore = true
 
 # FIXME: has some not-yet-upstream patches, maybe we want them in nixpkgs?
-bluez.check = "5.76-2.1"
+bluez.check = "5.76-2.2"
 
 # more A/B stuff
 bmap-tools.ignore = true
@@ -52,6 +52,9 @@ ckbcomp.ignore = true
 # just disables tests
 clang.check = "16.0.6-2.1"
 
+# we don't enable this anywhere in the first place
+ddcutil.ignore = true
+
 # unused
 debos-git.ignore = true
 
@@ -69,6 +72,9 @@ ds-inhibit.ignore = true
 drm_info.ignore = true
 drm_info-git.ignore = true
 
+# FIXME: GPU reset thingy, package?
+drm_janitor.ignore = true
+
 # backports already in nixpkgs
 e2fsprogs.check = "1.47.0-1.2"
 
@@ -84,6 +90,9 @@ flatpak.check = "1:1.15.6-2.1"
 # FIXME: some internal Valve thing, investigate?
 foxnet.ignore = true
 foxnetstatsd.ignore = true
+
+# we use nixpkgs version
+fwupd-minimal.ignore = true
 
 galileo-mura = { map = true, pkgrel = 1, fixup = "v" }
 
@@ -132,7 +141,9 @@ holo-rust-packaging-tools.ignore = true
 holo-zram-swap.check = "0.2-0"
 
 # FIXME: IME stuff
+ibus.ignore = true
 ibus-anthy.ignore = true
+ibus-pinyin.ignore = true
 ibus-table-cangjie-lite.ignore = true
 
 # backport from newer version than what we have
@@ -229,6 +240,9 @@ neptune-ctl.ignore = true
 # FIXME?
 networkmanager.check = "1.44.2-3.3"
 
+# security backports, nixpkgs has latest
+openssh.check = "9.6p1-3.1"
+
 # Arch stuff
 pacman-contrib.ignore = true
 paru.ignore = true
@@ -254,6 +268,9 @@ powerbuttond.check = "2-1"
 
 # some internal tooling, not shipped
 python-libversion.ignore = true
+
+# FIXME: more IME stuff
+pyzy.ignore = true
 
 # more A/B stuff
 rauc.ignore = true
@@ -292,7 +309,7 @@ steamos-atomupd-client-git.ignore = true
 # applied as NixOS modules instead
 # check both to make sure we get the latest changes
 steamos-customizations-git.check = "20240530.1-3"
-steamos-customizations-jupiter.check = "20240530.1-3"
+steamos-customizations-jupiter.check = "20240702.1-1"
 
 # devkit stuff
 steamos-devkit-service.ignore = true
@@ -357,7 +374,7 @@ wayland-protocols.ignore = true
 # dependency of pipewire
 webrtc-audio-processing-1.ignore = true
 
-wireplumber = { map = "wireplumber-jupiter", pkgrel = 1 }
+wireplumber.check = "0.5.3-1.2"
 
 # ours is newer
 xdg-desktop-portal-gtk.ignore = true
@@ -367,3 +384,6 @@ xorg-xwayland.check = "23.2.6-3"
 
 # build dependency
 xorgproto.ignore = true
+
+# Arch packaging fix, we don't care
+zenity-gtk3.check = "3.44.2-2"

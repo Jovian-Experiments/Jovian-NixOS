@@ -39,7 +39,6 @@ in
       pulse.enable = true;
       alsa.enable = true;
       configPackages = [ pkgs.steamdeck-dsp ];
-      wireplumber.package = pkgs.wireplumber-jupiter;
       wireplumber.configPackages = [ pkgs.steamdeck-dsp ];
     };
 
@@ -56,7 +55,7 @@ in
     systemd.services.pipewire-sysconf = {
       description = "Hardware Specific Pipewire Configuration";
       unitConfig.ConditionPathIsDirectory = "/run";
-      before = ["display-manager.service"];
+      before = ["multi-user.target"];
       wantedBy = ["multi-user.target"];
       serviceConfig = {
         Type = "oneshot";
@@ -67,7 +66,7 @@ in
     systemd.services.wireplumber-sysconf = {
       description = "Hardware Specific Wireplumber Configuration";
       unitConfig.ConditionPathIsDirectory = "/run";
-      before = ["display-manager.service"];
+      before = ["multi-user.target"];
       wantedBy = ["multi-user.target"];
       serviceConfig = {
         Type = "oneshot";
