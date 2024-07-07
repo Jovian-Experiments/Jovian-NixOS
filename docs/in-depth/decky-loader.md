@@ -1,9 +1,6 @@
 Decky Loader
 ============
 
-> [!INFO]
-> This page is a stub.
-
 To enable *Decky Loader* in your configuration:
 
 ```nix
@@ -13,3 +10,12 @@ To enable *Decky Loader* in your configuration:
   };
 }
 ```
+
+### Setup
+
+After having switched to your new configuration with Decky enabled, open Steam, navigate to
+**Settings > Developer** and activate the `CEF Remote Debugging` setting. This is required for
+Decky to inject its UI components.
+
+After enabling the option, you must log out or reboot for the change to take effect.
+> Note: The "Restart Steam" option in the power menu will not work!
