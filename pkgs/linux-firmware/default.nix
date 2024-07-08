@@ -11,5 +11,6 @@ linux-firmware.overrideAttrs(_: rec {
   };
 
   outputHashMode = null;
+  outputHashAlgo = null;
   outputHash = null;
 })
