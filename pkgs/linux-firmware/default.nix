@@ -9,4 +9,7 @@ linux-firmware.overrideAttrs(_: rec {
     rev = "jupiter-${version}";
     hash = "sha256-NY0TwT9AWFyXEUYLzokMnsR6g5CKeZYbbANEPPqIYts=";
   };
+
+  outputHashMode = null;
+  outputHash = null;
 })
