@@ -31,12 +31,6 @@ rec {
   };
   gamescope-session = final.callPackage ./pkgs/gamescope-session { };
 
-  mangohud = final.callPackage ./pkgs/mangohud {
-    libXNVCtrl = linuxPackages_jovian.nvidia_x11.settings.libXNVCtrl;
-    mangohud32 = final.pkgsi686Linux.mangohud;
-    inherit (final.python3Packages) mako;
-  };
-
   mesa-radeonsi-jupiter = final.callPackage ./pkgs/mesa-radeonsi-jupiter {};
   mesa-radv-jupiter = final.callPackage ./pkgs/mesa-radv-jupiter {};
 
