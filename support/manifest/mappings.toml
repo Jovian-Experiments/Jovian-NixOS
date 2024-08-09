@@ -309,8 +309,8 @@ steamos-atomupd-client-git.ignore = true
 
 # applied as NixOS modules instead
 # check both to make sure we get the latest changes
-steamos-customizations-git.check = "20240530.1-3"
-steamos-customizations-jupiter.check = "20240709.1-1"
+steamos-customizations-git.check = "20240530.1-4"
+steamos-customizations-jupiter.check = "20240709.1-2"
 
 # devkit stuff
 steamos-devkit-service.ignore = true
@@ -369,8 +369,9 @@ vpower.ignore = true
 
 wakehook = { map = true, pkgrel = 2 }
 
-# we use upstream
-wayland-protocols.ignore = true
+# we use upstream but check the versions
+wayland = { map = true, pkgrel = 1 }
+wayland-protocols = { map = true, pkgrel = 1 }
 
 # dependency of pipewire
 webrtc-audio-processing-1.ignore = true
@@ -381,7 +382,7 @@ wireplumber.check = "0.5.3-1.2"
 xdg-desktop-portal-gtk.ignore = true
 
 # upstream backport
-xorg-xwayland.check = "23.2.6-3"
+xorg-xwayland = { map = "xwayland", pkgrel = 1 }
 
 # build dependency
 xorgproto.ignore = true
