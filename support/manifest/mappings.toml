@@ -208,7 +208,7 @@ linux-neptune.ignore = true
 linux-neptune-61.ignore = true
 
 # new kernel
-linux-neptune-65 = { map = "linux_jovian", pkgrel = 1 }
+linux-neptune-65 = { map = "linux_jovian", pkgrel = 2 }
 
 # debug kernels
 linux-neptune-65-kasan.ignore = true

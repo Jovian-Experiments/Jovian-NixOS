@@ -133,6 +133,9 @@ buildLinux (args // rec {
     # Disable simple-framebuffer to fix logo regression
     SYSFB_SIMPLEFB = lib.mkForce no;
 
+    # Disable call depth tracking speculative execution vulnerability mitigation
+    CALL_DEPTH_TRACKING = no;
+
     # Jovian: fix fallout from the vendor-set options
     DRM_AMD_DC_SI = lib.mkForce (option no);
     DRM_AMD_DC_DCN = lib.mkForce (option no);
