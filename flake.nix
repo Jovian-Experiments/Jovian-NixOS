@@ -16,7 +16,10 @@
     eachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: let
       pkgs = import nixpkgs {
         inherit system;
-        config.allowUnfree = true;
+        config = {
+          allowAliases = false;
+          allowUnfree = true;
+        };
         overlays = [ self.overlays.default ];
       };
     in f pkgs);

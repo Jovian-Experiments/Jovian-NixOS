@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , autoPatchelfHook
 , makeWrapper
-, libusb
+, libusb1
 }:
 
 stdenv.mkDerivation(finalAttrs: {
@@ -17,7 +17,7 @@ stdenv.mkDerivation(finalAttrs: {
   };
 
   buildInputs = [
-    libusb
+    libusb1
   ];
 
   nativeBuildInputs = [
