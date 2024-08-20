@@ -1,21 +1,18 @@
 { gamescope'
 , fetchFromGitHub
-, lcms
 }:
 
 # NOTE: vendoring gamescope for the time being since we want to match the
 #       version shipped by the vendor, ensuring feature level is equivalent.
 
 gamescope'.overrideAttrs(old: rec {
-  version = "3.14.29";
+  version = "3.15.0";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-q3HEbFqUeNczKYUlou+quxawCTjpM5JNLrML84tZVYE=";
+    hash = "sha256-iU/K5PeO75j5V69SJOeyzWXxd2KuUpwO+3bWfh7K5lk=";
   };
-
-  buildInputs = old.buildInputs ++ [ lcms ];
 })
