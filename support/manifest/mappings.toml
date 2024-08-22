@@ -178,6 +178,7 @@ kmod.check = "30-1.6"
 
 # backports
 kpmcore.check = "23.04.2-2.1"
+kwin.check = "5.27.10-3"
 
 # security backports
 less.check = "1:643-1.1"
@@ -208,7 +209,7 @@ linux-neptune.ignore = true
 linux-neptune-61.ignore = true
 
 # new kernel
-linux-neptune-65 = { map = "linux_jovian", pkgrel = 2 }
+linux-neptune-65 = { map = "linux_jovian", pkgrel = 1 }
 
 # debug kernels
 linux-neptune-65-kasan.ignore = true
@@ -309,8 +310,8 @@ steamos-atomupd-client-git.ignore = true
 
 # applied as NixOS modules instead
 # check both to make sure we get the latest changes
-steamos-customizations-git.check = "20240530.1-4"
-steamos-customizations-jupiter.check = "20240709.1-2"
+steamos-customizations-git.check = "20240821.1-1"
+steamos-customizations-jupiter.check = "20240821.1-2"
 
 # devkit stuff
 steamos-devkit-service.ignore = true
