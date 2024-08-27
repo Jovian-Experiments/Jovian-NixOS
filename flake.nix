@@ -26,6 +26,10 @@
   in {
     legacyPackages = eachSupportedSystem (pkgs: pkgs);
 
+    packages = eachSupportedSystem (pkgs: {
+      jovian-install-iso = (pkgs.nixos ./support/install-iso/configuration.nix).config.system.build.isoImage;
+    });
+
     nixosModules = rec {
       default = jovian;
       jovian = ./modules;
