@@ -83,7 +83,8 @@ let
 
     prologue = "${writeText "gamescope-session-prologue" ''
       # Don't resholve gamescope so we can use the cap_sys_nice wrapper when available
-      export PATH=/run/wrappers/bin:${gamescope}/bin:$PATH
+      # mangohud is not picked up by resholve due to loop_background
+      export PATH=/run/wrappers/bin:${gamescope}/bin:${mangohud}/bin:$PATH
   
       # Make gamescope discover the Steam cursor theme
       export XCURSOR_PATH=${plasma5Packages.breeze-qt5}/share/icons:${steamdeck-hw-theme}/share/icons
@@ -104,13 +105,13 @@ let
   };
 in stdenv.mkDerivation(finalAttrs: {
   pname = "gamescope-session";
-  version = "3.15.1-1";
+  version = "3.15.1-2";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "PKGBUILDs-mirror";
     rev = "jupiter-main/gamescope-${finalAttrs.version}";
-    hash = "sha256-4t32Zm1EyAB5KBQRwRQCsVkjbpyuohkybWw/0S2/dus=";
+    hash = "sha256-iij3kOrBEC7xbtkSOpzcpJSmy6fvnuaL0AkZB+CPG8E=";
   };
 
   patches = [
@@ -120,9 +121,11 @@ in stdenv.mkDerivation(finalAttrs: {
   postPatch = ''
     patchShebangs steam-http-loader
 
+    # The powerbuttond stuff should be handled by resholve, but currently isn't
     substituteInPlace gamescope-session \
       --replace /usr/share ${steamdeck-hw-theme}/share \
-      --replace /usr/lib/steam ${steamPackages.steam}/lib/steam
+      --replace /usr/lib/steam ${steamPackages.steam}/lib/steam \
+      --replace /usr/lib/hwsupport/powerbuttond ${powerbuttond}/bin/powerbuttond
 
     substituteInPlace gamescope-session.service \
       --replace /usr/bin $out/bin
