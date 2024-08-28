@@ -284,6 +284,9 @@ renderdoc-minimal.ignore = true
 # unused
 rtl88x2ce-dkms.ignore = true
 
+# not used yet
+scx-scheds.check = "1.0.3.linux.neptune.68-7"
+
 # big mess, our SDDM is much newer
 sddm-wayland.ignore = true
 
@@ -310,8 +313,8 @@ steamos-atomupd-client-git.ignore = true
 
 # applied as NixOS modules instead
 # check both to make sure we get the latest changes
-steamos-customizations-git.check = "20240821.1-1"
-steamos-customizations-jupiter.check = "20240821.1-2"
+steamos-customizations-git.check = "20240827.3-1"
+steamos-customizations-jupiter.check = "20240827.3-1"
 
 # devkit stuff
 steamos-devkit-service.ignore = true
