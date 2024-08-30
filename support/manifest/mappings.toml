@@ -29,7 +29,7 @@
 alsa-ucm-conf.check = "1.2.9-1.2"
 
 # Valve A/B stuff
-atomupd-daemon-git.ignore = true
+atomupd-daemon.ignore = true
 
 # FIXME: has some not-yet-upstream patches, maybe we want them in nixpkgs?
 bluez.check = "5.76-2.3"
@@ -59,7 +59,7 @@ ddcutil.ignore = true
 debos-git.ignore = true
 
 # backports
-discover.check = "5.27.10.1-1.1"
+discover.check = "5.27.10.1-1.2"
 
 # we don't need this
 dkms.ignore = true
@@ -309,7 +309,7 @@ steamdeck-kde-presets.ignore = true
 steamfs-git.ignore = true
 
 # more A/B stuff
-steamos-atomupd-client-git.ignore = true
+steamos-atomupd-client.ignore = true
 
 # applied as NixOS modules instead
 # check both to make sure we get the latest changes
