@@ -46,7 +46,9 @@ in
         "amdgpu.gttsize=8128"
         "amdgpu.sched_hw_submission=4"
         "audit=0"
-        "fbcon=vc:4-6"
+        # Jovian: intentionally not using this one, as many people run
+        # setups with LUKS password prompts on fbcon
+        # "fbcon=vc:4-6"
         "fbcon=rotate:1"
       ];
     })
