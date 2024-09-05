@@ -36,7 +36,7 @@ This is where the fun begins!
 This only applies if you have a "made for gaming" device like the Steam Deck, or other portable gaming devices.
 
 Other computers are just boring computers, and mostly need nothing special here.
-Note that since the Steam Deck experience is developed on AMD hardware, using [other hardware](https://github.com/Jovian-Experiments/Jovian-NixOS/labels/8.%20hardware%3A%20other) may have issues, especially [NVIDIA hardware](https://github.com/Jovian-Experiments/Jovian-NixOS/labels/8. hardware%3A NVIDIA).
+Note that since the Steam Deck experience is developed on AMD hardware, using [other hardware](https://github.com/Jovian-Experiments/Jovian-NixOS/labels/8.%20hardware%3A%20other) may have issues, especially [NVIDIA hardware](https://github.com/Jovian-Experiments/Jovian-NixOS/labels/8.%20hardware%3A%20NVIDIA).
 
 **Known hardware**
 
