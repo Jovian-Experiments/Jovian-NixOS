@@ -7,6 +7,10 @@ let
     types
   ;
   cfg = config.jovian.decky-loader;
+
+  package = cfg.package.overridePythonAttrs(old: {
+    dependencies = old.dependencies ++ (cfg.extraPythonPackages old.python.pkgs);
+  });
 in
 {
   options = {
@@ -86,17 +90,15 @@ in
         description = "Steam Deck Plugin Loader";
 
         wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
 
-        environment = let
-          inherit (cfg.package.passthru) python;
-        in {
+        environment = {
           UNPRIVILEGED_USER = cfg.user;
           UNPRIVILEGED_PATH = cfg.stateDir;
           PLUGIN_PATH = "${cfg.stateDir}/plugins";
-          PYTHONPATH = "${python.withPackages cfg.extraPythonPackages}/${python.sitePackages}";
         };
 
-        path = with pkgs; [ coreutils gawk ] ++ cfg.extraPackages;
+        path = cfg.extraPackages;
 
         preStart = ''
           mkdir -p "${cfg.stateDir}"
@@ -104,8 +106,9 @@ in
         '';
 
         serviceConfig = {
-          ExecStart = "${cfg.package}/bin/decky-loader";
-          KillSignal = "SIGINT";
+          ExecStart = "${package}/bin/decky-loader";
+          KillMode = "process";
+          TimeoutStopSec = 45;
         };
       };
     }
