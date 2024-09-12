@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (substituteAll {
-      handler = jovian-steam-protocol-handler;
+      handler = lib.getExe jovian-steam-protocol-handler;
       src = ./jovian.patch;
     })
   ];

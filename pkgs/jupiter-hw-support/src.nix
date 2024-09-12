@@ -1,4 +1,5 @@
 { 
+  lib,
   stdenv, 
   fetchFromGitHub, 
   substituteAll, 
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (substituteAll {
-      handler = jovian-steam-protocol-handler;
+      handler = lib.getExe jovian-steam-protocol-handler;
       systemd = systemd;
       src = ./jovian.patch;
     })
