@@ -197,7 +197,7 @@ libversion.ignore = true
 # some mainline kernel build
 linux.ignore = true
 
-linux-firmware-neptune = { map = "linux-firmware-jupiter", pkgrel = 1 }
+linux-firmware-neptune = { map = "linux-firmware-jupiter", pkgrel = 2 }
 
 # some other mainline kernel build
 linux-lts.ignore = true
