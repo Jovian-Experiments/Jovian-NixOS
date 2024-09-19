@@ -88,7 +88,7 @@ f3.ignore = true
 filesystem.ignore = true
 
 # security backports we already have
-flatpak.check = "1:1.15.6-2.2"
+flatpak.check = "1:1.15.10-1.1"
 
 # FIXME: some internal Valve thing, investigate?
 foxnet.ignore = true
@@ -181,7 +181,7 @@ kmod.check = "30-1.6"
 
 # backports
 kpmcore.check = "23.04.2-2.1"
-kwin.check = "5.27.10-3"
+kwin.check = "5.27.10-4"
 
 # security backports
 less.check = "1:643-1.1"
@@ -377,7 +377,7 @@ vpower.ignore = true
 wakehook = { map = true, pkgrel = 2 }
 
 # we use upstream but check the versions
-wayland = { map = true, pkgrel = 1 }
+wayland = { map = true, pkgrel = 2 }
 wayland-protocols = { map = true, pkgrel = 1 }
 
 # dependency of pipewire
