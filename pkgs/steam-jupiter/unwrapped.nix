@@ -6,10 +6,10 @@
 { steam-original, fetchurl }:
 
 let
-  version = "1.0.0.79-1.2";
+  version = "1.0.0.79-1.3";
   bundle = fetchurl {
     url = "https://steamdeck-packages.steamos.cloud/archlinux-mirror/sources/jupiter-main/steam-jupiter-stable-${version}.src.tar.gz";
-    hash = "sha256-kvJ/R/kerZ/HibC7LJTGz96LU6XEhxoO6Y4vpXkN/PU=";
+    hash = "sha256-q814Tkdo9yQjv2hpupINd6uZC3LpZz+gP6TfWcTINQ8=";
   };
 
 in steam-original.overrideAttrs (old: {
