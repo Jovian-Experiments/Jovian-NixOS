@@ -49,7 +49,8 @@ in
         # Jovian: intentionally not using this one, as many people run
         # setups with LUKS password prompts on fbcon
         # "fbcon=vc:4-6"
-        "fbcon=rotate:1"
+        # Jovian: this is Steam Deck specific so it goes into the Deck profile
+        # "fbcon=rotate:1"
       ];
     })
   ];

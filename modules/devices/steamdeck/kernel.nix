@@ -29,6 +29,8 @@ in
       boot.kernelPackages = mkDefault pkgs.linuxPackages_jovian;
       # see https://github.com/Jovian-Experiments/steamos-customizations-jupiter/blob/jupiter-20240709.1/misc/modules-load.d/hid-playstation.conf
       boot.kernelModules = ["hid_playstation"];
+      # Deck specific, not needed on latest non-vendor kernels
+      boot.kernelParams = ["fbcon=rotate:1"];
     }
   ]);
 }
