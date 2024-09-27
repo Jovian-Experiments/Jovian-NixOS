@@ -22,6 +22,14 @@ in
           — holo-dmi-rules 1.0
         '';
       };
+      enableZram = mkOption {
+        default = cfg.useSteamOSConfig;
+        defaultText = lib.literalExpression "config.jovian.steamos.useSteamOSConfig";
+        type = types.bool;
+        description = ''
+          Whether to enable SteamOS-like zram swap configuration
+        '';
+      };
     };
   };
 
@@ -31,7 +39,7 @@ in
         "z /sys/class/dmi/id/product_serial 440 root wheel - -"
       ];
     })
-    (mkIf (cfg.useSteamOSConfig) {
+    (mkIf (cfg.enableZram) {
       # Match vendor settings: https://github.com/Jovian-Experiments/PKGBUILDs-mirror/blob/holo-main/holo-zram-swap-0.1-0/zram-generator.conf
       zramSwap = {
         enable = lib.mkDefault true;
