@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
       systemd = systemd;
       src = ./jovian.patch;
     })
+    ./btrfs.patch
     # Fix controller updates with python-hid >= 1.0.6
     ./hid-1.0.6.patch
   ];

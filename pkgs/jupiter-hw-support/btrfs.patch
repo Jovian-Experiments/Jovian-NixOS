@@ -1,0 +1,62 @@
+diff --git a/usr/lib/hwsupport/steamos-automount.sh b/usr/lib/hwsupport/steamos-automount.sh
+index 386f4d8..1c78233 100755
+--- a/usr/lib/hwsupport/steamos-automount.sh
++++ b/usr/lib/hwsupport/steamos-automount.sh
+@@ -67,23 +67,40 @@ do_mount()
+     #fi
+ 
+     # We need symlinks for Steam for now, so only automount ext4 as that'll Steam will format right now
+-    if [[ ${ID_FS_TYPE} != "ext4" ]]; then
+-        echo "Error mounting ${DEVICE}: wrong fstype: ${ID_FS_TYPE} - ${dev_json}"
+-        exit 2
+-    fi
+-
+-    # Try to repair the filesystem if it's known to have errors.
+-    # ret=0 means no errors, 1 means that errors were corrected.
+-    # In all other cases we try to mount the fs read-only and report an error.
+-    ret=0
+-    fsck.ext4 -y "${DEVICE}" || ret=$?
+-    if (( ret != 0 && ret != 1 )); then
+-        send_steam_url "system/devicemountresult" "${DEVBASE}/${FSCK_ERROR}"
+-        echo "Error running fsck on ${DEVICE} (status = $ret)"
+-        OPTS+=",ro"
+-    else
+-        OPTS+=",rw"
+-    fi
++    case ${ID_FS_TYPE} in
++        "ext4")
++            # Try to repair the filesystem if it's known to have errors.
++            # ret=0 means no errors, 1 means that errors were corrected.
++            # In all other cases we try to mount the fs read-only and report an error.
++            ret=0
++            fsck.ext4 -y "${DEVICE}" || ret=$?
++            if (( ret != 0 && ret != 1 )); then
++                send_steam_url "system/devicemountresult" "${DEVBASE}/${FSCK_ERROR}"
++                echo "Error running fsck on ${DEVICE} (status = $ret)"
++                OPTS+=",ro"
++            else
++                OPTS+=",rw"
++            fi
++            ;;
++        "btrfs")
++            # btrfs doesn't have fsck (see man fsck.btrfs)
++            OPTS+=",rw"
++            ;;
++        "f2fs")
++            ret=0
++            fsck.f2fs "${DEVICE}" || ret=$?
++            if (( ret != 0 )); then
++                echo "Error running fsck on ${DEVICE} (status = $ret)"
++                OPTS+=",ro"
++            else
++                OPTS+=",rw"
++            fi
++            ;;
++        *)
++            echo "Error mounting ${DEVICE}: wrong fstype: ${ID_FS_TYPE} - ${dev_json}"
++            exit 2
++            ;;
++    esac
+ 
+     # Ask udisks to auto-mount. This needs a version of udisks that supports the 'as-user' option.
+     mount_point=$(make_dbus_udisks_call call 'data[0]' s         \
