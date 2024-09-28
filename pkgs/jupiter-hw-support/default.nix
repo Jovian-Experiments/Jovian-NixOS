@@ -22,7 +22,7 @@ let
   src = callPackage ./src.nix { };
 
   solution = {
-    scripts = [ "bin/*" "lib/hwsupport/*.sh" ];
+    scripts = [ "bin/*" "lib/hwsupport/*.sh" "lib/hwsupport/common-functions" ];
     interpreter = "${bash}/bin/bash";
     inputs = [
       coreutils
@@ -89,6 +89,12 @@ stdenv.mkDerivation {
 
     substituteInPlace $out/lib/hwsupport/* \
       --replace-warn ". /usr/lib/hwsupport" ". $out/lib/hwsupport"
+
+    mkdir -p $out/lib/udev/rules.d
+
+    substitute usr/lib/udev/rules.d/99-steamos-automount.rules $out/lib/udev/rules.d/99-steamos-automount.rules \
+      --replace-warn "/bin/systemd-run" "${systemd}/bin/systemd-run" \
+      --replace-warn "/usr/lib/hwsupport" "$out/lib/hwsupport"
 
     ${resholve.phraseSolution "jupiter-hw-support" solution}
 
