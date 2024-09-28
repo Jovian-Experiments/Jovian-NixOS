@@ -14,6 +14,14 @@ in
 {
   options = {
     jovian.devices.steamdeck = {
+      enableAutoMountUdevRules = mkOption {
+        default = cfg.enable;
+        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
+        type = types.bool;
+        description = ''
+          Whether to enable udev rules to automatically mount SD cards upon insertion.
+        '';
+      };
       enableDefaultCmdlineConfig = mkOption {
         default = cfg.enable;
         defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
@@ -34,6 +42,11 @@ in
   };
 
   config = mkMerge [
+    (mkIf (cfg.enableAutoMountUdevRules) {
+      services.udev.packages = [
+        pkgs.jupiter-hw-support
+      ];
+    })
     (mkIf (cfg.enableDefaultStage1Modules) {
       boot.initrd.kernelModules = [
         "hid-generic"
