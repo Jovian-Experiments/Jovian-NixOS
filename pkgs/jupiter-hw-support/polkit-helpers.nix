@@ -80,7 +80,7 @@ in stdenv.mkDerivation {
   patchPhase = ''
     runHook prePatch
   
-    substituteInPlace usr/share/polkit-1/actions/org.valve.steamos.policy --replace /usr $out
+    substituteInPlace usr/share/polkit-1/actions/org.valve.steamos.policy --replace-fail /usr $out
 
     runHook postPatch
   '';
