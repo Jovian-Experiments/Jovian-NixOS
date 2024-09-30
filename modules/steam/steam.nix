@@ -68,6 +68,14 @@ in
         wantedBy = [ "gamescope-session.service" ];
       };
 
+      systemd.services.steamos-manager = {
+        overrideStrategy = "asDropin";
+        path = [
+          # .../lib/hwsupport/format-device.sh makes an unqualified `umount` call.
+          "/run/wrappers/"
+        ];
+      };
+
       services.dbus.packages = [ pkgs.steamos-manager ];
 
       services.displayManager.sessionPackages = [ pkgs.gamescope-session ];
