@@ -2,18 +2,6 @@ diff --git a/usr/lib/hwsupport/steamos-automount.sh b/usr/lib/hwsupport/steamos-
 index 386f4d8..cf79351 100755
 --- a/usr/lib/hwsupport/steamos-automount.sh
 +++ b/usr/lib/hwsupport/steamos-automount.sh
-@@ -22,8 +22,9 @@ fi
- ACTION=$1
- DEVBASE=$2
- DEVICE="/dev/${DEVBASE}"
--DECK_UID=$(id -u deck)
--DECK_GID=$(id -g deck)
-+# Jovian: hardcode these for now
-+DECK_UID=1000
-+DECK_GID=100
- 
- send_steam_url()
- {
 @@ -33,7 +34,7 @@ send_steam_url()
    if pgrep -x "steam" > /dev/null; then
        # TODO use -ifrunning and check return value - if there was a steam process and it returns -1, the message wasn't sent

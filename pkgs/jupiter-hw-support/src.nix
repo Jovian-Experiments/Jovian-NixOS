@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     (substituteAll {
       handler = jovian-steam-protocol-handler;
       systemd = systemd;
-      src = ./jovian.patch;
+      src = ./automount-fix-system-paths.patch;
     })
     # Fix controller updates with python-hid >= 1.0.6
     ./hid-1.0.6.patch
