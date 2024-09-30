@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+
+set -eu
+
+# [Jovian]
+#
+# Not a polkit helper anymore, this calls the steamos-manager system service
+# to poke through the fhsenv used here.
+#
+# Note that this is uh... quite a hack, but uh... works?
+#
+# The TLDR is:
+#
+#  - We poke the steamos-manager to run the dbus endpoint for formatting
+#  - We `tail` the journal for the output from the script
+#
+# And uh, this fulfills the requirements for Steam (stage=... flags).
+#
+
+cleanup() {
+	 >/dev/null 2>&1 \
+		 kill -9 % || :
+}
+
+trap cleanup EXIT SIGINT SIGTERM
+
+_call() {
+	object="$1"; shift
+	interface="$1"; shift
+	busctl --timeout=99y --expect-reply=yes -j \
+		call \
+		com.steampowered.SteamOSManager1 \
+		"$object" \
+		com.steampowered.SteamOSManager1."${interface}" \
+		"$@" \
+		| jq -r .data[0]
+}
+
+# Only supported flags, from the DBUS interface shape (ssb)
+#  • --skip-validation|--force)
+#  • --device)
+#  • --label)
+
+DEVICE=""
+LABEL="STEAM-$RANDOM"
+VALIDATE="true"
+
+OPTS=$(getopt -l force,skip-validation,device:,label: -n steamos-format-device -- "" "$@")
+
+eval set -- "$OPTS"
+
+while true; do
+	case "$1" in
+		--force)
+			# yes, this is just like --skip-validate in the vendor script
+			VALIDATE="false"
+			shift
+			;;
+		--skip-validation)
+			# yes, this is just like --force in the vendor script
+			VALIDATE="false"
+			shift
+			;;
+		--label)
+			LABEL="$2";
+			shift 2
+			;;
+		--device)
+			DEVICE="$2"
+			shift 2
+			;;
+		--) shift; break ;;
+	esac
+done
+
+if [[ "$DEVICE" == "" ]]; then
+	>&2 printf "Error: --device flag mandatory\n"
+	exit 1
+fi
+
+journalctl --lines=0 --follow \
+	--output cat \
+	--unit steamos-manager.service \
+	SYSLOG_IDENTIFIER=steamos-format-device &
+
+process=$(_call "/com/steampowered/SteamOSManager1" Manager FormatDevice ssb "$DEVICE" "$LABEL" "$VALIDATE")
+res="$(_call "${process}" "SubProcess" Wait)"
+
+exit "$res"
