@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     })
     # Fix controller updates with python-hid >= 1.0.6
     ./hid-1.0.6.patch
+    # Remove `deck` username assumption
+    ./0001-Jovian-Ensure-automounting-works-for-any-UID-1000-us.patch
   ];
 
   installPhase = ''

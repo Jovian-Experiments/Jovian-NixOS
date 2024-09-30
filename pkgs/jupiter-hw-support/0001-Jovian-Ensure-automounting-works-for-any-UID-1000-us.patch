@@ -1,0 +1,45 @@
+From 42798ed60fbc601cefab84fd1f2c8dab95906702 Mon Sep 17 00:00:00 2001
+From: Samuel Dionne-Riel <samuel@dionne-riel.com>
+Date: Sun, 29 Sep 2024 02:52:26 -0400
+Subject: [PATCH] =?UTF-8?q?[Jovian]=C2=A0Ensure=20automounting=20works=20f?=
+ =?UTF-8?q?or=20any=20UID=201000=20username?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Samuel Dionne-Riel <samuel@dionne-riel.com>
+---
+ usr/lib/hwsupport/steamos-automount.sh | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/usr/lib/hwsupport/steamos-automount.sh b/usr/lib/hwsupport/steamos-automount.sh
+index 386f4d8..8583ca7 100755
+--- a/usr/lib/hwsupport/steamos-automount.sh
++++ b/usr/lib/hwsupport/steamos-automount.sh
+@@ -22,8 +22,12 @@ fi
+ ACTION=$1
+ DEVBASE=$2
+ DEVICE="/dev/${DEVBASE}"
+-DECK_UID=$(id -u deck)
+-DECK_GID=$(id -g deck)
++# Jovian Experiments assumptions:
++#  - UID for Steam user is 1000
++#  - Username is unknown
++DECK_UID=1000
++DECK_GID=$(id -g "$DECK_UID")
++DECK_USERNAME=$(id -nu "$DECK_UID")
+ 
+ send_steam_url()
+ {
+@@ -90,7 +94,7 @@ do_mount()
+                                  "block_devices/${DEVBASE}"      \
+                                  Filesystem Mount                \
+                                  'a{sv}' 3                       \
+-                                 as-user s deck                  \
++                                 as-user s "$DECK_USERNAME"      \
+                                  auth.no_user_interaction b true \
+                                  options s "$OPTS")
+ 
+-- 
+2.46.0
+
