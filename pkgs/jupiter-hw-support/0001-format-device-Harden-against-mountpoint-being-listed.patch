@@ -1,0 +1,30 @@
+From eee1d1e1f8e6d7a2246e3428d71522e02b04c5d7 Mon Sep 17 00:00:00 2001
+From: Samuel Dionne-Riel <samuel@dionne-riel.com>
+Date: Sun, 29 Sep 2024 21:45:49 -0400
+Subject: [PATCH] format-device: Harden against mountpoint being listed more
+ than once
+
+This can happen with some combination of bind mounts magic, where the
+mount point may appear at more than one location at a time.
+
+Signed-off-by: Samuel Dionne-Riel <samuel@dionne-riel.com>
+---
+ usr/lib/hwsupport/format-device.sh | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/usr/lib/hwsupport/format-device.sh b/usr/lib/hwsupport/format-device.sh
+index 65d77f8..0400ae8 100755
+--- a/usr/lib/hwsupport/format-device.sh
++++ b/usr/lib/hwsupport/format-device.sh
+@@ -77,6 +77,8 @@ fi
+ # If any partitions on the device are mounted, unmount them before continuing
+ # to prevent problems later
+ lsblk -n "$STORAGE_DEVICE" -o MOUNTPOINTS | awk NF | sort -u | while read m; do
++    # Check the mountpoint still exists, in case the mount point is reported more than once.
++    test -e "$m" || continue
+     if ! umount "$m"; then
+         echo "Failed to unmount filesystem: $m"
+         exit 32 # EPIPE
+-- 
+2.46.0
+
