@@ -105,11 +105,11 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = ''
-      Steam Deck (Jupiter) hardware support package
+      Steam OS's generic “hardware support” package.
 
-      This package only contains the utility scripts as well as UCM files.
-      For the themes as well as unfree firmware, see the `steamdeck-theme`
-      and `steamdeck-firmware` packages.
+      This package contains the hardware-agnostic files from the `jupiter-hw-support` package.
+
+      For themes, as well as unfree firmware, see the `steamdeck-theme` and `steamdeck-firmware` packages.
     '';
     license = licenses.mit;
   };
