@@ -8,6 +8,7 @@ let
 in
 {
   imports = [
+    ./automount.nix
     ./bluetooth.nix
     ./boot.nix
     ./mesa.nix

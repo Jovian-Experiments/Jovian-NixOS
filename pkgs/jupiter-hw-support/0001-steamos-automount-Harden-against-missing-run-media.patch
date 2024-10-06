@@ -1,0 +1,36 @@
+From 55674111fe7956adb41c2b8d0c6fbb3c3d6ca8bf Mon Sep 17 00:00:00 2001
+From: Samuel Dionne-Riel <samuel@dionne-riel.com>
+Date: Sun, 29 Sep 2024 02:36:41 -0400
+Subject: [PATCH] steamos-automount: Harden against missing /run/media
+
+When running against some systems, it is possible `/run/media` does not
+exist when trying to unmount a path. E.g. with `UDISKS_FILESYSTEM_SHARED`.
+
+Signed-off-by: Samuel Dionne-Riel <samuel@dionne-riel.com>
+---
+ usr/lib/hwsupport/steamos-automount.sh | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/usr/lib/hwsupport/steamos-automount.sh b/usr/lib/hwsupport/steamos-automount.sh
+index 8583ca7..0b0457f 100755
+--- a/usr/lib/hwsupport/steamos-automount.sh
++++ b/usr/lib/hwsupport/steamos-automount.sh
+@@ -107,6 +107,7 @@ do_mount()
+     # that use the older mount point (for SD cards only).
+     case "${DEVBASE}" in
+         mmcblk0p*)
++            mkdir -p /run/media
+             if [[ -z "${ID_FS_LABEL}" ]]; then
+                 old_mount_point="/run/media/${DEVBASE}"
+             else
+@@ -124,6 +125,7 @@ do_mount()
+ 
+ do_unmount()
+ {
++    mkdir -p /run/media
+     local mount_point=$(findmnt -fno TARGET "${DEVICE}" || true)
+     if [[ -n $mount_point ]]; then
+         # Remove symlink to the mount point that we're unmounting
+-- 
+2.46.0
+

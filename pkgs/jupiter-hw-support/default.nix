@@ -22,7 +22,7 @@ let
   src = callPackage ./src.nix { };
 
   solution = {
-    scripts = [ "bin/*" "lib/hwsupport/*.sh" ];
+    scripts = [ "bin/*" "lib/hwsupport/*.sh" "lib/hwsupport/common-functions" ];
     interpreter = "${bash}/bin/bash";
     inputs = [
       coreutils
@@ -90,6 +90,14 @@ stdenv.mkDerivation {
     substituteInPlace $out/lib/hwsupport/* \
       --replace-warn ". /usr/lib/hwsupport" ". $out/lib/hwsupport"
 
+    mkdir -p $out/lib/udev/rules.d
+    cp usr/lib/udev/rules.d/99-steamos-automount.rules $out/lib/udev/rules.d
+    cp usr/lib/udev/rules.d/99-sdcard-rescan.rules $out/lib/udev/rules.d
+
+    substituteInPlace $out/lib/udev/rules.d/*.rules \
+      --replace-fail "/bin/systemd-run" "${systemd}/bin/systemd-run" \
+      --replace-fail "/usr/lib/hwsupport" "$out/lib/hwsupport"
+
     ${resholve.phraseSolution "jupiter-hw-support" solution}
 
     runHook postInstall
@@ -97,11 +105,11 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = ''
-      Steam Deck (Jupiter) hardware support package
+      Steam OS's generic “hardware support” package.
 
-      This package only contains the utility scripts as well as UCM files.
-      For the themes as well as unfree firmware, see the `steamdeck-theme`
-      and `steamdeck-firmware` packages.
+      This package contains the hardware-agnostic files from the `jupiter-hw-support` package.
+
+      For themes, as well as unfree firmware, see the `steamdeck-theme` and `steamdeck-firmware` packages.
     '';
     license = licenses.mit;
   };
