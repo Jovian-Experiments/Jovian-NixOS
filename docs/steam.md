@@ -17,7 +17,7 @@ To manually start **Gaming Mode** (also known as the **Steam Deck UI**), there a
 
 ## Start On Boot
 
-To automatically launch Gaming Mode on boot and enable desktop switching from the power menu:
+The following configuration snippet configures the system to automatically launch Gaming Mode on boot, and enables desktop switching to Plasma 5.
 
 ```nix
 {
@@ -31,6 +31,9 @@ To automatically launch Gaming Mode on boot and enable desktop switching from th
   };
 }
 ```
+
+> [!NOTE]
+> The session name semantics are the same as for the `services.displayManager.defaultSession` NixOS option.
 
 
 ## Troubleshooting
