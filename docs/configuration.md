@@ -39,7 +39,7 @@ The *Switch to Desktop* option will not work as intended, instead it will close 
 
 Run `gamescope-session` within an existing desktop session.
 
-This will run [gamescope](https://github.com/Plagman/gamescope) in nested mode which may result in higher latency.
+This will run [gamescope](https://github.com/ValveSoftware/gamescope) in nested mode which may result in higher latency.
 
 Usage as a *nested* window is less tested, and may have other undesirable idiosyncrasies.
 
