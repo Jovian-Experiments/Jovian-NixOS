@@ -13,15 +13,15 @@ You can enable the Steam Deck version of the Steam client with:
 To manually start **Gaming Mode** (also known as the **Steam Deck UI**), there are two options:
 
 - Select "Gaming Mode" in the Display Manager or run `start-gamescope-session` in a VT.
-- Launch `gamescope-session` within an existing desktop session. This will run [gamescope](https://github.com/Plagman/gamescope) in nested mode which results in higher latency.
+- Launch `gamescope-session` within an existing desktop session. This will run [gamescope](https://github.com/ValveSoftware/gamescope) in nested mode which results in higher latency.
 
 ## Start On Boot
 
-To automatically launch Gaming Mode on boot and enable desktop switching from the power menu:
+The following configuration snippet configures the system to automatically launch Gaming Mode on boot, and enables desktop switching to Plasma 6.
 
 ```nix
 {
-  services.xserver.desktopManager.plasma5.enable = true;
+  services.desktopManager.plasma6.enable = true;
 
   jovian.steam = {
     enable = true;
@@ -31,6 +31,9 @@ To automatically launch Gaming Mode on boot and enable desktop switching from th
   };
 }
 ```
+
+> [!NOTE]
+> The session name semantics are the same as for the `services.displayManager.defaultSession` NixOS option.
 
 
 ## Troubleshooting

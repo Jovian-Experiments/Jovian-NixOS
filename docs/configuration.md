@@ -1,20 +1,46 @@
 Configuration
 =============
 
-> [!INFO]
-> This page is a stub.
-
 All available module options along with their descriptions can be found under `modules`.
+The options are also listed on the [options page in the documentation](https://jovian-experiments.github.io/Jovian-NixOS/options.html).
+
+### Using the Steam Deck UI
 
 To use the Steam Deck UI, set `jovian.steam.enable = true;` in your configuration.
-This will only enable the Steam Deck UI tooling. To enable "desktop" steam, enable the usual NixOS options.
-Then you can start the UI using one of the following methods:
 
-- (**preferred**) Use `jovian.steam.autoStart = true;` to auto-start at login, and enabling use of *Switch to Desktop* option.
-- Select "Gaming Mode" in the Display Manager or run `start-gamescope-session` in a VT.
-- Launch `gamescope-session` within an existing desktop session. This will run [gamescope](https://github.com/Plagman/gamescope) in nested mode which results in higher latency.
+This will only enable the Steam Deck UI tooling.
+**To enable "desktop" Steam**, enable the usual NixOS options.
 
-If you want *Switch to Desktop* to switch to another session with `autoStart`, you will need to configure `jovian.steam.desktopSession`.
+The Steam Deck UI can be used in different manners.
+
+#### Autostart
+
+(*This is the preferred way to use the Steam Deck interface*)
+
+Set `jovian.steam.autoStart = true;` to auto-start at boot.
+
+This also enables use of the *Switch to Desktop* option.
+
+> [!NOTE]
+> To go back to the *Steam Deck interface* from the *desktop* interface, logout or exit from your desktop environment.
+
+If you want the *Switch to Desktop* menu option to switch to another session, you will need to configure `jovian.steam.desktopSession`.
 Configure it with the name of the X11 or Wayland session of your choosing.
-The *Switch to Desktop* option will not work with the other two methods of running the Steam Deck UI, instead it will close Steam.
+The session name semantics are the same as for the `services.displayManager.defaultSession` NixOS option.
 
+#### As a user session
+
+Select the *Gaming Mode* sesssion in your Display Manager, or run `start-gamescope-session` in a VT.
+
+The *Switch to Desktop* option will not work as intended, instead it will close Steam.
+
+
+#### As a *nested* window
+
+Run `gamescope-session` within an existing desktop session.
+
+This will run [gamescope](https://github.com/ValveSoftware/gamescope) in nested mode which may result in higher latency.
+
+Usage as a *nested* window is less tested, and may have other undesirable idiosyncrasies.
+
+The *Switch to Desktop* option will not work as intended, instead it will close Steam.
