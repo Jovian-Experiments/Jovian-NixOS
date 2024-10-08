@@ -17,11 +17,11 @@ To manually start **Gaming Mode** (also known as the **Steam Deck UI**), there a
 
 ## Start On Boot
 
-The following configuration snippet configures the system to automatically launch Gaming Mode on boot, and enables desktop switching to Plasma 5.
+The following configuration snippet configures the system to automatically launch Gaming Mode on boot, and enables desktop switching to Plasma 6.
 
 ```nix
 {
-  services.xserver.desktopManager.plasma5.enable = true;
+  services.desktopManager.plasma6.enable = true;
 
   jovian.steam = {
     enable = true;
