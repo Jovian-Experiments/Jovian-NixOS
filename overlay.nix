@@ -92,5 +92,5 @@ rec {
   sdgyrodsu = final.callPackage ./pkgs/sdgyrodsu { };
 
   decky-loader = final.callPackage ./pkgs/decky-loader { };
-  decky-loader-prerelease = decky-loader;
+  decky-loader-prerelease = final.callPackage ./pkgs/decky-loader/prerelease.nix { };
 }

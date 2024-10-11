@@ -17,13 +17,13 @@ python3.pkgs.buildPythonPackage rec {
     hash = "sha256-IFop3SbXYCzYdHGRK08v8uPL4sSAHelCrIEc8HquZmg=";
   };
 
-  pyproject = true;
-
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
     sourceRoot = "${src.name}/frontend";
     hash = "sha256-IX7WI0q30Wa54sSpPQu9SarxijS9BQFgo6Lkw12E6GI=";
   };
+
+  pyproject = true;
 
   pnpmRoot = "frontend";
 
