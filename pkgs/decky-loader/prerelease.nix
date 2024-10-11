@@ -3,7 +3,7 @@
   fetchFromGitHub,
   pnpm,
 }:
-decky-loader.overrideAttrs rec {
+decky-loader.overridePythonAttrs rec {
   pname = "decky-loader";
   version = "3.0.2-pre3";
 
