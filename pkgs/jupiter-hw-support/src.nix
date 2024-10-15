@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
       systemd = systemd;
       src = ./automount-fix-system-paths.patch;
     })
+    ./steamos-automount-add-btrfs-and-f2fs-support.patch
     # Fix controller updates with python-hid >= 1.0.6
     ./hid-1.0.6.patch
     # Remove `deck` username assumption
