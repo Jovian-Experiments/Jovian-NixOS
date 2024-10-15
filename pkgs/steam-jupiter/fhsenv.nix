@@ -4,6 +4,7 @@
 { writeShellScriptBin
 , dmidecode
 , jovian-stubs
+, jovian-support-scripts
 , steam-fhsenv
 # , steamos-polkit-helpers
 , ...
@@ -16,6 +17,7 @@ let
     "writeShellScriptBin"
     "dmidecode"
     "jovian-stubs"
+    "jovian-support-scripts"
     "steam-fhsenv"
     "steamos-polkit-helpers"
   ];
@@ -47,6 +49,7 @@ let
     extraPkgs = pkgs: (if args ? extraPkgs then args.extraPkgs pkgs else []) ++ [
       dmidecode
       jovian-stubs
+      jovian-support-scripts
       sessionSwitcher
 
       # FIXME: figure out how to fix pkexec (needs SUID in fhsenv, see https://github.com/NixOS/nixpkgs/issues/69338) 

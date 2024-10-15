@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -eu
+
+# [Jovian]
+# Not a polkit helper anymore, this calls the `format-device` helper following
+# the same semantics as `usr/lib/hwsupport/format-sdcard.sh`.
+
+exec /usr/bin/steamos-polkit-helpers/steamos-format-device \
+	--device /dev/mmcblk0 "$@"
