@@ -23,7 +23,7 @@ index 97bad39..657ea2b 100644
 -	snprintf(state->steam_path, sizeof(state->steam_path),
 -		"%s/.steam/root/ubuntu12_32/steam",
 -		homedir);
-+	state->steam_path = "@handler@";
++	state->steam_path = "steam";
  }
  
  static bool init_dbus(struct sfd_state *state) {

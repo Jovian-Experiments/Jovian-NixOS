@@ -52,7 +52,6 @@ rec {
 
   jovian-stubs = final.callPackage ./pkgs/jovian-stubs { };
   jovian-greeter = final.callPackage ./pkgs/jovian-greeter { };
-  jovian-steam-protocol-handler = final.callPackage ./pkgs/jovian-steam-protocol-handler { };
 
   jovian-documentation = final.callPackage ./support/docs {
     pagefind = final.callPackage ./pkgs/pagefind { };

@@ -7,7 +7,7 @@ index 386f4d8..cf79351 100755
        # TODO use -ifrunning and check return value - if there was a steam process and it returns -1, the message wasn't sent
        # need to retry until either steam process is gone or -ifrunning returns 0, or timeout i guess
 -      systemd-run -M ${DECK_UID}@ --user --collect --wait sh -c "./.steam/root/ubuntu12_32/steam steam://${command}/${encoded@Q}"
-+      @systemd@/bin/systemd-run -M ${DECK_UID}@ --user --collect --wait @handler@ "steam://${command}/${encoded@Q}"
++      @systemd@/bin/systemd-run -M ${DECK_UID}@ --user --collect --wait @steam@ "steam://${command}/${encoded@Q}"
        echo "Sent URL to steam: steam://${command}/${arg} (steam://${command}/${encoded})"
    else
        echo "Could not send steam URL steam://${command}/${arg} (steam://${command}/${encoded}) -- steam not running"

@@ -2,13 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
   meson,
   ninja,
   pkg-config,
   systemd,
   curl,
-  jovian-steam-protocol-handler,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "steam_notif_daemon";
@@ -22,10 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (substituteAll {
-      handler = jovian-steam-protocol-handler;
-      src = ./jovian.patch;
-    })
+    ./jovian.patch
   ];
 
   mesonFlags = ["-Dsd-bus-provider=libsystemd"];

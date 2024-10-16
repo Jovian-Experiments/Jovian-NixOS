@@ -84,7 +84,8 @@ let
     prologue = "${writeText "gamescope-session-prologue" ''
       # Don't resholve gamescope so we can use the cap_sys_nice wrapper when available
       # mangohud is not picked up by resholve due to loop_background
-      export PATH=/run/wrappers/bin:${gamescope}/bin:${mangohud}/bin:$PATH
+      # Steam needs to be on PATH for powerbuttond and steam_notif_daemon
+      export PATH=/run/wrappers/bin:${gamescope}/bin:${mangohud}/bin:${steamPackages.steam}/bin:$PATH
   
       # Make gamescope discover the Steam cursor theme
       export XCURSOR_PATH=${plasma5Packages.breeze-qt5}/share/icons:${steamdeck-hw-theme}/share/icons

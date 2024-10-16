@@ -2,10 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
   pkg-config,
   libevdev,
-  jovian-steam-protocol-handler,
 }:
 stdenv.mkDerivation {
   pname = "powerbuttond";
@@ -14,16 +12,9 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "powerbuttond";
-    rev = "ef6d214295a38f186bba9a80cc6f48c055700e3a"; # jovian/multi
-    hash = "sha256-SD8NpiBIIvI59/HtV19lsJ8/SdBOoyO2rH1OVmDX5Q8=";
+    rev = "3d3b41afb181bf7cdc2ee3b36f84934cf2bd379d"; # jovian/multi
+    hash = "sha256-4Q/brmwl3mb8WJYkMejM2IorwVlIb7L2RnIMWczfb8A=";
   };
-
-  patches = [
-    (substituteAll {
-      handler = jovian-steam-protocol-handler;
-      src = ./jovian.patch;
-    })
-  ];
 
   postPatch = ''
     substituteInPlace Makefile \
