@@ -5,7 +5,8 @@
   fetchFromGitHub,
   python3,
   steamdeck-hw-theme,
-  steamPackages,
+  steam,
+  steam-unwrapped,
   bash,
   coreutils,
   dbus,
@@ -46,7 +47,7 @@ let
       procps
       steam_notif_daemon
       "${steamos-polkit-helpers}/bin/steamos-polkit-helpers"
-      steamPackages.steam-fhsenv
+      steam
       util-linux
       xbindkeys
     ];
@@ -56,7 +57,7 @@ let
       "cannot:${steamos-polkit-helpers}/bin/steamos-polkit-helpers/steamos-poweroff-now"
       "cannot:${steamos-polkit-helpers}/bin/steamos-polkit-helpers/steamos-reboot-now"
       "cannot:${steamos-polkit-helpers}/bin/steamos-polkit-helpers/steamos-retrigger-automounts"
-      "cannot:${steamPackages.steam-fhsenv}/bin/steam"
+      "cannot:${steam}/bin/steam"
       "cannot:${util-linux}/bin/flock"
       "cannot:${xbindkeys}/bin/xbindkeys"
     ];
@@ -124,7 +125,7 @@ in stdenv.mkDerivation(finalAttrs: {
     # The powerbuttond stuff should be handled by resholve, but currently isn't
     substituteInPlace gamescope-session \
       --replace /usr/share ${steamdeck-hw-theme}/share \
-      --replace /usr/lib/steam ${steamPackages.steam}/lib/steam \
+      --replace /usr/lib/steam ${steam-unwrapped}/lib/steam \
       --replace /usr/lib/hwsupport/powerbuttond ${powerbuttond}/bin/powerbuttond
 
     substituteInPlace gamescope-session.service \

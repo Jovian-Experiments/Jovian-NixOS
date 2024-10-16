@@ -296,7 +296,7 @@ sddm-wayland.ignore = true
 # FIXME: package this
 steam-im-modules.ignore = true
 
-steam-jupiter-stable.map = "steamPackages.steam"
+steam-jupiter-stable.map = "steam"
 
 # we don't use this
 steam-jupiter-oobe.ignore = true
