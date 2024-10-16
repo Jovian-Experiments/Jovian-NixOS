@@ -4,7 +4,7 @@
 { writeShellScriptBin
 , dmidecode
 , jovian-stubs
-, steam-fhsenv
+, steam
 # , steamos-polkit-helpers
 , ...
 } @ args:
@@ -16,7 +16,7 @@ let
     "writeShellScriptBin"
     "dmidecode"
     "jovian-stubs"
-    "steam-fhsenv"
+    "steam"
     "steamos-polkit-helpers"
   ];
 
@@ -43,7 +43,7 @@ let
     systemctl stop --user gamescope-session
   '';
 
-  wrappedSteam = steam-fhsenv.override (extraArgs // {
+  wrappedSteam = steam.override (extraArgs // {
     extraPkgs = pkgs: (if args ? extraPkgs then args.extraPkgs pkgs else []) ++ [
       dmidecode
       jovian-stubs

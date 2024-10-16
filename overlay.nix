@@ -1,4 +1,4 @@
-final: super:
+final: prev:
 
 let
   inherit (final)
@@ -8,7 +8,7 @@ let
 in
 rec {
   linux-firmware-jupiter = final.callPackage ./pkgs/linux-firmware {
-    linux-firmware = super.linux-firmware;
+    linux-firmware = prev.linux-firmware;
   };
   linuxPackages_jovian = linuxPackagesFor final.linux_jovian;
   linux_jovian = final.callPackage ./pkgs/linux-jovian {
@@ -22,7 +22,7 @@ rec {
   galileo-mura = final.callPackage ./pkgs/galileo-mura { };
 
   gamescope = import ./pkgs/gamescope {
-    gamescope' = super.gamescope;
+    gamescope' = prev.gamescope;
     inherit (final) fetchFromGitHub;
   };
   gamescope-wsi = gamescope.override {
@@ -77,17 +77,13 @@ rec {
 
   jovian-hardware-survey = final.callPackage ./pkgs/jovian-hardware-survey { };
 
-  steamPackages = super.steamPackages.overrideScope (_: scopeSuper: {
-    steam = final.callPackage ./pkgs/steam-jupiter/unwrapped.nix {
-      steam-original = scopeSuper.steam;
-    };
-    steam-fhsenv = final.callPackage ./pkgs/steam-jupiter/fhsenv.nix {
-      steam-fhsenv = scopeSuper.steam-fhsenv;
-    };
-    steam-fhsenv-small = final.callPackage ./pkgs/steam-jupiter/fhsenv.nix {
-      steam-fhsenv = scopeSuper.steam-fhsenv-small;
-    };
-  });
+  steam-unwrapped = final.callPackage ./pkgs/steam-jupiter/unwrapped.nix {
+    # FIXME: compatibility with older nixpkgs, remove this fallback in a couple weeks
+    steam-unwrapped = prev.steam-unwrapped or prev.steamPackages.steam;
+  };
+  steam = final.callPackage ./pkgs/steam-jupiter/fhsenv.nix {
+    steam = prev.steam;
+  };
 
   sdgyrodsu = final.callPackage ./pkgs/sdgyrodsu { };
 
