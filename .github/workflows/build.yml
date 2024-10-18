@@ -72,6 +72,15 @@ jobs:
       - name: Setup automatic caching
         uses: DeterminateSystems/magic-nix-cache-action@v2
 
+      - name: Enable Cachix
+        uses: cachix/cachix-action@v12
+        if: >
+          github.repository_owner == 'Jovian-Experiments' &&
+          github.ref == 'refs/heads/development'
+        with:
+          name: jovian-nixos
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
       - name: Install nix-build-uncached
         # Save evaluation time by pulling directly from cache.nixos.org
         # nixpkgs rev 12303c652b881435065a98729eb7278313041e49
