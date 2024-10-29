@@ -19,4 +19,15 @@ set "${final[@]}"
 
 >&2 printf "[JOVIAN] %s: parsed command: %s\n" "${0##*/}" "$(printf "%q " "$@")"
 
+case "$*" in
+    # citation:
+    #   - https://github.com/Jovian-Experiments/jupiter-hw-support/blob/86b3de5b64a549b47577472f77f710212857451c/usr/bin/steamos-polkit-helpers/jupiter-get-als-gain#L22C1-L22C16
+    # but we're instead hitting the polkit-helper-less fallback (WARNING: using plain als gain get)
+    "dmidecode -t 11")
+        >&2 printf "[JOVIAN] %s: dmidecode command hijacked with saved data\n" "${0##*/}"
+        cat /run/jovian/dmidecode-11.txt
+        exit 0
+        ;;
+esac
+
 exec "$@"
