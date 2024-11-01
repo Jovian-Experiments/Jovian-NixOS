@@ -83,6 +83,7 @@ rec {
   steam = final.callPackage ./pkgs/steam-jupiter/fhsenv.nix {
     steam = prev.steam;
   };
+  steam-im-modules = final.callPackage ./pkgs/steam-im-modules { };
 
   sdgyrodsu = final.callPackage ./pkgs/sdgyrodsu { };
 

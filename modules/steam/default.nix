@@ -11,6 +11,7 @@ in
     ./steam.nix
     ./autostart.nix
     ./environment.nix
+    ./inputmethod.nix
   ];
   options = {
     jovian = {
