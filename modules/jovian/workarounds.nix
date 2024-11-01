@@ -7,7 +7,7 @@ in
     jovian = {
       workarounds = {
         ignoreMissingKernelModules = lib.mkOption {
-          default = true;
+          default = false;
           type = lib.types.bool;
           description = ''
             Whether to ignore missing kernel modules.

@@ -39,6 +39,9 @@ in
       ];
       # Deck specific, not needed on latest non-vendor kernels
       boot.kernelParams = [ "fbcon=rotate:1" ];
+
+      # Ensures modules missing from the vendor kernel don't cause a generation build failure.
+      jovian.workarounds.ignoreMissingKernelModules = mkDefault true;
     }
   ]);
 }
