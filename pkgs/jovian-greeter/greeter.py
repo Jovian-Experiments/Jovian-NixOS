@@ -195,7 +195,7 @@ def handle_exception(exc_type, exc_value, exc_traceback):
 sys.excepthook = handle_exception
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
     logging.root.handlers = [
         JournalHandler(SYSLOG_IDENTIFIER="jovian-greeter")
     ]
@@ -226,7 +226,7 @@ if __name__ == '__main__':
         logging.error('No sessions found')
         sys.exit(1)
 
-    logging.debug(f'Found {session.TYPE} session')
+    logging.info(f'Found {session.TYPE} session')
     command = session.get_command()
     environment = session.get_environment()
 
