@@ -6,6 +6,7 @@ import json
 import logging
 import os
 import re
+import shlex
 import socket
 import struct
 import subprocess
@@ -91,7 +92,8 @@ class GreetdClient:
             logging.debug("Failed to stop Plymouth", exc_info=ex)
 
         # greetd before 0.9.0 doesn't support env
-        command_with_env = [ 'systemd-cat', '--identifier=jovian-session', '--', '/usr/bin/env' ] + environment + command
+        environment = list(map(lambda s: shlex.quote(s), environment))
+        command_with_env = [ 'systemd-cat', '--identifier=autologin-session', '--', '/usr/bin/env' ] + environment + command
 
         self._send({
             'type': 'start_session',
