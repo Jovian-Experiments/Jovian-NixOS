@@ -3,6 +3,7 @@
 let
   inherit (lib)
     mkDefault
+    mkForce
     mkIf
     mkMerge
     mkOption
@@ -26,6 +27,8 @@ in
   };
   config = mkIf (cfg.enableKernelPatches) (mkMerge [
     {
+      jovian.overlay.enable = mkForce true;
+
       boot.kernelPackages = mkDefault pkgs.linuxPackages_jovian;
       # see https://github.com/Jovian-Experiments/steamos-customizations-jupiter/blob/jupiter-20241107.1/misc/modules-load.d/hid-preload.conf
       boot.kernelModules = ["hid_nintendo" "hid_playstation"];

@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) types;
+  inherit (lib) mkForce types;
 
   cfg = config.jovian.steamos;
 
@@ -45,12 +45,16 @@ in
   config = lib.mkMerge [
     # Jupiter Gamescope + radeonsi patches
     (lib.mkIf (cfg.enableMesaPatches) {
+      jovian.overlay.enable = mkForce true;
+
       hardware.graphics.package = pkgs.mesa-radeonsi-jupiter.drivers;
       hardware.graphics.package32 = pkgs.pkgsi686Linux.mesa-radeonsi-jupiter.drivers;
     })
 
     # Jupiter RADV
     (lib.mkIf (cfg.enableVendorRadv) {
+      jovian.overlay.enable = mkForce true;
+
       hardware.graphics = {
         extraPackages = [ (lib.hiPrio pkgs.mesa-radv-jupiter) ];
         extraPackages32 = [ (lib.hiPrio pkgs.pkgsi686Linux.mesa-radv-jupiter) ];

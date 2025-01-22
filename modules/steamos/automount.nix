@@ -2,6 +2,7 @@
 
 let
   inherit (lib)
+    mkForce
     mkIf
     mkMerge
     mkOption
@@ -24,6 +25,8 @@ in
   };
   config = mkMerge [
     (mkIf (cfg.enableAutoMountUdevRules) {
+      jovian.overlay.enable = mkForce true;
+
       services.udev.packages = [
         pkgs.jupiter-hw-support
       ];

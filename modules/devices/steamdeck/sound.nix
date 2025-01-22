@@ -8,7 +8,7 @@ let
 
     # override acp5x configs with Jovian stuff
     cp -rf ${pkgs.steamdeck-dsp}/share/alsa $out/share
-    
+
     # remove more specific upstream symlink so Valve acp5x config is picked
     rm $out/share/alsa/ucm2/conf.d/acp5x/Valve-Jupiter-1.conf
   '';
@@ -32,6 +32,8 @@ in
 
     extraEnv.ALSA_CONFIG_UCM2 = "${alsa-ucm-conf'}/share/alsa/ucm2";
   in lib.mkIf cfg.enableSoundSupport {
+    jovian.overlay.enable = lib.mkForce true;
+
     services.pulseaudio.enable = false;
 
     services.pipewire = {

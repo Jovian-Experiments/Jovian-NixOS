@@ -2,6 +2,7 @@
 
 let
   inherit (lib)
+    mkForce
     mkIf
     mkOption
     types
@@ -24,6 +25,8 @@ in
     };
   };
   config = mkIf cfg.enableGyroDsuService {
+    jovian.overlay.enable = mkForce true;
+
     systemd.user.services.sdgyrodsu = {
       description = "Cemuhook DSU server for the Steam Deck Gyroscope";
       wantedBy = [ "graphical-session.target" ];

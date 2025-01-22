@@ -2,6 +2,7 @@
 
 let
   inherit (lib)
+    mkForce
     mkIf
     mkOption
     types
@@ -86,6 +87,8 @@ in
       # run plugins. Running as non-root is unsupported and currently breaks:
       #
       # <https://github.com/SteamDeckHomebrew/decky-loader/issues/446#issuecomment-1637177368>
+      jovian.overlay.enable = mkForce true;
+
       systemd.services.decky-loader = {
         description = "Steam Deck Plugin Loader";
 
