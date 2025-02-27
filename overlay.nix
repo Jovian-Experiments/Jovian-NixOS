@@ -16,7 +16,7 @@ let
   ;
 in
 
-if prev ? linux_jovian then builtins.throw ''
+if prev ? linux_jovian && !( prev.__jovian_ignore_guard or false ) then builtins.throw ''
   ${""  }The Jovian NixOS overlay was already previously imported in this
          NixOS configuration. This is unsupported, and may cause build failures.
 
