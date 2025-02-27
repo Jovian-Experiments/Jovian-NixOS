@@ -1,3 +1,12 @@
+#
+# █▀▀▀▀▀▀▀▀▀▀▀█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
+# █  WARNING  █  This overlay.nix file is not a public interface.  █
+# █▄▄▄▄▄▄▄▄▄▄▄█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
+#
+# Importing this overlay in your NixOS configuration may cause unexpected
+# errors. Import the Jovian NixOS modules in your NixOS configuration,
+# which will import this overlay correctly.
+# 
 final: prev:
 
 let
