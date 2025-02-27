@@ -40,6 +40,15 @@ if prev ? linux_jovian && !( prev.__jovian_ignore_guard or false ) then builtins
          * * *
 '' else
 
+let
+  # The different parts of this tooling need to "peek" into the overlay.
+  # (Mainly to read the overlaid package metadata.)
+  pkgs'WithoutGuardClause =
+    final.appendOverlays [(_: _: {
+      __jovian_ignore_guard = true;
+    })]
+  ;
+in
 rec {
   linux-firmware-jupiter = final.callPackage ./pkgs/linux-firmware {
     linux-firmware = prev.linux-firmware;
