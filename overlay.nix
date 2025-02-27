@@ -102,7 +102,7 @@ rec {
   jovian-steam-protocol-handler = final.callPackage ./pkgs/jovian-steam-protocol-handler { };
   jovian-updater-logo-helper = final.callPackage ./pkgs/jovian-updater-logo-helper { };
 
-  jovian-documentation = final.callPackage ./support/docs {
+  jovian-documentation = pkgs'WithoutGuardClause.callPackage ./support/docs {
     documentationPath = final.callPackage (
       { runCommand
       }:
