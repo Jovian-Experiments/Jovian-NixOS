@@ -15,6 +15,31 @@ let
     linuxPackagesFor
   ;
 in
+
+if prev ? linux_jovian then builtins.throw ''
+  ${""  }The Jovian NixOS overlay was already previously imported in this
+         NixOS configuration. This is unsupported, and may cause build failures.
+
+         Please make sure that you are not adding the Jovian NixOS overlay
+         to `nixpkgs.overlays` in your NixOS configuration.
+
+         Adding the overlay is not needed when importing the Jovian NixOS
+         module in your configuration.
+
+         If you are not using the Jovian NixOS modules, make sure the
+         overlay is not being imported twice.
+
+         The overlay is not part of the public interface, and care should
+         be taken when using it directly.
+
+         * * *
+         Technical detail:
+         This is checking for `linux_jovian` being already set. If another
+         module or overlay is adding `linux_jovian` to the package set, it
+         may also trigger this error.
+         * * *
+'' else
+
 rec {
   linux-firmware-jupiter = final.callPackage ./pkgs/linux-firmware {
     linux-firmware = prev.linux-firmware;
