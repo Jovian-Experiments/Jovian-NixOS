@@ -45,8 +45,8 @@ in
   config = lib.mkMerge [
     # Jupiter Gamescope + radeonsi patches
     (lib.mkIf (cfg.enableMesaPatches) {
-      hardware.graphics.package = pkgs.mesa-radeonsi-jupiter.drivers;
-      hardware.graphics.package32 = pkgs.pkgsi686Linux.mesa-radeonsi-jupiter.drivers;
+      hardware.graphics.package = pkgs.mesa-radeonsi-jupiter;
+      hardware.graphics.package32 = pkgs.pkgsi686Linux.mesa-radeonsi-jupiter;
     })
 
     # Jupiter RADV
