@@ -1,3 +1,4 @@
 result
 result-*
 .direnv/
+pkgs/jovian-utils/target

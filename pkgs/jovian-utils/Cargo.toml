@@ -1,0 +1,18 @@
+[package]
+name = "jovian-utils"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = { version = "*", features = ["backtrace"] }
+clap = { version = "*", features = ["derive"] }
+smbios-lib = "*"
+bitcode = "*"
+
+[[bin]]
+name = "dmidecode-parser"
+path = "src/dmidecode_parser.rs"
+
+[[bin]]
+name = "dmidecode-shim"
+path = "src/dmidecode_shim.rs"

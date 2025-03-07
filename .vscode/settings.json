@@ -1,0 +1,5 @@
+{
+    "rust-analyzer.linkedProjects": [
+        "./pkgs/jovian-utils/Cargo.toml"
+    ]
+}

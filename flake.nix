@@ -60,7 +60,15 @@
             ps.toml
             (ps.callPackage ./support/manifest/pyalpm.nix {})
           ]); 
-        in [ pyenv ];
+        in [
+          pyenv
+          pkgs.rustc
+          pkgs.cargo
+          pkgs.clippy
+          pkgs.rustfmt
+        ];
+
+        RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
       };
     });
   };
