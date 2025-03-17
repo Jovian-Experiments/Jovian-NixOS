@@ -4,7 +4,7 @@ Jovian-NixOS provides an overlay with a set of extra packages.
 
 Most of these packages are used implicitly from the Jovian NixOS configuration, and are an implementation detail.
 
-See the [Getting Started](docs/getting-started.md) page and the [Configuration](docs/configuration.md) page for the options that will end-up using or enabling them.
+See the [Getting Started](getting-started.md) page and the [Configuration](configuration.md) page for the options that will end-up using or enabling them.
 
 * * *
 

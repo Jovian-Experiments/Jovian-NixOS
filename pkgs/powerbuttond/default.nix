@@ -5,17 +5,18 @@
   substituteAll,
   pkg-config,
   libevdev,
+  udev,
   jovian-steam-protocol-handler,
 }:
 stdenv.mkDerivation {
   pname = "powerbuttond";
-  version = "2.0";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "powerbuttond";
-    rev = "ef6d214295a38f186bba9a80cc6f48c055700e3a"; # jovian/multi
-    hash = "sha256-SD8NpiBIIvI59/HtV19lsJ8/SdBOoyO2rH1OVmDX5Q8=";
+    rev = "v3.0"; # jovian/multi
+    hash = "sha256-MJIq7zilItTS05EiCzU8fJv5sY0gUdEwpNAt5bPREzk=";
   };
 
   patches = [
@@ -27,12 +28,15 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace '/usr/lib/hwsupport/powerbuttond' '/usr/bin/powerbuttond' \
-      --replace '/usr/' '/'
+      --replace-fail /usr/lib/hwsupport/steamos-powerbuttond /usr/bin/steamos-powerbuttond \
+      --replace-fail /usr/ /
+
+    substituteInPlace steamos-powerbuttond.service \
+      --replace-fail /usr/lib/hwsupport/steamos-powerbuttond $out/bin/steamos-powerbuttond
   '';
 
   nativeBuildInputs = [pkg-config];
-  buildInputs = [libevdev];
+  buildInputs = [libevdev udev];
 
   makeFlags = [
     "DESTDIR=$(out)"

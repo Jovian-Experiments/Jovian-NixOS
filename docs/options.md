@@ -4,7 +4,7 @@ Jovian-NixOS adds a set of extra options that can be used in your NixOS configur
 
 Most of these options are implementation details, and likely are not needed to be changed.
 
-See the [Getting Started](docs/getting-started.md) page and the [Configuration](docs/configuration.md) page for the options that matter.
+See the [Getting Started](getting-started.md) page and the [Configuration](configuration.md) page for the options that matter.
 
 * * *
 

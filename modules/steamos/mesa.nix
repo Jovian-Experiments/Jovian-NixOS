@@ -5,6 +5,12 @@ let
 
   cfg = config.jovian.steamos;
 
+  # FIXME: remove when all channels update
+  getDrivers = mesa:
+    if builtins.elem "drivers" mesa.outputs
+    then mesa.drivers
+    else mesa;
+
   #
   # NOTE: to test the patch works, you can `strace` something using mesa.
   # It will need to know about a limiter file path though. A bogus path is fine.
@@ -47,8 +53,9 @@ in
     (lib.mkIf (cfg.enableMesaPatches) {
       jovian.overlay.enable = mkForce true;
 
-      hardware.graphics.package = pkgs.mesa-radeonsi-jupiter.drivers;
-      hardware.graphics.package32 = pkgs.pkgsi686Linux.mesa-radeonsi-jupiter.drivers;
+      hardware.graphics.package = getDrivers pkgs.mesa-radeonsi-jupiter;
+      hardware.graphics.package32 = getDrivers pkgs.pkgsi686Linux.mesa-radeonsi-jupiter;
+
     })
 
     # Jupiter RADV

@@ -49,7 +49,7 @@ in
       systemd.services."jovian-updater-logo-helper" = {
         enable = true;
         unitConfig.ConditionPathIsDirectory = "/run";
-        before = [ "multi-user.target" ];
+        before = [ "display-manager.service" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Type = "oneshot";

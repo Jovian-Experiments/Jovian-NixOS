@@ -2,9 +2,10 @@
 # dependencies of the Steam Deck UI
 
 { writeShellScriptBin
+, dmidecode
 , jovian-stubs
 , steam
-# , steamos-polkit-helpers
+  # , steamos-polkit-helpers
 , ...
 } @ args:
 
@@ -13,6 +14,7 @@ let
     "lib"
     "runCommand"
     "writeShellScriptBin"
+    "dmidecode"
     "jovian-stubs"
     "steam"
     "steamos-polkit-helpers"
@@ -42,7 +44,8 @@ let
   '';
 
   wrappedSteam = steam.override (extraArgs // {
-    extraPkgs = pkgs: (if args ? extraPkgs then args.extraPkgs pkgs else []) ++ [
+    extraPkgs = pkgs: (if args ? extraPkgs then args.extraPkgs pkgs else [ ]) ++ [
+      dmidecode
       jovian-stubs
       sessionSwitcher
 
@@ -54,12 +57,15 @@ let
     '';
 
     # Force using host /tmp so gamescope-session can find the magic files
-    extraBwrapArgs = ["--bind /tmp /tmp"];
+    extraBwrapArgs = (args.extraBwrapArgs or [ ]) ++ [
+      "--bind /tmp /tmp"
+    ];
 
     # We need to add this flag when Steam is started directly (e.g., desktop mode)
     # so we have the correct client version. This is important even for desktop
     # use because only the Steam Deck branch of the client has the new on-screen
     # keyboard that's summoned with STEAM + X.
-    extraArgs = "-steamdeck";
+    extraArgs = (args.extraArgs or "") + " -steamdeck";
   });
-in wrappedSteam
+in
+wrappedSteam

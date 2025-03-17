@@ -2,6 +2,9 @@ name: Build
 on:
   pull_request:
   push:
+    branches:
+      - "development"
+
 jobs:
   matrix:
     name: Generate matrix
@@ -9,10 +12,10 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v3.5.3
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v4
+      - name: Install Lix
+        uses: samueldr/lix-gha-installer-action@v1
 
       - name: Generate matrix
         id: set-matrix
@@ -26,37 +29,25 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix: ${{fromJSON(needs.matrix.outputs.matrix)}}
+      fail-fast: false
     steps:
-      # Why are we doing this?
-      #
-      # The hosted GitHub runners have free disk space split
-      # between the root partition and a temporary partition,
-      # leaving limited space for builds. We work around this
-      # with easimon/maximize-build-space which creates a LVM
-      # volume to combine the free space in both.
-      #
-      # We mount this new volume at /nix, and set TMPDIR so
-      # all builds happen inside the volume.
-      - name: Create mount point for Nix store
-        run: |
-          sudo mkdir /nix
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: Maximize disk space for builds
-        uses: easimon/maximize-build-space@v7
+      - name: Scrounge-up some more space
+        uses: samueldr/more-space-action@v2025-01-24.pre
         with:
-          build-mount-path: /nix
+          enable-lvm-span: true
+          lvm-span-mountpoint: /nix
 
-      - name: Set Nix store ownership
-        run: |
-          sudo chown root:root /nix
-
-      - uses: actions/checkout@v3.5.3
-
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v4
+      - name: Install Lix
+        uses: samueldr/lix-gha-installer-action@v1
 
       - name: Override nix-daemon build directory
         run: |
+          (
+          PS4=" $ "
+          set -eux -o pipefail
+
           sudo mkdir -p /nix/tmp
           sudo chmod ug=rwx,o=rwxt /nix/tmp
 
@@ -68,13 +59,6 @@ jobs:
 
           sudo systemctl daemon-reload
           sudo systemctl restart nix-daemon
+          )
 
-      - name: Setup automatic caching
-        uses: DeterminateSystems/magic-nix-cache-action@v2
-
-      - name: Install nix-build-uncached
-        # Save evaluation time by pulling directly from cache.nixos.org
-        # nixpkgs rev 12303c652b881435065a98729eb7278313041e49
-        run: nix-env -i /nix/store/npzpwxjbxlgbi0kfji2x44nssksxk4zw-nix-build-uncached-1.1.2
-
-      - run: nix-build-uncached .ci/get-flake.nix -A "${{ matrix.attr }}"
+      - run: nix-build .ci/get-flake.nix -A "${{ matrix.attr }}"

@@ -3,9 +3,9 @@
 let
   inherit (lib) versions;
 
-  kernelVersion = "6.8.12";
-  vendorVersion = "valve7";
-  hash = "sha256-B0x40FuHeoE+9YBe3N3o2Hzz54hreCa6gQ0HFl7FzPU=";
+  kernelVersion = "6.11.11";
+  vendorVersion = "valve9";
+  hash = "sha256-vfma2AI3ic+jvjlKpM4jg+SMTnfXFzeXyP8QSIuSjVw=";
 in
 buildLinux (args // rec {
   version = "${kernelVersion}-${vendorVersion}";
@@ -56,9 +56,6 @@ buildLinux (args // rec {
     # Jovian: unused?
     # SND_SOC_AMD_RENOIR_MACH = no;
 
-    SND_SOC_AMD_ACP6x = no;
-    # Jovian: unused?
-    # SND_SOC_AMD_YC_MACH = no;
     SND_AMD_ACP_CONFIG = module;
     SND_SOC_AMD_ACP_COMMON = module;
     # Jovian: unused?
@@ -73,9 +70,6 @@ buildLinux (args // rec {
 
     SND_SOC_AMD_SOF_MACH = module;
     SND_SOC_AMD_RPL_ACP6x = no;
-    SND_SOC_AMD_PS = no;
-    # Jovian: unused?
-    # SND_SOC_AMD_PS_MACH = no;
 
     SND_SOC_SOF = module;
     SND_SOC_SOF_PROBE_WORK_QUEUE = yes;
@@ -111,12 +105,13 @@ buildLinux (args // rec {
     # kernel as a guest, so this also clears out a whole bunch of
     # virtualization-specific drivers.
     HYPERVISOR_GUEST = lib.mkForce no;
-    PARAVIRT_TIME_ACCOUNTING = lib.mkForce (option no);
 
-    # Disable some options enabled in ArchLinux 6.1.12-arch1 config
-    X86_AMD_PSTATE = lib.mkForce no;
-    # Jovian: meh
+    # Jovian: we don't enable this before 6.12
     # CONFIG_HAVE_RUST=n
+  
+    # This has been disabled upstream since 6.11.8-arch1
+    # See: https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/commit/1a06ca984333093fb12cbbff275da31fa2bc5f6c
+    ZSWAP_DEFAULT_ON = yes;
 
     # Build as module to experiment with toggling
     TCG_TPM = module;
@@ -135,18 +130,17 @@ buildLinux (args // rec {
     SCHED_CLASS_EXT = yes;
 
     # Disable call depth tracking speculative execution vulnerability mitigation
-    CALL_DEPTH_TRACKING = no;
+    # Jovian: renamed
+    MITIGATION_CALL_DEPTH_TRACKING = no;
 
     # Jovian: fix fallout from the vendor-set options
     DRM_AMD_DC_SI = lib.mkForce (option no);
-    DRM_AMD_DC_DCN = lib.mkForce (option no);
-    DRM_AMD_DC_HDCP = lib.mkForce (option no);
-    FB_HYPERV = lib.mkForce (option no);
     DRM_HYPERV = lib.mkForce (option no);
-    DRM_VMWGFX_FBCON = lib.mkForce (option no);
+    FB_HYPERV = lib.mkForce (option no);
+    INTEL_TDX_GUEST = lib.mkForce (option no);
     KVM_GUEST = lib.mkForce (option no);
     MOUSE_PS2_VMMOUSE = lib.mkForce (option no);
-    INTEL_TDX_GUEST = lib.mkForce (option no);
+    PARAVIRT_TIME_ACCOUNTING = lib.mkForce (option no);
     TDX_GUEST_DRIVER = lib.mkForce (option no);
   };
 

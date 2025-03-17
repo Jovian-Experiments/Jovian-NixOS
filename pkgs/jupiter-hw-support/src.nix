@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jupiter-hw-support-source";
-  version = "20250107.1";
+  version = "20250313.1";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "jupiter-hw-support";
     rev = "jupiter-${version}";
-    hash = "sha256-qrHQyECBvfBF5CdBKIJq8wxR2YTsEgtlxEqQMhUH0Ps=";
+    hash = "sha256-OkxEZy6uYrfRT1L7rddVYiz1v+cGDJ9e9og/9WrlydA=";
   };
 
   patches = [
@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
     ./0001-steamos-automount-Harden-against-missing-run-media.patch
     ./0001-format-device-Harden-against-mountpoint-being-listed.patch
   ];
+
+  # broken symlinks will be filled in later
+  dontCheckForBrokenSymlinks = true;
 
   installPhase = ''
     cp -r . $out

@@ -1,0 +1,3 @@
+#!/bin/sh
+>&2 echo "[JOVIAN] $0: stub called with: $*"
+exit 1

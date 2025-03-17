@@ -9,7 +9,6 @@ stdenv.mkDerivation {
     install -D -m 755 ${./steamos-select-branch} $out/bin/steamos-select-branch
     install -D -m 755 ${./steamos-update} $out/bin/steamos-update
 
-    install -D -m 755 ${./dmidecode} $out/bin/dmidecode
     install -D -m 755 ${./pkexec} $out/bin/pkexec
     install -D -m 755 ${./sudo} $out/bin/sudo
   '';

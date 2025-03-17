@@ -4,6 +4,7 @@
   resholve,
   bash,
   coreutils,
+  dmidecode,
   gawk,
   gnugrep,
   jovian-stubs,
@@ -22,6 +23,7 @@ let
     interpreter = "${bash}/bin/bash";
     inputs = [
       coreutils
+      dmidecode
       gawk
       gnugrep
       "${jupiter-dock-updater-bin}/lib/jupiter-dock-updater"
@@ -33,12 +35,12 @@ let
       wirelesstools
     ];
     execer = [
+      "cannot:${dmidecode}/bin/dmidecode"
       "cannot:${jovian-stubs}/bin/jupiter-biosupdate"
       "cannot:${jovian-stubs}/bin/steamos-reboot"
       "cannot:${jovian-stubs}/bin/steamos-factory-reset-config"
       "cannot:${jovian-stubs}/bin/steamos-select-branch"
       "cannot:${jovian-stubs}/bin/steamos-update"
-      "cannot:${jovian-stubs}/bin/dmidecode"
       "cannot:${jupiter-dock-updater-bin}/lib/jupiter-dock-updater/jupiter-dock-updater.sh"
       "cannot:${jupiter-hw-support}/bin/jupiter-check-support"
       "cannot:${jupiter-hw-support}/lib/hwsupport/format-device.sh"

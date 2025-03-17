@@ -32,7 +32,7 @@ alsa-ucm-conf.check = "1.2.12-1.1"
 atomupd-daemon.ignore = true
 
 # FIXME: has some not-yet-upstream patches, maybe we want them in nixpkgs?
-bluez.check = "5.79-1.6"
+bluez.check = "5.79-1.9"
 
 # more A/B stuff
 bmap-tools.ignore = true
@@ -53,10 +53,13 @@ ckbcomp.ignore = true
 clang.check = "18.1.8-4.2"
 
 # unused
-debos-git.ignore = true
+debos.ignore = true
+
+# A/B stuff
+desync.ignore = true
 
 # enables SteamOS A/B stuff
-discover.check = "6.2.2-1.1"
+discover.check = "6.2.5-1.1"
 
 # we don't need this
 dkms.ignore = true
@@ -122,9 +125,10 @@ holo-nix-offload.ignore = true
 holo-rust-packaging-tools.ignore = true
 
 # applied as NixOS config
-holo-zram-swap.check = "0.2-0"
+holo-zram-swap.check = "0.3-0"
 
 # FIXME: IME stuff
+ibus.ignore = true
 ibus-anthy.ignore = true
 ibus-pinyin.ignore = true
 ibus-table-cangjie-lite.ignore = true
@@ -144,7 +148,7 @@ jupiter-firewall.ignore = true
 
 jupiter-hw-support = { map = ["jupiter-hw-support", "steamdeck-hw-theme", "steamdeck-firmware", "steamos-polkit-helpers"], pkgrel = 2 }
 
-jupiter-legacy-support.check = "1.152-1"
+jupiter-legacy-support.check = "1.153-1"
 
 # devkit stuff
 jupiter-resolved-nomdns.ignore = true
@@ -162,8 +166,8 @@ kdumpst.ignore = true
 # just packaging changes
 kmod.check = "33-3.2"
 
-# FIXME: look into libei hack
-kwin.check = "6.2.2-1.1"
+# special hack to allow Steam input without a prompt, can be done better in 6.3
+kwin.check = "6.2.5-1.2"
 
 libdrm = { map = true, pkgrel = 1 }
 
@@ -172,6 +176,9 @@ libevdi.ignore = true
 
 # some internal tooling, not shipped
 libversion.ignore = true
+
+# packaging changes
+libxml2.ignore = true
 
 linux-firmware-neptune = { map = "linux-firmware-jupiter", pkgrel = 1 }
 
@@ -191,11 +198,11 @@ linux-neptune-65.ignore = true
 linux-neptune-65-kasan.ignore = true
 linux-neptune-rtw-debug.ignore = true
 
-# new kernel
-linux-neptune-68 = { map = "linux_jovian", pkgrel = 1 }
+# old kernel
+linux-neptune-68.ignore = true
 
-# very new kernel
-linux-neptune-611.ignore = true
+# new kernel
+linux-neptune-611 = { map = "linux_jovian", pkgrel = 1 }
 
 # we don't identify as SteamOS
 lsb-release.ignore = true
@@ -207,9 +214,9 @@ maliit-keyboard.check = "2.3.1-4.1"
 mangohud.check = "0.7.2.rc3.r11.g31f2ca5-2.3"
 
 # we take upstream patches and apply on top of our mesa
-mesa.check = "24.0.5.183660.radeonsi_24.0.4-1.2"
+mesa.check = "24.3.4.197725.radeonsi_24.3.4-2"
 
-mesa-radv = { map = "mesa-radv-jupiter", pkgrel = "3", fixup = "mesa" }
+mesa-radv = { map = "mesa-radv-jupiter", pkgrel = "1", fixup = "mesa" }
 
 # some old test thing
 mesa-unstable.ignore = true
@@ -222,21 +229,21 @@ neptune-ctl.ignore = true
 
 # we don't actually apply any of this, but it's worth checking
 # FIXME?
-networkmanager.check = "1.50.0-1.2"
+networkmanager.check = "1.50.1-1.2"
 
 # Arch stuff
 pacman-contrib.ignore = true
 paru.ignore = true
 
 # we ship a newer version, but patches may be valuable
-pipewire.check = "1:1.2.6-1.2"
+pipewire.check = "1:1.2.7-1.1"
 
 # builds from master branch for Qt6
 # FIXME: do we want this?
-plasma-remotecontrollers.check = "5.26.90.r256.g8daeecc-1"
+plasma-remotecontrollers.check = "5.26.90.r258.g9ace9a9-1"
 
 # packaging changes for SteamOS A/B
-plasma-workspace.check = "6.2.2-1.1"
+plasma-workspace.check = "6.2.5-1.2"
 
 # some weird patches, but nothing too relevant
 plymouth.check = "22.02.122-1.6"
@@ -244,8 +251,8 @@ plymouth.check = "22.02.122-1.6"
 # packaging changes only, will probably not be relevant ever
 podman.ignore = true
 
-# we're tracking our fork but want to merge stuff into it
-powerbuttond.check = "2-2"
+# renamed to steamos-powerbuttond
+powerbuttond.ignore = true
 
 # some internal tooling, not shipped
 python-libversion.ignore = true
@@ -265,7 +272,7 @@ renderdoc-minimal.ignore = true
 rtl88x2ce-dkms.ignore = true
 
 # not used yet
-scx-scheds.check = "1.0.7.linux.neptune.68-1"
+scx-scheds.check = "1.0.10.linux.neptune.611-1"
 
 # FIXME: package this
 steam-im-modules.ignore = true
@@ -290,8 +297,8 @@ steamos-atomupd-client.ignore = true
 
 # applied as NixOS modules instead
 # check both to make sure we get the latest changes
-steamos-customizations-git.check = "20241211.1-1"
-steamos-customizations-jupiter.check = "20241211.1-1"
+steamos-customizations-git.check = "20250219.1-1"
+steamos-customizations-jupiter.check = "20250310.1-1"
 
 # devkit stuff
 steamos-devkit-service.ignore = true
@@ -303,16 +310,17 @@ steamos-efi.ignore = true
 steamos-kdumpst-layer.ignore = true
 steamos-log-submitter.ignore = true
 
-# unused
-# FIXME: package when wired up on Steam side
-steamos-manager.ignore = true
+# not used yet? track this anyway for when it becomes used
+steamos-manager.map = true
 
 # not relevant to us
 steamos-media-creation-git.ignore = true
 
 # Allows switching between iwd and wpa_supplicant wifi backends from Steam
 # FIXME: doesn't seem to be wired up?
-steamos-networking-tools.check = "1.1-2"
+steamos-networking-tools.check = "1.2-1"
+
+steamos-powerbuttond.map = "powerbuttond"
 
 # more A/B stuff
 steamos-repair-backend-git.ignore = true
@@ -326,7 +334,7 @@ steamos-systemreport.ignore = true
 steamos-tweak-mtu-probing.check = "1-1"
 
 # SteamOS A/B specific patch
-systemd.check = "256.7-1.1"
+systemd.check = "257.2-1.1"
 
 # lul
 ttf-twemoji-default.ignore = true
@@ -347,10 +355,14 @@ vpower.ignore = true
 
 wakehook = { map = true, pkgrel = 1 }
 
-wireplumber = { map = "wireplumber-jupiter", pkgrel = "1.4" }
+wireplumber = { map = "wireplumber-jupiter", pkgrel = "1.1" }
 
 # ours is newer
 xdg-desktop-portal-gtk.ignore = true
+
+# packaging changes
+xorg-server.ignore = true
+xorg-xwayland.ignore = true
 
 # Arch packaging fix, we don't care
 zenity-gtk3.check = "3.44.2-3"

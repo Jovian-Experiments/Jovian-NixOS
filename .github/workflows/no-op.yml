@@ -6,10 +6,10 @@ jobs:
   eval:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.0.2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@v4
+      - name: Install Lix
+        uses: samueldr/lix-gha-installer-action@v1
 
       - name: Verify module is a No-Op
         run: nix-instantiate ./support/nix-tests/check-no-ops.nix

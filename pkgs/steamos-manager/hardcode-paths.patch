@@ -1,71 +1,109 @@
+diff --git a/data/platforms/jupiter.toml b/data/platforms/jupiter.toml
+index fd43cc5..66edccd 100644
+--- a/data/platforms/jupiter.toml
++++ b/data/platforms/jupiter.toml
+@@ -1,27 +1,27 @@
+ [factory_reset.all]
+-script  = "/usr/bin/steamos-reset-tool"
++script  = "@stubs@/bin/steamos-reset-tool"
+ script_args = ["factory-reset", "--reset-all"]
+
+ [factory_reset.os]
+-script  = "/usr/bin/steamos-reset-tool"
++script  = "@stubs@/bin/steamos-reset-tool"
+ script_args = ["factory-reset", "--reset-os"]
+
+ [factory_reset.user]
+-script  = "/usr/bin/steamos-reset-tool"
++script  = "@stubs@/bin/steamos-reset-tool"
+ script_args = ["factory-reset", "--reset-user-data"]
+
+ [update_bios]
+-script = "/usr/bin/jupiter-biosupdate"
++script = "@steamDeckFirmware@/bin/jupiter-biosupdate"
+ script_args = ["--auto"]
+
+ [update_dock]
+-script = "/usr/lib/jupiter-dock-updater/jupiter-dock-updater.sh"
++script = "@jupiterDockUpdaterBin@/jupiter-dock-updater/jupiter-dock-updater.sh"
+
+ [storage.trim_devices]
+-script = "/usr/lib/hwsupport/trim-devices.sh"
++script = "@hwsupport@/lib/hwsupport/trim-devices.sh"
+
+ [storage.format_device]
+-script = "/usr/lib/hwsupport/format-device.sh"
++script = "@hwsupport@/lib/hwsupport/format-device.sh"
+ label_flag = "--label"
+ device_flag = "--device"
+ no_validate_flag = "--skip-validation"
 diff --git a/src/hardware.rs b/src/hardware.rs
-index 09f8dc8..7b443c4 100644
+index b3b80bd..e227bbf 100644
 --- a/src/hardware.rs
 +++ b/src/hardware.rs
-@@ -118,7 +118,7 @@ pub(crate) async fn variant() -> Result<HardwareVariant> {
+@@ -97,7 +97,7 @@ pub(crate) async fn is_deck() -> Result<bool> {
  pub(crate) async fn check_support() -> Result<HardwareCurrentlySupported> {
      // Run jupiter-check-support note this script does exit 1 for "Support: No" case
      // so no need to parse output, etc.
 -    let res = script_exit_code("/usr/bin/jupiter-check-support", &[] as &[String; 0]).await?;
 +    let res = script_exit_code("@hwsupport@/bin/jupiter-check-support", &[] as &[String; 0]).await?;
- 
+
      Ok(match res {
          0 => HardwareCurrentlySupported::Supported,
 diff --git a/src/manager/root.rs b/src/manager/root.rs
-index 6d945fe..4a440c9 100644
+index 821ffcb..c317d4c 100644
 --- a/src/manager/root.rs
 +++ b/src/manager/root.rs
-@@ -60,7 +60,7 @@ const ALS_INTEGRATION_PATH: &str = "/sys/devices/platform/AMDI0010:00/i2c-0/i2c-
- impl SteamOSManager {
-     async fn prepare_factory_reset(&self) -> u32 {
-         // Run steamos factory reset script and return true on success
--        let res = run_script("/usr/bin/steamos-factory-reset-config", &[""]).await;
-+        let res = run_script("@stubs@/bin/steamos-factory-reset-config", &[""]).await;
-         match res {
-             Ok(_) => PrepareFactoryReset::RebootRequired as u32,
-             Err(_) => PrepareFactoryReset::Unknown as u32,
-@@ -120,7 +120,7 @@ impl SteamOSManager {
-     async fn als_calibration_gain(&self) -> f64 {
-         // Run script to get calibration value
-         let result = script_output(
--            "/usr/bin/steamos-polkit-helpers/jupiter-get-als-gain",
-+            "@polkitHelpers@/bin/steamos-polkit-helpers/jupiter-get-als-gain",
-             &[] as &[String; 0],
-         )
-         .await;
-@@ -148,7 +148,7 @@ impl SteamOSManager {
-     async fn update_bios(&mut self) -> fdo::Result<zbus::zvariant::OwnedObjectPath> {
-         // Update the bios as needed
-         self.process_manager
--            .get_command_object_path("/usr/bin/jupiter-biosupdate", &["--auto"], "updating BIOS")
-+            .get_command_object_path("@steamDeckFirmware@/bin/jupiter-biosupdate", &["--auto"], "updating BIOS")
-             .await
-     }
- 
-@@ -156,7 +156,7 @@ impl SteamOSManager {
-         // Update the dock firmware as needed
-         self.process_manager
-             .get_command_object_path(
--                "/usr/lib/jupiter-dock-updater/jupiter-dock-updater.sh",
-+                "@jupiterDockUpdaterBin@/jupiter-dock-updater/jupiter-dock-updater.sh",
-                 &[] as &[String; 0],
-                 "updating dock",
+@@ -158,7 +158,7 @@ impl SteamOSManager {
+         };
+         for index in indices {
+             let result = script_output(
+-                "/usr/bin/steamos-polkit-helpers/jupiter-get-als-gain",
++                "@polkitHelpers@/bin/steamos-polkit-helpers/jupiter-get-als-gain",
+                 &["-s", index],
              )
-@@ -167,7 +167,7 @@ impl SteamOSManager {
-         // Run steamos-trim-devices script
-         self.process_manager
-             .get_command_object_path(
--                "/usr/lib/hwsupport/trim-devices.sh",
-+                "@hwsupport@/lib/hwsupport/trim-devices.sh",
-                 &[] as &[String; 0],
-                 "trimming devices",
-             )
-@@ -186,7 +186,7 @@ impl SteamOSManager {
-         }
-         self.process_manager
-             .get_command_object_path(
--                "/usr/lib/hwsupport/format-device.sh",
-+                "@hwsupport@/lib/hwsupport/format-device.sh",
-                 args.as_ref(),
-                 format!("formatting {device}").as_str(),
-             )
+             .await;
+diff --git a/src/wifi.rs b/src/wifi.rs
+index cde865e..512f1ed 100644
+--- a/src/wifi.rs
++++ b/src/wifi.rs
+@@ -32,19 +32,18 @@ use crate::{path, read_config_directory};
+
+ const OVERRIDE_CONTENTS: &str = "[Service]
+ ExecStart=
+-ExecStart=/usr/lib/iwd/iwd -d
++ExecStart=@iwd@/libexec/iwd -d
+ ";
+ const OVERRIDE_FOLDER: &str = "/etc/systemd/system/iwd.service.d";
+ const OVERRIDE_PATH: &str = "/etc/systemd/system/iwd.service.d/99-valve-override.conf";
+
+ // Only use one path for output for now. If needed we can add a timestamp later
+ // to have multiple files, etc.
+-const TRACE_CMD_PATH: &str = "/usr/bin/trace-cmd";
++const TRACE_CMD_PATH: &str = "@traceCmd@/bin/trace-cmd";
+
+ const MIN_BUFFER_SIZE: u32 = 100;
+
+ const WIFI_BACKEND_PATHS: &[&str] = &[
+-    "/usr/lib/NetworkManager/conf.d",
+     "/etc/NetworkManager/conf.d",
+ ];
+
+@@ -233,7 +232,7 @@ pub(crate) async fn get_wifi_backend() -> Result<WifiBackend> {
+ }
+
+ pub(crate) async fn set_wifi_backend(backend: WifiBackend) -> Result<()> {
+-    run_script("/usr/bin/steamos-wifi-set-backend", &[backend.to_string()]).await
++    run_script("@stubs@/bin/steamos-wifi-set-backend", &[backend.to_string()]).await
+ }
+
+ pub(crate) async fn list_wifi_interfaces() -> Result<Vec<String>> {
+@@ -251,7 +250,7 @@ pub(crate) async fn get_wifi_power_management_state() -> Result<WifiPowerManagem
+     let mut found_any = false;
+     for iface in list_wifi_interfaces().await? {
+         let output =
+-            script_output("/usr/bin/iw", &["dev", iface.as_str(), "get", "power_save"]).await?;
++            script_output("@iw@/bin/iw", &["dev", iface.as_str(), "get", "power_save"]).await?;
+         for line in output.lines() {
+             match line.trim() {
+                 "Power save: on" => return Ok(WifiPowerManagement::Enabled),
