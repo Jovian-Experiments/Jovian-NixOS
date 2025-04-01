@@ -35,6 +35,7 @@ in
         "kernel.sched_wakeup_granularity_ns" = mkDefault 500000;
         "kernel.sched_migration_cost_ns" = mkDefault 50000;
         "kernel.sched_nr_migrate" = mkDefault 128;
+        "kernel.split_lock_mitigate" = mkDefault 0;
 
         # > This is required due to some games being unable to reuse their TCP ports
         # > if they're killed and restarted quickly - the default timeout is too large.

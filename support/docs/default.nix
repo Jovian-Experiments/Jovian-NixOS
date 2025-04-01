@@ -87,10 +87,10 @@ let
       # https://pagefind.app/docs/hosting/#hosting-on-github-pages
       pagefind \
         --verbose \
-        --bundle-dir !pagefind \
+        --output-subdir !pagefind \
         --root-selector 'body > main' \
         --keep-index-url \
-        --source .
+        --site .
 
       for p in "''${OPT_OUT[@]}"; do
         mv -v $p.xxx $p.html

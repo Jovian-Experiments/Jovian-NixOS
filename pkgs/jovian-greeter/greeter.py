@@ -11,28 +11,28 @@ import struct
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Optional, Iterable, Mapping, List
+from types import TracebackType
+from typing import cast, override
 
 from systemd.journal import JournalHandler
 
 DEFAULT_SESSION = 'gamescope-wayland'
-HELPER_PREFIX = Path('/run/current-system/sw/lib/jovian-greeter')
 
 class Session:
-    TYPE = 'tty'
+    TYPE: str = 'tty'
 
     def __init__(self, name: str, path: Path):
-        self.name = name
+        self.name: str = name
         with open(path, 'r') as f:
-            self.content = f.read()
+            self.content: str = f.read()
 
-    def get_command(self) -> Optional[List[str]]:
+    def get_command(self) -> list[str] | None:
         if command := self._get_property('Exec'):
             return command.split(' ')
 
         return None
 
-    def get_environment(self) -> List[str]:
+    def get_environment(self) -> list[str]:
         envs = [
             f'XDG_SESSION_TYPE={self.TYPE}',
             f'XDG_SESSION_DESKTOP={self.name}',
@@ -43,19 +43,20 @@ class Session:
 
         return envs
 
-    def _get_property(self, property: str) -> Optional[str]:
+    def _get_property(self, property: str) -> str | None:
         if matches := re.search(f'^{property}=(.*)$', self.content, re.MULTILINE):
             return matches.group(1)
 
         return None
 
 class WaylandSession(Session):
-    TYPE = 'wayland'
+    TYPE: str = 'wayland'
 
 class XSession(Session):
-    TYPE = 'x11'
+    TYPE: str = 'x11'
 
-    def get_command(self) -> Optional[List[str]]:
+    @override
+    def get_command(self) -> list[str] | None:
         if command := super().get_command():
             return [ 'startx', '/usr/bin/env' ] + command
 
@@ -63,7 +64,7 @@ class XSession(Session):
 
 class GreetdClient:
     def __init__(self, path: Path):
-        self.client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        self.client: socket.socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         self.client.connect(str(path))
 
     def create_session(self, username: str):
@@ -84,18 +85,25 @@ class GreetdClient:
 
         raise RuntimeError('Bad response', response)
 
-    def start_session(self, command: List[str], environment: List[str]):
+    def start_session(self, session: Session):
         try:
-            subprocess.check_call(["plymouth", "quit", "--retain-splash", "--wait"])
+            _ = subprocess.check_call(["plymouth", "quit", "--retain-splash", "--wait"])
         except Exception as ex:
             logging.debug("Failed to stop Plymouth", exc_info=ex)
 
-        # greetd before 0.9.0 doesn't support env
-        command_with_env = [ 'systemd-cat', '--identifier=jovian-session', '--', '/usr/bin/env' ] + environment + command
+        session_command = session.get_command()
+        if not session_command:
+            raise RuntimeError('Session does not have a command')
 
+        command = [ 'systemd-cat', '--identifier=jovian-session', '--' ] + session_command
+        environment = session.get_environment()
+
+        logging.info("Starting session '%s'", session.name)
+        logging.info("Command: %s", command)
+        logging.info("Environment: %s", environment)
         self._send({
             'type': 'start_session',
-            'cmd': command_with_env,
+            'cmd': command,
             'env': environment,
         })
         response = self._recv()
@@ -108,24 +116,23 @@ class GreetdClient:
 
         raise RuntimeError('Bad response', response)
 
-    def _send(self, data: dict):
+    def _send(self, data: dict[str, str | list[str]]):
         payload = bytes(json.dumps(data), encoding='utf-8')
         self.client.sendall(struct.pack('=I', len(payload)))
         self.client.sendall(payload)
 
-    def _recv(self) -> Mapping[str, Any]:
-        length = self.client.recv(4, socket.MSG_WAITALL)
-        (length,) = struct.unpack('=I', length)
-        payload = self.client.recv(length, socket.MSG_WAITALL)
-        return json.loads(payload)
+    def _recv(self) -> dict[str, str]:
+        length_bytes = self.client.recv(4, socket.MSG_WAITALL)
+        length: tuple[int] = struct.unpack('=I', length_bytes)
+        payload = self.client.recv(length[0], socket.MSG_WAITALL)
+        return cast(dict[str, str], json.loads(payload))
 
 class Context:
-    def __init__(self, user: str, home: Path):
-        self.user = user
-        self.home = home
-        self.xdg_data_dirs = os.environ.get('XDG_DATA_DIRS', '').split(':')
+    def __init__(self, user: str):
+        self.user: str = user
+        self.xdg_data_dirs: list[str] = os.environ.get('XDG_DATA_DIRS', '').split(':')
 
-    def next_session(self) -> Optional[Session]:
+    def next_session(self) -> Session | None:
         sessions = [ DEFAULT_SESSION ]
 
         if next_session := self._consume_session():
@@ -133,39 +140,22 @@ class Context:
 
         return self._find_sessions(sessions)
 
-    def _consume_session(self) -> Optional[str]:
-        helper = HELPER_PREFIX.joinpath('consume-session')
-        if helper.exists():
-            logging.debug('Using pkexec helper')
-            res = subprocess.run(
-                ['/run/wrappers/bin/pkexec', helper, self.user],
-                stdin=subprocess.DEVNULL,
-                capture_output=True,
-                check=True,
-                env={'SHELL': '/bin/sh'}
-            )
-            next_session = res.stdout.decode('utf-8').strip()
-
-            if not next_session:
-                return None
-
-            return next_session
-
-        next_session_file = self.home.joinpath(".local/state/steamos-session-select")
-        if not next_session_file.exists():
-            return None
-
-        with open(next_session_file, 'r') as f:
-            next_session = f.read().strip()
-
-        next_session_file.unlink()
+    def _consume_session(self) -> str | None:
+        res = subprocess.run(
+            ['/run/wrappers/bin/jovian-consume-session'],
+            stdin=subprocess.DEVNULL,
+            capture_output=True,
+            check=True,
+            env={},
+        )
+        next_session = res.stdout.decode('utf-8').strip()
 
         if not next_session:
             return None
 
         return next_session
 
-    def _find_sessions(self, sessions: Iterable[str]) -> Optional[Session]:
+    def _find_sessions(self, sessions: list[str]) -> Session | None:
         for data_dir in self.xdg_data_dirs + [ '/usr/share' ]:
             data_dir = Path(data_dir)
             for session in sessions:
@@ -181,8 +171,18 @@ class Context:
 
         return None
 
+def handle_exception(exc_type: type[Exception], exc_value: Exception, exc_traceback: TracebackType):
+    if issubclass(exc_type, KeyboardInterrupt):
+        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        return
+
+    logging.error("Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback))
+    sys.exit(1)
+
+sys.excepthook = handle_exception
+
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
     logging.root.handlers = [
         JournalHandler(SYSLOG_IDENTIFIER="jovian-greeter")
     ]
@@ -192,18 +192,13 @@ if __name__ == '__main__':
         sys.exit(1)
 
     user = sys.argv[1]
-    home = os.path.expanduser(f'~{user}/')
     socket_path = os.environ.get('GREETD_SOCK')
-
-    if not home:
-        logging.error(f'Home directory for {user} not found')
-        sys.exit(1)
 
     if not socket_path:
         logging.error("GREETD_SOCK must be set")
         sys.exit(1)
 
-    ctx = Context(user, Path(home))
+    ctx = Context(user)
 
     client = GreetdClient(Path(socket_path))
     client.create_session(user)
@@ -213,7 +208,7 @@ if __name__ == '__main__':
         logging.error('No sessions found')
         sys.exit(1)
 
-    logging.debug(f'Found {session.TYPE} session')
+    logging.info(f'Found {session.TYPE} session')
     command = session.get_command()
     environment = session.get_environment()
 
@@ -221,4 +216,4 @@ if __name__ == '__main__':
         logging.error(".desktop file doesn't contain Exec=")
         sys.exit(1)
 
-    client.start_session(command, environment)
+    client.start_session(session)

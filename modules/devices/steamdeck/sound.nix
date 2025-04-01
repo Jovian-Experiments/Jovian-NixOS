@@ -32,13 +32,14 @@ in
 
     extraEnv.ALSA_CONFIG_UCM2 = "${alsa-ucm-conf'}/share/alsa/ucm2";
   in lib.mkIf cfg.enableSoundSupport {
-    hardware.pulseaudio.enable = false;
+    services.pulseaudio.enable = false;
 
     services.pipewire = {
       enable = true;
       pulse.enable = true;
       alsa.enable = true;
       configPackages = [ pkgs.steamdeck-dsp ];
+      wireplumber.package = pkgs.wireplumber-jupiter;
       wireplumber.configPackages = [ pkgs.steamdeck-dsp ];
     };
 

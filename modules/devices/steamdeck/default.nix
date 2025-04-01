@@ -24,6 +24,7 @@ in
     ./perf-control.nix
     ./sdgyrodsu.nix
     ./sound.nix
+    ./workarounds.nix
   ];
 
   options = {

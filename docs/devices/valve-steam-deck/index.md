@@ -28,4 +28,4 @@ Connect to the dock via USB-C and run `jupiter-dock-updater` to update.
 Helpful Tips
 ------------
 
-To enter the boot menu, power off the Steam Deck then hold down `Volume-` and tap the `Power` button.
+To enter the boot menu, power off the Steam Deck then hold down `Volume Down` and tap the `Power` button.

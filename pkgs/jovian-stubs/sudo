@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
->&2 echo "[JOVIAN] $0: stub called with: $*"
+>&2 printf "[JOVIAN] %s: stub called with: %s\n" "${0##*/}" "$(printf "%q " "$@")"
 
 declare -a final
 
@@ -14,5 +14,7 @@ for value in "$@"; do
         final+=("$value")
     fi
 done
+
+>&2 printf "[JOVIAN] %s: parsed command: %s\n" "${0##*/}" "$(printf "%q " "${final[@]}")"
 
 exec "${final[@]}"

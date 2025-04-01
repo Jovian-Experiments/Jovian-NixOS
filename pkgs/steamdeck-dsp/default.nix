@@ -31,13 +31,13 @@ let
   };
   self = stdenv.mkDerivation(finalAttrs: {
     pname = "steamdeck-dsp";
-    version = "0.49.5";
+    version = "0.61";
 
     src = fetchFromGitHub {
       owner = "Jovian-Experiments";
       repo = "steamdeck-dsp";
       rev = finalAttrs.version;
-      hash = "sha256-RleDIa1E3kOCYlOdzNSfk4u0Cb4NhzP4GIJjjD6CeMA=";
+      hash = "sha256-+63OyDjFlAsndSVDT5IsG5IuHR7xmurhnJs56HjMYUk=";
     };
 
     nativeBuildInputs = [
@@ -50,7 +50,7 @@ let
         --replace-fail /usr/include/boost "${boost.dev}/include/boost" \
         --replace-fail /usr/include/lv2 "${lv2.dev}/include/lv2"
 
-      substituteInPlace pipewire-confs/hardware-profiles/valve-{jupiter,galileo}/pipewire.conf.d/filter-chain.conf \
+      substituteInPlace pipewire-confs/hardware-profiles/*/pipewire.conf.d/filter-chain.conf \
         --replace-fail "/usr/lib/ladspa/librnnoise_ladspa.so" "${rnnoise-plugin}/lib/ladspa/librnnoise_ladspa.so"
 
       substituteInPlace ucm2/conf.d/*/*.conf \
@@ -77,7 +77,7 @@ let
       ${resholve.phraseSolution "wireplumber-hwconfig" wireplumber-hwconfig-solution}
 
       for pkg in pipewire wireplumber; do
-        for i in $(find $out/share/$pkg/hardware-profiles/{valve-jupiter,valve-galileo} -type f -printf "%P\n" | sort | uniq); do 
+        for i in $(find $out/share/$pkg/hardware-profiles/* -type f -printf "%P\n" | sort | uniq); do 
           mkdir -p $(dirname "$out/share/$pkg/$i")
           ln -s /run/$pkg/$i $out/share/$pkg/$i
         done

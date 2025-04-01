@@ -2,6 +2,7 @@
 
 let
   inherit (lib)
+    mkDefault
     mkIf
     mkOption
     types
@@ -23,6 +24,7 @@ in
   };
 
   config = mkIf (cfg.enableBluetoothConfig) {
+    hardware.bluetooth.enable = mkDefault true;
     # See: https://github.com/Jovian-Experiments/PKGBUILDs-mirror/tree/jupiter-main/bluez
     hardware.bluetooth.settings = {
       General = {

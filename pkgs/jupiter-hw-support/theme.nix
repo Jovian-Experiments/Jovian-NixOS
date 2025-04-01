@@ -33,6 +33,9 @@ stdenv.mkDerivation {
     pushd $out/share/steamos
     xcursorgen steamos-cursor-config $out/share/icons/steam/cursors/default
     popd
+
+    # remove dangling symlink
+    rm $out/share/steamos/steamos.png
   '';
 
   meta = with lib; {

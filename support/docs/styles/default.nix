@@ -1,6 +1,7 @@
 { stdenv
 , runCommandLocal
 , writeShellScriptBin
+, lessc
 , nodePackages
 }:
 
@@ -64,7 +65,7 @@ let
 
     buildInputs = [
       embedSVG
-      nodePackages.less
+      lessc
     ];
 
     installPhase = ''

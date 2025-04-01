@@ -1,26 +1,26 @@
 { lib
 , fetchFromGitHub
 , nodejs
-, pnpm
+, pnpm_9
 , python3
 , coreutils
 , psmisc
 }:
 python3.pkgs.buildPythonPackage rec {
   pname = "decky-loader";
-  version = "3.0.1";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "SteamDeckHomebrew";
     repo = "decky-loader";
     rev = "v${version}";
-    hash = "sha256-IFop3SbXYCzYdHGRK08v8uPL4sSAHelCrIEc8HquZmg=";
+    hash = "sha256-wJCSjuZJTYtFVtvVHhfvrxQAUcaI/GT93E2Lcok5Yvk=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     sourceRoot = "${src.name}/frontend";
-    hash = "sha256-IX7WI0q30Wa54sSpPQu9SarxijS9BQFgo6Lkw12E6GI=";
+    hash = "sha256-WzYbqcniww6jpLu1PIJ3En/FPZSqOZuK6fcwN1mxuNQ=";
   };
 
   pyproject = true;
@@ -29,7 +29,7 @@ python3.pkgs.buildPythonPackage rec {
 
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpm_9.configHook
   ];
 
   preBuild = ''
@@ -57,6 +57,8 @@ python3.pkgs.buildPythonPackage rec {
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ coreutils psmisc ]}"
   ];
+
+  pythonRelaxDeps = [ "watchdog" ];
 
   passthru.python = python3;
 

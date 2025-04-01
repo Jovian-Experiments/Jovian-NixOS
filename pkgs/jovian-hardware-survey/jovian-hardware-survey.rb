@@ -5,6 +5,13 @@ require "shellwords"
 
 D20BOOTLOADER ||= "/usr/share/jupiter_controller_fw_updater/d20bootloader.py"
 
+# Identifiers from: class DeviceType(IntEnum)
+DeviceType = {
+  :D21_D21 => 0x100,
+  :D2x_D21 => 0x200,
+  :RA4     => 0x300,
+}
+
 # Handles joining/escaping a command, and raises on status != 0
 # Additionally prints the command to stderr.
 def run(*args, stdout:, silent: false, stderr: false, ignore_fail: false)
@@ -128,7 +135,10 @@ module ReportData
   end
 
   def is_steam_deck?()
-    system_information["Product Name"] == "Jupiter"
+    [
+      "Jupiter",
+      "Galileo",
+    ].include?(system_information["Product Name"])
   end
 
   FIELDS = [
@@ -197,7 +207,16 @@ module ReportData
   end
 
   def processor_information()
-    dmi_info["Processor"]["data"]
+    dmi_info["Processor"]["data"].tap do
+      # Convert flags into a Hash, for converting into a JSON Object.
+      _1["Flags"] = _1["Flags"].split("\n").map do |line|
+        data = line.match(%r{^([^\s]+)\s+\((.*)\)$})
+        [data[1], data[2]]
+      end
+        .to_h
+      # Convert characteristics into an array
+      _1["Characteristics"] = _1["Characteristics"].split("\n")
+    end
   end
 
   def memory_information()
@@ -252,7 +271,7 @@ module ReportData
     return @controller_information if @controller_information
     begin
       info = JSON.parse(run(D20BOOTLOADER, "getdevicesjson", silent: true, stdout: true)).first
-      bootloader_type = info["release_number"] >> 8 # Shift for the major release byte
+      bootloader_type = info["release_number"] & 0xff00 # Mask out lower byte
       raw = run(D20BOOTLOADER, "getinfo", silent: true, stdout: true, stderr: true)
 
       # Clean up the raw data
@@ -263,26 +282,30 @@ module ReportData
         .map { |line| line.split(/\s*-\s*/, 6).last } # "2023-08-09 20:35:03,265 - __main__ - INFO - ......"
         .join("\n")
 
+      # Seed device_type from the bootloader type
+      device_type = bootloader_type
+
       # Extract the info
-      if bootloader_type == 3
-        # RA4
-        device_type =
-          raw
-          .split(/\n+/)
-          .grep(/Found a/)
-          .first
-          .sub("DeviceType.", "")
-          .split(/\s+/)[2]
+      if bootloader_type == DeviceType[:RA4]
         mcu = raw.split("**").last.strip
         mcus = [mcu]
       else
         # D20/D21
         mcus = raw.split("\n\n")
         header = mcus.shift.split(/\n/)
+        # Let the vendor identify the device for us.
         device_type = header
           .find { |line| line.match(/^Found a/) }
           .split(/\s+/)[2]
       end
+
+      # Identify the device type from the bootloader type
+      if DeviceType.key(device_type.to_i)
+        device_type = DeviceType.key(device_type.to_i).to_s
+      end
+
+      # Format the raw information (bootloader_type) with the information we got.
+      device_type = "%s (0x%x)" % [device_type.to_s, bootloader_type]
 
       mcus = mcus.map do |mcu|
         mcu.split(/\n/)
@@ -309,6 +332,7 @@ module ReportData
       "Hardware Info" => mcus,
       "Bootloader Type" => bootloader_type,
       "Hardware ID" => mcus.first["Stored hardware ID"],
+      "Release Number" => info["release_number"],
     }
   end
 
@@ -321,6 +345,8 @@ module ReportData
     ram_chip_size = memory_information["Devices"][0]["Size"].split(/\s+/, 2)[0].to_i
 
     [
+      "Product Name:         #{system_information["Product Name"]}",
+      "System Family:        #{system_information["Family"]}",
       "Serial:               #{system_information["Serial Number"]}",
       "Manufacturing year:   #{manufacturing_information["Year"]}",
       "Manufacturing week:   #{manufacturing_information["Week"]}",

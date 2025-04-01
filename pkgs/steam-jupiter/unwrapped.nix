@@ -3,16 +3,16 @@
 # This allows the Steam Deck UI to start on a fresh installation
 # (i.e., have not launched Steam at all before).
 
-{ steam-original, fetchurl }:
+{ steam-unwrapped, fetchurl }:
 
 let
-  bootstrapVersion = "1.0.0.79-1.3";
+  bootstrapVersion = "1.0.0.81-2.2";
   bundle = fetchurl {
     url = "https://steamdeck-packages.steamos.cloud/archlinux-mirror/sources/jupiter-main/steam-jupiter-stable-${bootstrapVersion}.src.tar.gz";
-    hash = "sha256-q814Tkdo9yQjv2hpupINd6uZC3LpZz+gP6TfWcTINQ8=";
+    hash = "sha256-PAA1fV7JZSv07cXewtAjwD96gUwuAde2P+Pg+bGQkPY=";
   };
-in steam-original.overrideAttrs (old: {
-  pname = "steam-jupiter-original";
+in steam-unwrapped.overrideAttrs (old: {
+  pname = "steam-jupiter-unwrapped";
 
   postInstall = (old.postInstall or "") + ''
     >&2 echo ":: Injecting Steam Deck client bootstrap..."

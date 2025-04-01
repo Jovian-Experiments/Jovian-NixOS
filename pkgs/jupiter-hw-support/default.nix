@@ -91,12 +91,13 @@ stdenv.mkDerivation {
       --replace-warn ". /usr/lib/hwsupport" ". $out/lib/hwsupport"
 
     mkdir -p $out/lib/udev/rules.d
-    cp usr/lib/udev/rules.d/99-steamos-automount.rules $out/lib/udev/rules.d
-    cp usr/lib/udev/rules.d/99-sdcard-rescan.rules $out/lib/udev/rules.d
+    for rule in 80-rtl-wobt.rules 99-steamos-automount.rules 99-sdcard-rescan.rules; do
+      cp usr/lib/udev/rules.d/$rule $out/lib/udev/rules.d
+    done
 
     substituteInPlace $out/lib/udev/rules.d/*.rules \
-      --replace-fail "/bin/systemd-run" "${systemd}/bin/systemd-run" \
-      --replace-fail "/usr/lib/hwsupport" "$out/lib/hwsupport"
+      --replace-warn "/bin/systemd-run" "${systemd}/bin/systemd-run" \
+      --replace-warn "/usr/lib/hwsupport" "$out/lib/hwsupport"
 
     ${resholve.phraseSolution "jupiter-hw-support" solution}
 

@@ -27,7 +27,7 @@ in
         user = mkOption {
           type = types.str;
           description = ''
-            The user to run Steam with.
+            The local system user that Steam will be launched as.
           '';
         };
 
@@ -134,21 +134,12 @@ in
         '';
       };
 
-      environment = {
-        systemPackages = [ pkgs.jovian-greeter.helper ];
-        pathsToLink = [ "lib/jovian-greeter" ];
+      security.wrappers.jovian-consume-session = {
+        source = "${pkgs.jovian-greeter.helper}/bin/consume-session";
+        owner = cfg.user;
+        group = "users";
+        setuid = true;
       };
-      security.polkit.extraConfig = ''
-        polkit.addRule(function(action, subject) {
-          if (
-            action.id == "org.freedesktop.policykit.exec" &&
-            action.lookup("program") == "/run/current-system/sw/lib/jovian-greeter/consume-session" &&
-            subject.user == "jovian-greeter"
-          ) {
-            return polkit.Result.YES;
-          }
-        });
-      '';
 
       xdg.portal.configPackages = mkDefault [ pkgs.gamescope-session ];
     })

@@ -1,0 +1,59 @@
+From ec4e002c4b84ffbe008198fc2d39f4aecc0e0e56 Mon Sep 17 00:00:00 2001
+From: Matthew Schwartz <matthew.schwartz@linux.dev>
+Date: Fri, 31 Jan 2025 17:21:47 -0800
+Subject: [PATCH] layer: Fix 32-bit layer crash
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Some fprintf pointers added in "layer: Fix oldSwapchain when going in/out
+of XWayland bypassing" will crash when executed in the 32-bit WSI layer.
+
+GCC also warns about the pointer usage when compiling the 32-bit layer:
+"warning: format ‘%p’ expects argument of type ‘void*’, but argument 3
+has type ‘VkSwapchainKHR’ {aka ‘long long unsigned int’} [-Wformat=]"
+
+To keep it simple, let's just reinterpret_cast the problematic pointers
+to void*.
+
+Closes:  #1718
+Closes:  #1736
+---
+ layer/VkLayer_FROG_gamescope_wsi.cpp | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/layer/VkLayer_FROG_gamescope_wsi.cpp b/layer/VkLayer_FROG_gamescope_wsi.cpp
+index 718a2604f3..5bd1408bf7 100644
+--- a/layer/VkLayer_FROG_gamescope_wsi.cpp
++++ b/layer/VkLayer_FROG_gamescope_wsi.cpp
+@@ -1076,9 +1076,9 @@ namespace GamescopeWSILayer {
+         gamescope_swapchain_destroy(state->object);
+       }
+       GamescopeSwapchain::remove(swapchain);
+-      fprintf(stderr, "[Gamescope WSI] Destroying swapchain: %p\n", swapchain);
++      fprintf(stderr, "[Gamescope WSI] Destroying swapchain: %p\n", reinterpret_cast<void*>(swapchain));
+       pDispatch->DestroySwapchainKHR(device, swapchain, pAllocator);
+-      fprintf(stderr, "[Gamescope WSI] Destroyed swapchain: %p\n", swapchain);
++      fprintf(stderr, "[Gamescope WSI] Destroyed swapchain: %p\n", reinterpret_cast<void*>(swapchain));
+     }
+ 
+     static VkResult CreateSwapchainKHR(
+@@ -1160,7 +1160,7 @@ namespace GamescopeWSILayer {
+ 
+       fprintf(stderr, "[Gamescope WSI] Creating swapchain for xid: 0x%0x - oldSwapchain: %p - provided minImageCount: %u - minImageCount: %u - format: %s - colorspace: %s - flip: %s\n",
+         gamescopeSurface->window,
+-        pCreateInfo->oldSwapchain,
++        reinterpret_cast<void*>(pCreateInfo->oldSwapchain),
+         pCreateInfo->minImageCount,
+         minImageCount,
+         vkroots::helpers::enumString(pCreateInfo->imageFormat),
+@@ -1241,7 +1241,7 @@ namespace GamescopeWSILayer {
+ 
+       fprintf(stderr, "[Gamescope WSI] Created swapchain for xid: 0x%0x swapchain: %p - imageCount: %u\n",
+         gamescopeSurface->window,
+-        *pSwapchain,
++        reinterpret_cast<void*>(*pSwapchain),
+         imageCount);
+ 
+       gamescope_swapchain_swapchain_feedback(
+

@@ -35,7 +35,6 @@ Pointers to helpful pages
 
  - The [Getting Started](docs/getting-started.md) page may be your first stop.
  - The [Configuration](docs/configuration.md) page guides you into configuring your system.
- - The [Options](docs/options.md) is good to know all that you can do.
 
 <div class="for-github -unneeded">
 <hr />

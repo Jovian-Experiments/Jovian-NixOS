@@ -1,0 +1,29 @@
+From ac69208ecc6c49550cac08676eff3e1adc130d34 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Marco=20=22Capypara=22=20K=C3=B6pcke?= <hello@capypara.de>
+Date: Sat, 23 Nov 2024 21:44:13 +0100
+Subject: [PATCH] start-gamescope-session: do not set XDG_DESKTOP_PORTAL_DIR
+
+---
+ start-gamescope-session | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/start-gamescope-session b/start-gamescope-session
+index b52d665..a2d185f 100755
+--- a/start-gamescope-session
++++ b/start-gamescope-session
+@@ -6,12 +6,6 @@ export XDG_SESSION_TYPE=x11
+ # Update the enviroment with DESKTOP_SESSION and all XDG variables
+ dbus-update-activation-environment --systemd DESKTOP_SESSION `env | grep ^XDG_ | cut -d = -f 1`
+ 
+-# This makes it so that xdg-desktop-portal doesn't find any portal implementations and doesn't start them and makes
+-# them crash/exit because the dbus env has no DISPLAY. In turn this causes dbus calls to the portal which don't rely
+-# on implementations to hang (such as SDL talking to the real time portal)
+-# Plasma resets this variable when it starts
+-systemctl --user set-environment XDG_DESKTOP_PORTAL_DIR=""
+-
+ # Remove these as they prevent gamescope-session from starting correctly
+ systemctl --user unset-environment DISPLAY XAUTHORITY
+ 
+-- 
+2.44.2
+

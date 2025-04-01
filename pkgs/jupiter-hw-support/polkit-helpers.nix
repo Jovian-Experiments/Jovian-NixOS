@@ -35,6 +35,7 @@ let
       wirelesstools
     ];
     execer = [
+      "cannot:${dmidecode}/bin/dmidecode"
       "cannot:${jovian-stubs}/bin/jupiter-biosupdate"
       "cannot:${jovian-stubs}/bin/steamos-reboot"
       "cannot:${jovian-stubs}/bin/steamos-factory-reset-config"

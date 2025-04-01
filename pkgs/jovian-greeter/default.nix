@@ -1,9 +1,7 @@
-{ lib, stdenv, python3, plymouth, shellcheck, nodePackages }:
+{ lib, stdenv, python3, plymouth, shellcheck, nodePackages, rustPlatform }:
 
 stdenv.mkDerivation {
   name = "jovian-greeter";
-
-  outputs = [ "out" "helper" ];
 
   src = ./.;
 
@@ -19,7 +17,6 @@ stdenv.mkDerivation {
   checkPhase = ''
     runHook preCheck
 
-    shellcheck ./consume-session
     pyright *.py
 
     runHook postCheck
@@ -31,8 +28,18 @@ stdenv.mkDerivation {
     install -Dm555 greeter.py $out/bin/jovian-greeter
     wrapPythonPrograms --prefix PATH : ${lib.makeBinPath [ plymouth ]}
 
-    install -Dm555 ./consume-session $helper/lib/jovian-greeter/consume-session
-
     runHook postInstall
   '';
+
+  passthru.helper = rustPlatform.buildRustPackage {
+    pname = "jovian-consume-session";
+    version = "0.0.1";
+
+    src = ./consume-session;
+
+    cargoLock.lockFile = ./consume-session/Cargo.lock;
+
+    # avoid a second rebuild
+    doCheck = false;
+  };
 }
