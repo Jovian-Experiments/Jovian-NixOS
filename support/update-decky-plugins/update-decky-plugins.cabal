@@ -17,13 +17,13 @@ executable update-decky-plugins
                    Plugin,
                    Version
     build-depends:    
-      base ^>=4.18.2.1,
+      base,
       aeson >=2.0,
       optparse-applicative,
-      req >= 3.13.4, 
+      req >= 3.13.2, 
       text,
       async,
-      process >= 1.6.25.0,
+      process,
       hnix >= 0.17.0
     hs-source-dirs:   app
     default-language: Haskell2010
