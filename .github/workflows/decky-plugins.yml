@@ -1,7 +1,8 @@
 name: Update decky-plugins
 on:
-  pull_request:
-  push:
+  schedule:
+    - cron: "0 0 1 * *"
+  workflow_dispatch 
 jobs:
   update-plugins:
     runs-on: ubuntu-latest
