@@ -23,7 +23,7 @@ rec {
 
   gamescope = import ./pkgs/gamescope {
     gamescope' = prev.gamescope;
-    inherit (final) fetchFromGitHub;
+    inherit (final) fetchFromGitHub fetchpatch;
   };
   gamescope-wsi = gamescope.override {
     enableExecutable = false;
