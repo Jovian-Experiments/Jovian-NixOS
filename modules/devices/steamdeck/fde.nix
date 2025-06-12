@@ -9,8 +9,7 @@ in
       fde = {
         deckbd = {
           enable = lib.mkOption {
-            default = cfg.enable;
-            defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
+            default = false;
             type = lib.types.bool;
             description = ''
               Whether to enable deckbd for initrd password entry.
