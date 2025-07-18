@@ -4,6 +4,7 @@
 
 let
   inherit (lib)
+    mkForce
     mkIf
     mkMerge
     mkOption
@@ -35,18 +36,24 @@ in
 
   config = mkMerge [
     (mkIf (cfg.enable) {
+      jovian.overlay.enable = mkForce true;
+
       hardware.firmware = [
         (lib.hiPrio pkgs.linux-firmware-jupiter)
         (lib.hiPrio pkgs.steamdeck-dsp)
       ];
     })
     (mkIf (cfg.autoUpdate) {
+      jovian.overlay.enable = mkForce true;
+
       systemd.packages = [pkgs.steamdeck-firmware];
 
       systemd.services.jupiter-biosupdate.wantedBy = ["multi-user.target"];
       systemd.services.jupiter-controller-update.wantedBy = ["multi-user.target"];
     })
     (mkIf (cfg.enableFwupdBiosUpdates) {
+      jovian.overlay.enable = mkForce true;
+
       services.fwupd.enable = true;
 
       environment.etc."fwupd/remotes.d/steamdeck-bios.conf".text = ''

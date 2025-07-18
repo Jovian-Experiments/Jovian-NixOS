@@ -3,6 +3,7 @@
 let
   inherit (lib)
     mkDefault
+    mkForce
     mkIf
     mkMerge
     mkOption
@@ -32,7 +33,7 @@ in
         };
 
         desktopSession = mkOption {
-          type = with types ; nullOr str // {         
+          type = with types ; nullOr str // {
             check = userProvidedDesktopSession:
               lib.assertMsg (userProvidedDesktopSession != null -> (str.check userProvidedDesktopSession && lib.elem userProvidedDesktopSession config.services.displayManager.sessionData.sessionNames)) ''
                   Desktop session '${userProvidedDesktopSession}' not found.
@@ -75,6 +76,8 @@ in
         Set jovian.steam.desktopSession to the name of a desktop session, or "gamescope-wayland"
         to keep this behavior.
       '';
+
+      jovian.overlay.enable = mkForce true;
 
       services.displayManager.enable = true;
 

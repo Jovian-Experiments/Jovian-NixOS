@@ -2,6 +2,7 @@
 
 let
   inherit (lib)
+    mkForce
     mkIf
     mkMerge
     mkOption
@@ -43,6 +44,8 @@ in
   };
   config = mkIf (cfg.enable && cfg.updater.splash != "vendor") (mkMerge [
     {
+      jovian.overlay.enable = mkForce true;
+
       systemd.services."jovian-updater-logo-helper" = {
         enable = true;
         unitConfig.ConditionPathIsDirectory = "/run";

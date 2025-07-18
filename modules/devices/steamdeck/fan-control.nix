@@ -4,6 +4,7 @@
 
 let
   inherit (lib)
+    mkForce
     mkIf
     mkOption
     types
@@ -27,6 +28,8 @@ in
   };
 
   config = mkIf (cfg.enableOsFanControl) {
+    jovian.overlay.enable = mkForce true;
+
     systemd.services.jupiter-fan-control = {
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.dmidecode ];

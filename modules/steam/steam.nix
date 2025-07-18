@@ -3,6 +3,7 @@
 let
   inherit (lib)
     mkDefault
+    mkForce
     mkIf
     mkMerge
   ;
@@ -17,6 +18,8 @@ in
           "The Steam Deck UI integrates with NetworkManager (networking.networkmanager.enable) which is not enabled. NetworkManager is required to complete the first-time setup process.";
     }
     {
+      jovian.overlay.enable = mkForce true;
+
       security.wrappers.gamescope = {
         owner = "root";
         group = "root";
@@ -32,6 +35,8 @@ in
       };
     }
     {
+      jovian.overlay.enable = mkForce true;
+
       # Enable the usual desktop Steam stuff
       programs.steam.enable = mkDefault true;
 
