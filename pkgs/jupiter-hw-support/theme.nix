@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, callPackage
-, xorg
+{
+  lib,
+  stdenv,
+  callPackage,
+  xorg,
 }:
 
 let

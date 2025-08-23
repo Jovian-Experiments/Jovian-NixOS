@@ -1,11 +1,12 @@
-{ stdenv
-, fetchFromGitHub
-, autoPatchelfHook
-, makeWrapper
-, libusb1
+{
+  stdenv,
+  fetchFromGitHub,
+  autoPatchelfHook,
+  makeWrapper,
+  libusb1,
 }:
 
-stdenv.mkDerivation(finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jupiter-dock-updater-bin";
   version = "20250220.02";
 

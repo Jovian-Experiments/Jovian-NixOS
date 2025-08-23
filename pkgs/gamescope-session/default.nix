@@ -63,7 +63,7 @@ let
       # Don't resholve gamescope so we can use the cap_sys_nice wrapper when available
       # mangohud is not picked up by resholve due to loop_background
       export PATH=/run/wrappers/bin:${gamescope}/bin:$PATH
-  
+
       # Make gamescope discover the Steam cursor theme
       export XCURSOR_PATH=${kdePackages.breeze}/share/icons:${steamdeck-hw-theme}/share/icons
 
@@ -111,7 +111,8 @@ let
       gnutar
     ];
   };
-in stdenv.mkDerivation(finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope-session";
   version = "3.16.15-2";
 
@@ -127,7 +128,10 @@ in stdenv.mkDerivation(finalAttrs: {
     (replaceVars ./portals.patch {
       gamescope-portals = symlinkJoin {
         name = "gamescope-portals";
-        paths = [ xdg-desktop-portal-gamescope xdg-desktop-portal-holo ];
+        paths = [
+          xdg-desktop-portal-gamescope
+          xdg-desktop-portal-holo
+        ];
       };
     })
   ];
@@ -155,7 +159,7 @@ in stdenv.mkDerivation(finalAttrs: {
     substituteInPlace steam-notif-daemon.service --replace-fail /usr/bin ${steam_notif_daemon}/bin
   '';
 
-  nativeBuildInputs = [python3];
+  nativeBuildInputs = [ python3 ];
 
   # Largely copied from upstream
   installPhase = ''
@@ -177,7 +181,7 @@ in stdenv.mkDerivation(finalAttrs: {
     install -D -m 644 gamescope-session.service $out/lib/systemd/user/gamescope-session.service
     install -D -m 644 gamescope-session.target $out/lib/systemd/user/gamescope-session.target
     install -D -m 644 gamescope-mangoapp.service $out/lib/systemd/user/gamescope-mangoapp.service
-    install -D -m 644 ibus-gamescope.service  $out/lib/systemd/user/ibus-gamescope.service 
+    install -D -m 644 ibus-gamescope.service  $out/lib/systemd/user/ibus-gamescope.service
     install -D -m 644 steam-launcher.service $out/lib/systemd/user/steam-launcher.service
     install -D -m 644 steam-notif-daemon.service $out/lib/systemd/user/steam-notif-daemon.service
     # Jovian: don't install this, it's not useful for us
@@ -194,5 +198,5 @@ in stdenv.mkDerivation(finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.providedSessions = ["gamescope-wayland"];
+  passthru.providedSessions = [ "gamescope-wayland" ];
 })

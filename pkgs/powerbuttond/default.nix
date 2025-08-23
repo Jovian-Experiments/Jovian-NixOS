@@ -8,7 +8,7 @@
   udev,
   jovian-steam-protocol-handler,
 }:
-stdenv.mkDerivation(finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "powerbuttond";
   version = "3.3";
 
@@ -34,8 +34,11 @@ stdenv.mkDerivation(finalAttrs: {
       --replace-fail /usr/lib/hwsupport/steamos-powerbuttond $out/bin/steamos-powerbuttond
   '';
 
-  nativeBuildInputs = [pkg-config];
-  buildInputs = [libevdev udev];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    libevdev
+    udev
+  ];
 
   makeFlags = [
     "DESTDIR=$(out)"

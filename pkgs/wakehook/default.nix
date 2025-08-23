@@ -16,8 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-KtwD+7BYj654JD28DWAr2jFkqTkM0NraSFivO6UXIYg=";
   };
 
-  nativeBuildInputs = [pkg-config];
-  buildInputs = [systemd];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ systemd ];
 
   installPhase = ''
     runHook preInstall

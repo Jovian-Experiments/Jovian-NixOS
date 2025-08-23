@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, boost
-, lv2
-, faust2lv2
-, rnnoise-plugin
-, which
-, resholve
-, bash
-, coreutils
-, dmidecode
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  boost,
+  lv2,
+  faust2lv2,
+  rnnoise-plugin,
+  which,
+  resholve,
+  bash,
+  coreutils,
+  dmidecode,
 }:
 
 let
@@ -29,7 +30,7 @@ let
       dmidecode
     ];
   };
-  self = stdenv.mkDerivation(finalAttrs: {
+  self = stdenv.mkDerivation (finalAttrs: {
     pname = "steamdeck-dsp";
     version = "0.69";
 
@@ -77,7 +78,7 @@ let
       ${resholve.phraseSolution "wireplumber-hwconfig" wireplumber-hwconfig-solution}
 
       for pkg in pipewire wireplumber; do
-        for i in $(find $out/share/$pkg/hardware-profiles/* -type f -printf "%P\n" | sort | uniq); do 
+        for i in $(find $out/share/$pkg/hardware-profiles/* -type f -printf "%P\n" | sort | uniq); do
           mkdir -p $(dirname "$out/share/$pkg/$i")
           ln -s /run/$pkg/$i $out/share/$pkg/$i
         done
@@ -97,4 +98,5 @@ let
       license = lib.licenses.gpl3;
     };
   });
-in self
+in
+self
