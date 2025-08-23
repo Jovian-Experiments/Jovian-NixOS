@@ -198,7 +198,7 @@ linux-neptune-68.ignore = true
 linux-neptune-611.ignore = true
 
 # new kernel
-linux-neptune-615 = { map = "linux_jovian", pkgrel = 2 }
+linux-neptune-615 = { map = "linux_jovian", pkgrel = 1 }
 
 # we don't identify as SteamOS
 lsb-release.ignore = true
@@ -208,7 +208,7 @@ maliit-keyboard.check = "2.3.1-4.2"
 
 mangohud.check = "0.8.1.r49.ga113f7c-2"
 
-mesa = { map = "mesa-radeonsi-jupiter", pkgrel = "1.1", fixup = "mesa" }
+mesa = { map = "mesa-radeonsi-jupiter", pkgrel = "1", fixup = "mesa" }
 mesa-radv = { map = "mesa-radv-jupiter", pkgrel = "2", fixup = "mesa" }
 
 # we don't actually apply any of this, but it's worth checking
@@ -261,7 +261,7 @@ renderdoc-minimal.ignore = true
 rtl88x2ce-dkms.ignore = true
 
 # not used yet
-scx-scheds.check = "1.0.14.linux.neptune.611-2"
+scx-scheds.check = "1.0.15.linux.neptune.611-1"
 
 # FIXME: package this
 steam-im-modules.ignore = true
@@ -344,7 +344,7 @@ vpower.ignore = true
 
 wakehook = { map = true, pkgrel = 2 }
 
-wireplumber = { map = "wireplumber-jupiter", pkgrel = "1.2" }
+wireplumber.map = "wireplumber-jupiter"
 
 xdg-desktop-portal-gamescope = { map = true, pkgrel = 2 }
 xdg-desktop-portal-holo = { map = true, pkgrel = 2 }

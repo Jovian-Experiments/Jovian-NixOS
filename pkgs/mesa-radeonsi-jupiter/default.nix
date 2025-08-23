@@ -6,8 +6,8 @@
   fetchFromGitHub,
 }:
 let
-  version = "25.1.4";
-  jupiterVersion = "radeonsi-25.1.5";
+  version = "25.2.0";
+  jupiterVersion = "radeonsi-25.2.0";
 in
 stdenv.mkDerivation {
   pname = "mesa-radeonsi-jupiter";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "Jovian-Experiments";
     repo = "mesa";
     rev = jupiterVersion;
-    hash = "sha256-G82GHYeEeP9U5uxr8nvX4fk605UszHkumAzO7IOZu1s=";
+    hash = "sha256-yftXfcJHndS9bcyiAaGf3YkLHw7/aIzfVnJMLsYmyNo=";
   };
 
   # Jovian: tell Mesa where to find libclang
@@ -42,7 +42,6 @@ stdenv.mkDerivation {
     "-D gallium-drivers=radeonsi,llvmpipe,zink,iris,i915"
     "-D gallium-extra-hud=true"
     "-D gallium-rusticl=false"
-    "-D gallium-xa=disabled"
     "-D gles1=disabled"
     "-D html-docs=disabled"
     "-D libunwind=disabled"
@@ -51,8 +50,8 @@ stdenv.mkDerivation {
     "-D video-codecs=all"
     "-D vulkan-drivers=intel,swrast"
     "-D vulkan-layers=device-select,intel-nullhw,overlay,screenshot,vram-report-limit"
-    "-D gallium-opencl=disabled"
-    "-D radeonsi-build-id=53d063d06f3d5b95f1ffc56a00972475e31e57ac"
+    "-D gallium-mediafoundation=disabled"
+    "-D radeonsi-build-id=057e67ad037d628991eb985a05023c20caeed78d"
 
     # Jovian: build with our libgbm
     "-D libgbm-external=true"
