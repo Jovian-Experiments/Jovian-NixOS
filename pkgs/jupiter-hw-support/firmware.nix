@@ -1,31 +1,34 @@
-{ lib
-, stdenv
-, callPackage
-, autoPatchelfHook
-, makeWrapper
-, writeShellScript
-, python3
-, util-linuxMinimal
+{
+  lib,
+  stdenv,
+  callPackage,
+  autoPatchelfHook,
+  makeWrapper,
+  writeShellScript,
+  python3,
+  util-linuxMinimal,
 
-# jupiter-biosupdate
-, libkrb5
-, zlib
-, coreutils
-, gawk
-, dmidecode
-, jq
+  # jupiter-biosupdate
+  libkrb5,
+  zlib,
+  coreutils,
+  gawk,
+  dmidecode,
+  jq,
 
-, efiSysMountPoint ? "/boot"
+  efiSysMountPoint ? "/boot",
 }:
 
 let
   src = callPackage ./src.nix { };
-  pythonEnv = python3.withPackages (py: with py; [
-    crcmod
-    click
-    progressbar2
-    hid
-  ]);
+  pythonEnv = python3.withPackages (
+    py: with py; [
+      crcmod
+      click
+      progressbar2
+      hid
+    ]
+  );
 
   # Very ugly wrapper to work around the hardcoded ESP path
   h2offtWrapper = writeShellScript "h2offt-wrapper" ''
@@ -98,7 +101,14 @@ stdenv.mkDerivation {
     sed -i "s|/usr/share/jupiter_bios_updater/h2offt|$h2offt_nixos|g" $out/bin/jupiter-biosupdate
     sed -i "s|/usr/|$out/|g" $out/bin/jupiter-biosupdate
     wrapProgram $out/bin/jupiter-biosupdate \
-      --prefix PATH : ${lib.makeBinPath [ coreutils dmidecode gawk jq ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          dmidecode
+          gawk
+          jq
+        ]
+      }
 
     cp usr/bin/jupiter-initial-firmware-update $out/bin
     sed -i "s|/usr/|$out/|g" $out/bin/jupiter-initial-firmware-update
@@ -107,13 +117,23 @@ stdenv.mkDerivation {
     cp usr/bin/jupiter-controller-update $out/bin
     sed -i "s|/usr/|$out/|g" $out/bin/jupiter-controller-update
     wrapProgram $out/bin/jupiter-controller-update \
-      --prefix PATH : ${lib.makeBinPath [ jq pythonEnv ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          jq
+          pythonEnv
+        ]
+      }
 
     mkdir -p $out/libexec
     makeShellWrapper \
       $out/share/jupiter_controller_fw_updater/d20bootloader.py \
       $out/libexec/d20bootloader \
-      --prefix PATH : ${lib.makeBinPath [ jq pythonEnv ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          jq
+          pythonEnv
+        ]
+      }
 
     pushd $out/share/jupiter_bios_updater
     # Upstream comment:

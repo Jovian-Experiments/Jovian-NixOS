@@ -35,9 +35,8 @@ rustPlatform.buildRustPackage rec {
   # tests assume Steam Deck hardware and FHS paths
   doCheck = false;
 
-  patches = [ 
-    (replaceVars ./hardcode-paths.patch
-    {
+  patches = [
+    (replaceVars ./hardcode-paths.patch {
       stubs = jovian-stubs;
       steamDeckFirmware = steamdeck-firmware;
       jupiterDockUpdaterBin = jupiter-dock-updater-bin;

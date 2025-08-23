@@ -1,6 +1,11 @@
-{ lib, stdenv, python3, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+}:
 
-stdenv.mkDerivation(finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jupiter-fan-control";
   version = "20240523.3";
 
@@ -12,9 +17,11 @@ stdenv.mkDerivation(finalAttrs: {
   };
 
   buildInputs = [
-    (python3.withPackages (py: with py; [
-      pyyaml
-    ]))
+    (python3.withPackages (
+      py: with py; [
+        pyyaml
+      ]
+    ))
   ];
 
   dontConfigure = true;

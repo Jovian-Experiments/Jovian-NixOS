@@ -1,4 +1,12 @@
-{ lib, stdenv, python3, plymouth, shellcheck, nodePackages, rustPlatform }:
+{
+  lib,
+  stdenv,
+  python3,
+  plymouth,
+  shellcheck,
+  nodePackages,
+  rustPlatform,
+}:
 
 stdenv.mkDerivation {
   name = "jovian-greeter";

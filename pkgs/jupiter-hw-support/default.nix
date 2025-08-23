@@ -1,28 +1,33 @@
-{ lib
-, stdenv
-, callPackage
-, resholve
-, bash
-, coreutils
-, e2fsprogs
-, exfatprogs
-, f3
-, findutils
-, gawk
-, gnugrep
-, gnused
-, jq
-, parted
-, procps
-, systemd
-, util-linux
+{
+  lib,
+  stdenv,
+  callPackage,
+  resholve,
+  bash,
+  coreutils,
+  e2fsprogs,
+  exfatprogs,
+  f3,
+  findutils,
+  gawk,
+  gnugrep,
+  gnused,
+  jq,
+  parted,
+  procps,
+  systemd,
+  util-linux,
 }:
 
 let
   src = callPackage ./src.nix { };
 
   solution = {
-    scripts = [ "bin/*" "lib/hwsupport/*.sh" "lib/hwsupport/common-functions" ];
+    scripts = [
+      "bin/*"
+      "lib/hwsupport/*.sh"
+      "lib/hwsupport/common-functions"
+    ];
     interpreter = "${bash}/bin/bash";
     inputs = [
       coreutils

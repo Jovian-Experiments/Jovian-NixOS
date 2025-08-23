@@ -1,4 +1,4 @@
-{ 
+{
   decky-loader,
 }:
 decky-loader

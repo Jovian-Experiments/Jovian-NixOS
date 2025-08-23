@@ -18,7 +18,7 @@
 let
   src = callPackage ./src.nix { };
 
-  solution = {      
+  solution = {
     scripts = [ "bin/steamos-polkit-helpers/*" ];
     interpreter = "${bash}/bin/bash";
     inputs = [
@@ -53,7 +53,7 @@ let
       "cannot:${systemd}/bin/systemd-cat"
     ];
     fake = {
-      external = ["pkexec"];
+      external = [ "pkexec" ];
     };
     fix = {
       "/usr/bin/jupiter-biosupdate" = true;
@@ -73,7 +73,8 @@ let
       "/usr/lib/hwsupport/jupiter-amp-control" = true;
     };
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "steamos-polkit-helpers";
 
   inherit src;
@@ -81,7 +82,7 @@ in stdenv.mkDerivation {
 
   patchPhase = ''
     runHook prePatch
-  
+
     substituteInPlace usr/share/polkit-1/actions/org.valve.steamos.policy --replace-fail /usr $out
 
     runHook postPatch

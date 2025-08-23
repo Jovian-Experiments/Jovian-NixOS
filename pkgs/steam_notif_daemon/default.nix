@@ -27,10 +27,17 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  mesonFlags = ["-Dsd-bus-provider=libsystemd"];
+  mesonFlags = [ "-Dsd-bus-provider=libsystemd" ];
 
-  nativeBuildInputs = [pkg-config meson ninja];
-  buildInputs = [systemd curl];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+  ];
+  buildInputs = [
+    systemd
+    curl
+  ];
 
   meta = with lib; {
     description = "Steam notification daemon";

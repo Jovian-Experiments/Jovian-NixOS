@@ -1,4 +1,4 @@
-{ 
+{
   lib,
   stdenv,
   llvmPackages,
@@ -23,17 +23,18 @@ stdenv.mkDerivation {
   # Jovian: tell Mesa where to find libclang
   patches = [ ./opencl.patch ];
 
-  inherit (mesa) 
+  inherit (mesa)
     buildInputs
     nativeBuildInputs
     propagatedBuildInputs
     # inherit fixups so we get correct paths in EGL driver/Vulkan layer manifests
-    postFixup;
+    postFixup
+    ;
 
   separateDebugInfo = true;
 
   mesonAutoFeatures = "auto";
-  
+
   # See https://github.com/Jovian-Experiments/PKGBUILDs-mirror/blob/jupiter-main/mesa-radeonsi/PKGBUILD
   mesonFlags = [
     "-D android-libbacktrace=disabled"
