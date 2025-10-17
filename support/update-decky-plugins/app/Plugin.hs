@@ -4,19 +4,19 @@
 module Plugin (Plugin, getPluginDrv, deckyPluginsFun)
 where
 
+import Control.Concurrent.Async (mapConcurrently)
 import Data.Aeson (FromJSON, ToJSON)
 import qualified Data.Text as T
 import qualified Data.Text.IO as T.IO
 import GHC.Generics (Generic)
+import GHC.IO.Exception (ExitCode (ExitFailure, ExitSuccess))
 import Nix.Expr
-import System.Process (CreateProcess (std_out, std_err), StdStream (CreatePipe), createProcess, getPid, proc, waitForProcess)
-import qualified Version as V
-import Control.Concurrent.Async (mapConcurrently)
-import GHC.IO.Exception (ExitCode(ExitSuccess, ExitFailure))
 import Nix.Prelude (exitWith)
-import System.IO (hPutStrLn, stderr)
+import System.IO (stderr)
+import System.Process (CreateProcess (std_err, std_out), StdStream (CreatePipe), createProcess, proc, waitForProcess)
+import qualified Version as V
 
-{- | Represent a single plugin structure -}
+-- | Represent a single plugin structure
 data Plugin = Plugin
   { id :: Integer
   , name :: T.Text
@@ -35,12 +35,12 @@ data Plugin = Plugin
 instance FromJSON Plugin
 instance ToJSON Plugin
 
--- | Constructs a derivation from the selected plugin, version, and hash
---   Pure entrypoint for the unpure IO version, `getPluginDrv`
+{- | Constructs a derivation from the selected plugin, version, and hash
+  Pure entrypoint for the unpure IO version, `getPluginDrv`
+-}
 pluginDrv :: Plugin -> V.Version -> T.Text -> T.Text -> NExpr
 pluginDrv plugin version download_url download_hash = "buildDeckyPlugin" @@ fields
  where
-  sourceHash = V.hash version 
   nix_tags = map mkStr (tags plugin)
   fields =
     attrsE
@@ -53,22 +53,22 @@ pluginDrv plugin version download_url download_hash = "buildDeckyPlugin" @@ fiel
 
   meta =
     mkWith "lib" $
-     attrsE $
-       [
-         ("description", mkStr $ description plugin)
-         , ("decky_tags", mkList nix_tags)
-         , ("platforms", "platforms.all")
-       ]
+      attrsE
+        [ ("description", mkStr $ description plugin)
+        , ("decky_tags", mkList nix_tags)
+        , ("platforms", "platforms.all")
+        ]
 
 -- | Returns a plugin download url from its hash
 getPluginDownloadUrl :: V.Version -> T.Text
 getPluginDownloadUrl version = url
-  where
-    hash = V.hash version
-    url = "https://cdn.tzatzikiweeb.moe/file/steam-deck-homebrew/versions/" <> hash <> ".zip"
+ where
+  hash = V.hash version
+  url = "https://cdn.tzatzikiweeb.moe/file/steam-deck-homebrew/versions/" <> hash <> ".zip"
 
--- | Get a Sha256 hash from the provided url
---   FIXME: Is there a way to do this without IO?
+{- | Get a Sha256 hash from the provided url
+  FIXME: Is there a way to do this without IO?
+-}
 getPluginSourceHash :: T.Text -> IO (Either T.Text T.Text)
 getPluginSourceHash url = do
   (_, Just stdout, Just proc_stderr, handle) <- createProcess (proc "nix-prefetch-url" [T.unpack url]){std_out = CreatePipe, std_err = CreatePipe}
@@ -80,10 +80,11 @@ getPluginSourceHash url = do
       pure $ Left hash
     ExitFailure _ -> do
       messageFailure <- T.IO.hGetContents proc_stderr
-      pure $ Right messageFailure 
+      pure $ Right messageFailure
 
--- | Some plugins have special characters, such as !
---   This function deals with this
+{- | Some plugins have special characters, such as !
+  This function deals with this
+-}
 replaceSpecialChar :: Char -> Bool
 replaceSpecialChar '!' = False
 replaceSpecialChar _ = True
@@ -91,45 +92,47 @@ replaceSpecialChar _ = True
 -- | Clean the name from spaces and special characters
 cleanName :: Plugin -> T.Text
 cleanName = clean
-  where
-    clean plugin =
-      T.toLower
+ where
+  clean plugin =
+    T.toLower
       . T.map (\c -> if c == ' ' then '_' else c)
-      . T.filter replaceSpecialChar 
+      . T.filter replaceSpecialChar
       $ name plugin
 
 -- | Get a nix key value pair for the specified plugin
 getPluginDrv :: Plugin -> IO (T.Text, NExpr)
-getPluginDrv plugin = let
-  latest_version = head (versions plugin)
-  -- To wrap the name in quotes
-  quotes toQuote = "\"" <> toQuote <> "\""
-  -- Clean the name from spaces, special chars...
-  key = quotes (cleanName plugin) 
-  url = getPluginDownloadUrl latest_version
-  in do
-  T.IO.putStrLn ("Processing plugin with name: " <> name plugin)
-  hash_result <- getPluginSourceHash url  
-  download_hash <- case hash_result of
-    Left hash -> do
-      let stripped = T.strip hash
-      T.IO.putStrLn ("Got hash: " <> stripped)
-      pure stripped
-    Right message -> do
-      T.IO.hPutStrLn stderr ("Process exit failed with " <> message)
-      exitWith (ExitFailure 2)
+getPluginDrv plugin =
+  let
+    latest_version = head (versions plugin)
+    -- To wrap the name in quotes
+    quotes toQuote = "\"" <> toQuote <> "\""
+    -- Clean the name from spaces, special chars...
+    key = quotes (cleanName plugin)
+    url = getPluginDownloadUrl latest_version
+   in
+    do
+      T.IO.putStrLn ("Processing plugin with name: " <> name plugin)
+      hash_result <- getPluginSourceHash url
+      download_hash <- case hash_result of
+        Left hash -> do
+          let stripped = T.strip hash
+          T.IO.putStrLn ("Got hash: " <> stripped)
+          pure stripped
+        Right message -> do
+          T.IO.hPutStrLn stderr ("Process exit failed with " <> message)
+          exitWith (ExitFailure 2)
 
-  pure (key, pluginDrv plugin latest_version url download_hash)
+      pure (key, pluginDrv plugin latest_version url download_hash)
 
 -- | Get a attrset consisting of all decky plugins as nix expressions
 getPluginDrvs :: [Plugin] -> IO NExpr
 getPluginDrvs plugins = do
   attrs <- mapConcurrently getPluginDrv plugins
-  pure $ attrsE attrs 
+  pure $ attrsE attrs
 
 deckyPluginsFun :: [Plugin] -> Maybe Int -> IO NExpr
 deckyPluginsFun plugins numPlugins = do
-  let params = [ ("buildDeckyPlugin", Nothing), ("lib", Nothing), ("stdenv", Nothing), ("fetchurl", Nothing), ("unzip", Nothing)]
+  let params = [("buildDeckyPlugin", Nothing), ("lib", Nothing), ("stdenv", Nothing), ("fetchurl", Nothing), ("unzip", Nothing)]
   pluginsDrv <- case numPlugins of
     Just n -> getPluginDrvs (take n plugins)
     Nothing -> getPluginDrvs plugins

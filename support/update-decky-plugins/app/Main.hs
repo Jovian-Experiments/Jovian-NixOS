@@ -2,11 +2,11 @@
 
 module Main where
 
-import Network.HTTP.Req
-import OptParse (parse, Options (withStoreUrl, output, numPlugins), Output (StdOut, OutputFile))
-import Plugin (Plugin, deckyPluginsFun)
 import qualified Data.Text as T
+import Network.HTTP.Req
 import Nix (prettyNix)
+import OptParse (Options (numPlugins, output, withStoreUrl), Output (OutputFile, StdOut), parse)
+import Plugin (Plugin, deckyPluginsFun)
 
 -- | Get plugins from store
 getPlugins :: T.Text -> IO [Plugin]
@@ -27,11 +27,10 @@ main = do
   opts <- parse
   plugins <- getPlugins (withStoreUrl opts)
   deckyPlugins <- deckyPluginsFun plugins (numPlugins opts)
-  let pretty = prettyNix deckyPlugins 
+  let pretty = prettyNix deckyPlugins
 
-  case (output opts) of
+  case output opts of
     StdOut -> print pretty
     OutputFile path -> do
       putStrLn ("Saving derivations to: " <> path)
       writeFile path (show pretty)
-      
