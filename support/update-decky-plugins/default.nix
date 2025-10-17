@@ -1,3 +1,3 @@
 { pkgs, ...}: let
- hpkgs = pkgs.haskell.packages.ghc96; 
+ hpkgs = pkgs.haskell.packages.ghc984; 
 in hpkgs.callCabal2nix "update-decky-plugins" ./. { } 

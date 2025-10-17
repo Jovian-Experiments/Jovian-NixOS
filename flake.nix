@@ -59,19 +59,25 @@
       inherit (self) checks;
     };
 
-    devShells = eachSupportedSystem (pkgs: {
-      default = pkgs.mkShell {
-        packages = let
-          pyenv = pkgs.python3.withPackages (ps: [
-            ps.colorama
-            ps.httpx
-            ps.toml
-            (ps.callPackage ./support/manifest/pyalpm.nix {})
-          ]);
+      devShells = eachSupportedSystem (pkgs: {
+        default = let
+          haskell_env = pkgs.update-decky-plugins.env.overrideAttrs (o:
+            with pkgs.haskellPackages; {
+              nativeBuildInputs = o.nativeBuildInputs or [ ]
+                ++ [ cabal-install haskell-language-server ];
+            });
+        in pkgs.mkShell {
+          inputsFrom = [ haskell_env ];
+          packages = let
+            pyenv = pkgs.python3.withPackages (ps: [
+              ps.colorama
+              ps.httpx
+              ps.toml
+              (ps.callPackage ./support/manifest/pyalpm.nix { })
+            ]);
 
-          haskell_env = with pkgs; [ghc cabal-install haskell-language-server zlib.dev libsodium];
-        in [pyenv haskell_env];
-      };
-    });
-  };
+          in [ pyenv ];
+        };
+      });
+    };
 }
