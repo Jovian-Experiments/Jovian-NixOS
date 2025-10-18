@@ -11,7 +11,7 @@ import qualified Data.Text.IO as T.IO
 import GHC.Generics (Generic)
 import GHC.IO.Exception (ExitCode (ExitFailure, ExitSuccess))
 import Nix.Expr
-import Nix.Prelude (exitWith)
+import Nix.Prelude (exitWith, fromMaybe)
 import System.IO (stderr)
 import System.Process (CreateProcess (std_err, std_out), StdStream (CreatePipe), createProcess, proc, waitForProcess)
 import qualified Version as V
@@ -60,11 +60,12 @@ pluginDrv plugin version download_url download_hash = "buildDeckyPlugin" @@ fiel
         ]
 
 -- | Returns a plugin download url from its hash
-getPluginDownloadUrl :: V.Version -> T.Text
-getPluginDownloadUrl version = url
+getPluginDownloadUrl :: Maybe T.Text -> V.Version -> T.Text
+getPluginDownloadUrl cdn_url version = url
  where
   hash = V.hash version
-  url = "https://cdn.tzatzikiweeb.moe/file/steam-deck-homebrew/versions/" <> hash <> ".zip"
+  base_url = fromMaybe "https://cdn.tzatzikiweeb.moe/file/steam-deck-homebrew/versions/" cdn_url
+  url = base_url <> hash <> ".zip"
 
 {- | Get a Sha256 hash from the provided url
   FIXME: Is there a way to do this without IO?
@@ -100,15 +101,15 @@ cleanName = clean
       $ name plugin
 
 -- | Get a nix key value pair for the specified plugin
-getPluginDrv :: Plugin -> IO (T.Text, NExpr)
-getPluginDrv plugin =
+getPluginDrv :: Maybe T.Text -> Plugin -> IO (T.Text, NExpr)
+getPluginDrv cdn_url plugin =
   let
     latest_version = head (versions plugin)
     -- To wrap the name in quotes
     quotes toQuote = "\"" <> toQuote <> "\""
     -- Clean the name from spaces, special chars...
     key = quotes (cleanName plugin)
-    url = getPluginDownloadUrl latest_version
+    url = getPluginDownloadUrl cdn_url latest_version
    in
     do
       T.IO.putStrLn ("Processing plugin with name: " <> name plugin)
@@ -125,16 +126,16 @@ getPluginDrv plugin =
       pure (key, pluginDrv plugin latest_version url download_hash)
 
 -- | Get a attrset consisting of all decky plugins as nix expressions
-getPluginDrvs :: [Plugin] -> IO NExpr
-getPluginDrvs plugins = do
-  attrs <- mapConcurrently getPluginDrv plugins
+getPluginDrvs :: Maybe T.Text -> [Plugin] -> IO NExpr
+getPluginDrvs cdn_url plugins = do
+  attrs <- mapConcurrently (getPluginDrv cdn_url) plugins
   pure $ attrsE attrs
 
-deckyPluginsFun :: [Plugin] -> Maybe Int -> IO NExpr
-deckyPluginsFun plugins numPlugins = do
+deckyPluginsFun :: [Plugin] -> Maybe Int -> Maybe T.Text -> IO NExpr
+deckyPluginsFun plugins numPlugins cdn_url = do
   let params = [("buildDeckyPlugin", Nothing), ("lib", Nothing), ("stdenv", Nothing), ("fetchurl", Nothing), ("unzip", Nothing)]
   pluginsDrv <- case numPlugins of
-    Just n -> getPluginDrvs (take n plugins)
-    Nothing -> getPluginDrvs plugins
+    Just n -> getPluginDrvs cdn_url (take n plugins)
+    Nothing -> getPluginDrvs cdn_url plugins
 
   pure $ mkGeneralParamSet Nothing params False ==> pluginsDrv

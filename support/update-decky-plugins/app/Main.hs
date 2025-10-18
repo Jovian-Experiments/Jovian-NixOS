@@ -5,7 +5,7 @@ module Main where
 import qualified Data.Text as T
 import Network.HTTP.Req
 import Nix (prettyNix)
-import OptParse (Options (numPlugins, output, withStoreUrl), Output (OutputFile, StdOut), parse)
+import OptParse (Options (cdnUrl, numPlugins, output, withStoreUrl), Output (OutputFile, StdOut), parse)
 import Plugin (Plugin, deckyPluginsFun)
 
 -- | Get plugins from store
@@ -26,7 +26,7 @@ main :: IO ()
 main = do
   opts <- parse
   plugins <- getPlugins (withStoreUrl opts)
-  deckyPlugins <- deckyPluginsFun plugins (numPlugins opts)
+  deckyPlugins <- deckyPluginsFun plugins (numPlugins opts) (cdnUrl opts)
   let pretty = prettyNix deckyPlugins
 
   case output opts of

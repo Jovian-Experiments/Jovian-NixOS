@@ -8,6 +8,7 @@ data Options = Options
   { withStoreUrl :: T.Text
   , output :: Output
   , numPlugins :: Maybe Int
+  , cdnUrl :: Maybe T.Text
   }
   deriving Show
 
@@ -19,6 +20,7 @@ optionsParser =
   Options <$> withStoreUrlParser
   <*> outputParser
   <*> numPluginsParser
+  <*> cdnUrlParser
   where
     withStoreUrlParser :: Parser T.Text
     withStoreUrlParser = strOption
@@ -42,6 +44,13 @@ optionsParser =
         <> short 'n'
         <> metavar "NUMPLUGINS"
         <> help "Number of plugins to process"
+      )
+
+    cdnUrlParser :: Parser (Maybe T.Text)
+    cdnUrlParser = optional (option auto $
+       long "cdn-url"
+        <> metavar "CDN URL"
+        <> help "Cdn url to use"
       )
   
 optsParser :: ParserInfo Options
