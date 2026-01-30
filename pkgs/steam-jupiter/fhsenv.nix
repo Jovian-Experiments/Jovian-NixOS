@@ -58,16 +58,16 @@ let
       # FIXME: figure out how to fix pkexec (needs SUID in fhsenv, see https://github.com/NixOS/nixpkgs/issues/69338) 
       # and readd steamos-polkit-helpers
     ];
-    extraProfile = (args.extraProfile or "") + ''
+    extraProfile = ''
       export PATH=${jovian-stubs}/bin:$PATH
-    '';
+    '' + (args.extraProfile or "");
 
     # Force using host /tmp so gamescope-session can find the magic files
     extraBwrapArgs = [
       "--bind /tmp /tmp"
     ] ++ (args.extraBwrapArgs or [ ]);
 
-    extraArgs = (args.extraArgs or "") + " " + platformArgs;
+    extraArgs = platformArgs + " " + (args.extraArgs or "");
   });
 in
 wrappedSteam
