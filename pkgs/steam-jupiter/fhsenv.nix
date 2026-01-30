@@ -6,10 +6,10 @@
 , jovian-stubs
 , steam
 
-# We need to add this flag when Steam is started directly (e.g., desktop mode)
-# so we have the correct client version. This is important even for desktop
-# use because only the Steam Deck branch of the client has the new on-screen
-# keyboard that's summoned with STEAM + X.
+  # We need to add this flag when Steam is started directly (e.g., desktop mode)
+  # so we have the correct client version. This is important even for desktop
+  # use because only the Steam Deck branch of the client has the new on-screen
+  # keyboard that's summoned with STEAM + X.
 , platformArgs ? "-steamdeck"
 , ...
 } @ args:
@@ -63,9 +63,9 @@ let
     '';
 
     # Force using host /tmp so gamescope-session can find the magic files
-    extraBwrapArgs = (args.extraBwrapArgs or [ ]) ++ [
+    extraBwrapArgs = [
       "--bind /tmp /tmp"
-    ];
+    ] ++ (args.extraBwrapArgs or [ ]);
 
     extraArgs = (args.extraArgs or "") + " " + platformArgs;
   });
