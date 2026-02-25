@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # A minimal greetd greeter that runs a user's preferred session
 # in $HOME/.local/state/steamos-session-select
+# or /etc/sddm.conf.d/zzt-steamos-temp-login.conf (written by steamos-manager)
 
+import configparser
 import json
 import logging
 import os
@@ -17,6 +19,7 @@ from typing import cast, override
 from systemd.journal import JournalHandler
 
 DEFAULT_SESSION = 'gamescope-wayland'
+SDDM_TEMPORARY_CONFIG = Path('/etc/sddm.conf.d/zzt-steamos-temp-login.conf')
 
 class Session:
     TYPE: str = 'tty'
@@ -141,6 +144,7 @@ class Context:
         return self._find_sessions(sessions)
 
     def _consume_session(self) -> str | None:
+        # First, check the traditional session state file (written by steamos-session-select)
         res = subprocess.run(
             ['/run/wrappers/bin/jovian-consume-session'],
             stdin=subprocess.DEVNULL,
@@ -150,10 +154,35 @@ class Context:
         )
         next_session = res.stdout.decode('utf-8').strip()
 
-        if not next_session:
-            return None
+        if next_session:
+            return next_session
 
-        return next_session
+        # Fallback: check the SDDM temporary config written by steamos-manager.
+        # As of early 2026, the Steam client uses the steamos-manager D-Bus API
+        # (SwitchToDesktopMode) which writes an SDDM config file instead of calling
+        # steamos-session-select. Read and consume it here.
+        return self._consume_sddm_temporary_session()
+
+    def _consume_sddm_temporary_session(self) -> str | None:
+        try:
+            config = configparser.ConfigParser()
+            config.read(SDDM_TEMPORARY_CONFIG)
+            session = config.get('Autologin', 'Session', fallback=None)
+            if not session:
+                return None
+            # Strip .desktop suffix if present; session names are stored without it
+            if session.endswith('.desktop'):
+                session = session[:-len('.desktop')]
+            try:
+                SDDM_TEMPORARY_CONFIG.unlink()
+            except OSError as ex:
+                logging.warning("Cannot remove SDDM temporary config: %s", ex)
+            logging.info("Consumed SDDM temporary session: '%s'", session)
+            return session
+        except Exception as ex:
+            logging.debug("Failed to read SDDM temporary config", exc_info=ex)
+
+        return None
 
     def _find_sessions(self, sessions: list[str]) -> Session | None:
         for data_dir in self.xdg_data_dirs + [ '/usr/share' ]:

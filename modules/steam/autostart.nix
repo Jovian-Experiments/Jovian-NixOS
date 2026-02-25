@@ -9,6 +9,7 @@ let
     types
   ;
   cfg = config.jovian.steam;
+  dmcfg = config.services.displayManager;
 in
 {
   options = {
@@ -139,6 +140,20 @@ in
       };
 
       xdg.portal.configPackages = mkDefault [ pkgs.gamescope-session ];
+
+      # steamos-manager expects session .desktop files under /usr/share/{wayland-sessions,xsessions}
+      # and writes temporary session config to /etc/sddm.conf.d/. These paths are hardcoded in the
+      # steamos-manager binary. Create the directories and symlink the session files so that
+      # steamos-manager's ValidDesktopSessions and SwitchToDesktopMode D-Bus methods work correctly.
+      systemd.tmpfiles.rules = let
+        desktops = dmcfg.sessionData.desktops;
+      in [
+        # Symlink session .desktop files to where steamos-manager looks for them
+        "L+ /usr/share/wayland-sessions - - - - ${desktops}/share/wayland-sessions"
+        "L+ /usr/share/xsessions - - - - ${desktops}/share/xsessions"
+        # steamos-manager writes temporary session config here during SwitchToDesktopMode
+        "d /etc/sddm.conf.d 0755 root root -"
+      ];
     })
   ]);
 }
