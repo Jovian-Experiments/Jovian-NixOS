@@ -87,6 +87,11 @@ in
         wantedBy = [ "gamescope-session.service" ];
       };
 
+      systemd.user.services.steamos-manager-session-cleanup = {
+        overrideStrategy = "asDropin";
+        wantedBy = [ "graphical-session.target" ];
+      };
+
       systemd.services.steamos-manager = {
         overrideStrategy = "asDropin";
         # FIXME: should probably be done upstream
