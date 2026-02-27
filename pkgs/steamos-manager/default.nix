@@ -104,8 +104,12 @@ rustPlatform.buildRustPackage rec {
     install -m644 "data/system/com.steampowered.SteamOSManager1.conf" "$out/share/dbus-1/system.d/"
     install -m644 "data/system/steamos-manager.service" "$out/lib/systemd/system/"
 
+    install -d -m0755 "$out/lib/systemd/system/sddm.service.d/"
+    install -m644 "data/system/reset-oneshot-boot.conf" "$out/lib/systemd/system/sddm.service.d/"
+
     install -m644 "data/user/com.steampowered.SteamOSManager1.service" "$out/share/dbus-1/services/"
     install -m644 "data/user/steamos-manager.service" "$out/lib/systemd/user/"
+    install -m644 "data/user/steamos-manager-session-cleanup.service" "$out/lib/systemd/user/"
   '';
 
   postFixup = ''
