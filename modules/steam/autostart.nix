@@ -73,20 +73,25 @@ in
         to keep this behavior.
       '';
 
-
+      # Disable NixOS's autologin config generation.
+      # We put autologin config in sddm.conf.d instead so that steamos-manager's
+      # zzt-steamos-temp-login.conf can override the session on Switch to Desktop.
+      # (SDDM reads conf.d files alphabetically, so zzt > 00)
       services.displayManager = {
-        autoLogin = {
-          enable = true;
-          user = cfg.user;
-        };
-        sddm = {
-          enable = true;
-          autoLogin.relogin = true;
-        };
-        defaultSession = "gamescope-wayland";
+        autoLogin.enable = lib.mkForce false;
+        sddm.enable = true;
       };
 
-      # tell steamos-manager it's allowed to manage our session
+      environment.etc."sddm.conf.d/00-jovian-autologin.conf".text = ''
+        [Autologin]
+        User=${cfg.user}
+        Relogin=true
+        Session=gamescope-wayland.desktop
+      '';
+
+      # Sentinel file: tell steamos-manager it's allowed to manage our session
+      # Without it, the SessionManagement1 D-Bus interface
+      # (Switch to Desktop/Game Mode) is not registered.
       environment.etc."sddm.conf.d/steamos.conf".text = "";
 
       # Steam overrides this SOMETIMES seemingly for no reason
