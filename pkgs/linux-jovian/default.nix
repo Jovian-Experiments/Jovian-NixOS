@@ -3,9 +3,9 @@
 let
   inherit (lib) versions;
 
-  kernelVersion = "6.16.12";
-  vendorVersion = "valve11-jovian2";
-  hash = "sha256-12vd0TbkgTP5Ouvz7Ha1qjd7BQJuM5FKI1ovf8FaN3Q=";
+  kernelVersion = "6.18.12";
+  vendorVersion = "valve1";
+  hash = "sha256-eY6GYt5P3MbFP00Qx7iSwX5LAzVu71nfo+JmaZynW6o=";
 in
 buildLinux (args // rec {
   version = "${kernelVersion}-${vendorVersion}";
@@ -110,7 +110,6 @@ buildLinux (args // rec {
     ZOTAC_ZONE_HID = module;
     ZOTAC_ZONE_PLATFORM = module;
 
-    # Jovian: renamed
     HID_ASUS_ALLY = module;
     ASUS_ARMOURY = module;
     ASUS_WMI_DEPRECATED_ATTRS = yes;
@@ -152,6 +151,9 @@ buildLinux (args // rec {
     # Jovian: renamed
     MITIGATION_CALL_DEPTH_TRACKING = no;
 
+    # Disable drm panic screen
+    DRM_PANIC = lib.mkForce no;
+
     # Xbox GIP driver
     JOYSTICK_XBOX_GIP = module;
     JOYSTICK_XBOX_GIP_FF = yes;
@@ -163,14 +165,16 @@ buildLinux (args // rec {
     # Jovian: fix fallout from the vendor-set options
     DRM_AMD_DC_SI = lib.mkForce (option no);
     DRM_HYPERV = lib.mkForce (option no);
+    DRM_PANIC_SCREEN = lib.mkForce (option no);
+    DRM_PANIC_SCREEN_QR_CODE = lib.mkForce (option no);
     FB_HYPERV = lib.mkForce (option no);
-    INTEL_TDX_GUEST = lib.mkForce (option no);
     HYPERV = lib.mkForce (option no);
+    INTEL_TDX_GUEST = lib.mkForce (option no);
     KVM_GUEST = lib.mkForce (option no);
     MOUSE_PS2_VMMOUSE = lib.mkForce (option no);
+    NOVA_CORE = lib.mkForce (option no);
     PARAVIRT_TIME_ACCOUNTING = lib.mkForce (option no);
     TDX_GUEST_DRIVER = lib.mkForce (option no);
-    NOVA_CORE = lib.mkForce (option no);
   };
 
   src = fetchFromGitHub {
