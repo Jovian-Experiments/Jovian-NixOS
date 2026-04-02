@@ -22,14 +22,14 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "steamos-manager";
-  version = "26.0.1";
+  version = "26.0.1-unstable-2026-04-02";
 
   src = fetchFromGitLab {
     domain = "gitlab.steamos.cloud";
     owner = "holo";
     repo = "steamos-manager";
-    rev = "v${version}";
-    hash = "sha256-TdiKY9dCxgurkjh9vAVvwmBlAswMLvVb29Uy/KVYhjU=";
+    rev = "ebd78b881ec4c04585bb4e9928ac77770d0dd059";
+    hash = "sha256-9aKl8YV6Im8dShkMSPeoikTdcTxoTdJX9S1ZDZ4uAcQ=";
   };
 
   cargoHash = "sha256-45X3ixQ200LVfSDhMcBzqjQsebydw76nGeqn7c7/rDY=";
