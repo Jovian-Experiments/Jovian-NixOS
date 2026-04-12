@@ -61,7 +61,7 @@ let
         --replace-fail /usr/include/lv2 "${lv2.dev}/include/lv2"
 
       substituteInPlace pipewire-confs/hardware-profiles/*/filter-chain.conf.d/filter-chain.conf \
-        --replace-fail "/usr/lib/ladspa/rnnoise_ladspa.so" "${noisetorch-ladspa}/lib/ladspa/rnnoise_ladspa.so"
+        --replace-fail "/usr/lib/ladspa/rnnoise_ladspa.so" "rnnoise_ladspa"
 
       substituteInPlace ucm2/conf.d/*/*.conf \
         --replace-warn "exec" "# exec"
@@ -104,7 +104,10 @@ let
     # Leaky wrappers I guess.
     dontWrapQtApps = true;
 
-    passthru.requiredLv2Packages = [ self ];
+    passthru = {
+      requiredLv2Packages = [ self ];
+      requiredLadspaPackages = [ noisetorch-ladspa ];
+    };
 
     meta = {
       description = "Steamdeck Audio Processing";
