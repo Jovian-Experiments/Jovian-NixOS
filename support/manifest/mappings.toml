@@ -77,7 +77,7 @@ debos.ignore = true
 desync.ignore = true
 
 # enables SteamOS A/B stuff
-discover.check = "6.4.3-1.4"
+discover.check = "6.4.3-1.5"
 
 # SteamOS disk encryption thing
 dirlock.ignore = true
@@ -132,12 +132,12 @@ gpu-trace.ignore = true
 grub.ignore = true
 
 # we use nixos config
-holo-dmi-rules.check = "1.0-2"
+holo-dmi-rules.check = "1.1-1"
 
 holo-earlyoom.check = "1.1-1"
 
 # unused, check in case it ever becomes used again
-holo-fstab-repair.check = "0.1-1"
+holo-fstab-repair.check = "0.2-1"
 
 # the split out locales
 holo-glibc-locales.check = "2.41+r65+ge7c419a29575-1"
@@ -183,9 +183,9 @@ jupiter-fan-control = { map = true, pkgrel = 4 }
 # we have our own, better one
 jupiter-firewall.ignore = true
 
-jupiter-hw-support = { map = ["jupiter-hw-support", "steamdeck-hw-theme", "steamdeck-firmware", "steamos-polkit-helpers"], pkgrel = 1 }
+jupiter-hw-support = { map = ["jupiter-hw-support", "steamdeck-hw-theme", "steamdeck-firmware", "holo-polkit-helpers"], pkgrel = 1 }
 
-jupiter-legacy-support.check = "1.156-1"
+jupiter-legacy-support.check = "1.157-1"
 
 # Valve telemetry stuff
 jupiter-steamos-log-submitter.ignore = true
@@ -342,7 +342,7 @@ scx-scheds.check = "1.1.0.linux.steamos-1"
 # FIXME: package this
 steam-im-modules.ignore = true
 
-steam-jupiter-stable = { map = "steam-unwrapped", pkgrel = "3" }
+steam-jupiter-stable = { map = "steam-unwrapped", pkgrel = "4" }
 
 # we don't use this
 steam-jupiter-oobe.ignore = true
@@ -352,7 +352,7 @@ steam_notif_daemon = { map = true, pkgrel = 3, fixup = "v" }
 steamdeck-dsp = { map = true, pkgrel = 1 }
 
 # we don't ship those but they may be useful to reference
-steamdeck-kde-presets.check = "3.8.3-1"
+steamdeck-kde-presets.check = "3.8.4-1"
 
 # very old, unused, but might be interesting? 
 steamfs-git.ignore = true
@@ -362,8 +362,8 @@ steamos-atomupd-client.ignore = true
 
 # applied as NixOS modules instead
 # check both to make sure we get the latest changes
-steamos-customizations-git.check = "20260415.1-1"
-steamos-customizations-jupiter.check = "20260415.1-1"
+steamos-customizations-git.check = "20260420.1-1"
+steamos-customizations-jupiter.check = "20260420.1-1"
 
 # devkit stuff
 steamos-devkit-service.ignore = true
@@ -442,7 +442,7 @@ xdg-desktop-portal-gtk.ignore = true
 
 # packaging changes + backports for small cosmetic issues
 xorg-server.check = "21.1.22-1.1"
-xorg-xwayland.check = "24.1.10-1.1"
+xorg-xwayland.check = "24.1.10-1.2"
 
 # Arch packaging fix, we don't care
 zenity-gtk3.check = "3.44.2-4"

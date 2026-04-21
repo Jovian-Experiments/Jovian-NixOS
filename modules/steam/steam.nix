@@ -54,7 +54,7 @@ in
       environment.systemPackages = [
         pkgs.gamescope
         pkgs.gamescope-session
-        pkgs.steamos-polkit-helpers
+        pkgs.holo-polkit-helpers
         pkgs.steamos-manager
       ];
 

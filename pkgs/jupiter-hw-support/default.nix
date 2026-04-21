@@ -51,7 +51,7 @@ let
       "cannot:${util-linux}/bin/setpriv"
 
       "cannot:${placeholder "out"}/lib/hwsupport/format-device.sh"
-      "cannot:${placeholder "out"}/lib/hwsupport/steamos-automount.sh"
+      "cannot:${placeholder "out"}/lib/hwsupport/holo-automount.sh"
     ];
     fake = {
       # we're using wrappers for these
@@ -59,7 +59,7 @@ let
     };
     fix = {
       "/usr/lib/hwsupport/format-device.sh" = true;
-      "/usr/lib/hwsupport/steamos-automount.sh" = true;
+      "/usr/lib/hwsupport/holo-automount.sh" = true;
     };
     keep = {
       # pre-applied via patch
@@ -87,11 +87,14 @@ stdenv.mkDerivation {
     mkdir -p $out/lib
     cp -r usr/lib/hwsupport $out/lib
 
+    # replace holo-alias hack with symlink
+    ln -sf $out/lib/hwsupport/{holo-automount.sh,steamos-automount.sh}
+
     substituteInPlace $out/lib/hwsupport/* \
       --replace-warn ". /usr/lib/hwsupport" ". $out/lib/hwsupport"
 
     mkdir -p $out/lib/udev/rules.d
-    for rule in 80-rtl-wobt.rules 99-steamos-automount.rules 99-sdcard-rescan.rules; do
+    for rule in 80-rtl-wobt.rules 99-holo-automount.rules 99-sdcard-rescan.rules; do
       cp usr/lib/udev/rules.d/$rule $out/lib/udev/rules.d
     done
 

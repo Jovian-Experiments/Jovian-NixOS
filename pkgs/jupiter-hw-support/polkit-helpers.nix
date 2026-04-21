@@ -19,7 +19,7 @@ let
   src = callPackage ./src.nix { };
 
   solution = {      
-    scripts = [ "bin/steamos-polkit-helpers/*" ];
+    scripts = [ "bin/holo-polkit-helpers/*" ];
     interpreter = "${bash}/bin/bash";
     inputs = [
       coreutils
@@ -36,11 +36,10 @@ let
     ];
     execer = [
       "cannot:${dmidecode}/bin/dmidecode"
-      "cannot:${jovian-stubs}/bin/steamos-reboot"
-      "cannot:${jovian-stubs}/bin/steamos-factory-reset-config"
-      "cannot:${jovian-stubs}/bin/steamos-firmware-update"
-      "cannot:${jovian-stubs}/bin/steamos-select-branch"
-      "cannot:${jovian-stubs}/bin/steamos-update"
+      "cannot:${jovian-stubs}/bin/holo-reboot"
+      "cannot:${jovian-stubs}/bin/holo-factory-reset-config"
+      "cannot:${jovian-stubs}/bin/holo-select-branch"
+      "cannot:${jovian-stubs}/bin/holo-update"
       "cannot:${jupiter-dock-updater-bin}/lib/jupiter-dock-updater/jupiter-dock-updater.sh"
       "cannot:${jupiter-hw-support}/bin/jupiter-check-support"
       "cannot:${jupiter-hw-support}/lib/hwsupport/format-device.sh"
@@ -58,11 +57,10 @@ let
     fix = {
       "/usr/bin/jupiter-biosupdate" = true;
       "/usr/bin/jupiter-check-support" = true;
-      "/usr/bin/steamos-factory-reset-config" = true;
-      "/usr/bin/steamos-firmware-update" = true;
-      "/usr/bin/steamos-reboot" = true;
-      "/usr/bin/steamos-select-branch" = true;
-      "/usr/bin/steamos-update" = true;
+      "/usr/bin/holo-factory-reset-config" = true;
+      "/usr/bin/holo-reboot" = true;
+      "/usr/bin/holo-select-branch" = true;
+      "/usr/bin/holo-update" = true;
       "/usr/lib/hwsupport/format-device.sh" = true;
       "/usr/lib/hwsupport/format-sdcard.sh" = true;
       "/usr/lib/hwsupport/trim-devices.sh" = true;
@@ -74,7 +72,7 @@ let
     };
   };
 in stdenv.mkDerivation {
-  pname = "steamos-polkit-helpers";
+  pname = "holo-polkit-helpers";
 
   inherit src;
   inherit (src) version;
@@ -82,7 +80,7 @@ in stdenv.mkDerivation {
   patchPhase = ''
     runHook prePatch
   
-    substituteInPlace usr/share/polkit-1/actions/org.valve.steamos.policy --replace-fail /usr $out
+    substituteInPlace usr/share/polkit-1/actions/org.valve.holo.policy --replace-fail /usr $out
 
     runHook postPatch
   '';
@@ -91,10 +89,10 @@ in stdenv.mkDerivation {
     runHook preInstall
 
     mkdir -p $out/{bin,share}
-    cp -r usr/bin/steamos-polkit-helpers $out/bin/steamos-polkit-helpers
+    cp -r usr/bin/holo-polkit-helpers $out/bin/holo-polkit-helpers
     cp -r usr/share/polkit-1 $out/share
 
-    ${resholve.phraseSolution "steamos-polkit-helpers" solution}
+    ${resholve.phraseSolution "holo-polkit-helpers" solution}
     runHook postInstall
   '';
 }

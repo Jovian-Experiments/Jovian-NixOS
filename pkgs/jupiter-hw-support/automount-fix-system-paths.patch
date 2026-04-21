@@ -1,7 +1,7 @@
-diff --git a/usr/lib/hwsupport/steamos-automount.sh b/usr/lib/hwsupport/steamos-automount.sh
+diff --git a/usr/lib/hwsupport/holo-automount.sh b/usr/lib/hwsupport/holo-automount.sh
 index 386f4d8..cf79351 100755
---- a/usr/lib/hwsupport/steamos-automount.sh
-+++ b/usr/lib/hwsupport/steamos-automount.sh
+--- a/usr/lib/hwsupport/holo-automount.sh
++++ b/usr/lib/hwsupport/holo-automount.sh
 @@ -33,7 +34,7 @@ send_steam_url()
    if pgrep -x "steam" > /dev/null; then
        # TODO use -ifrunning and check return value - if there was a steam process and it returns -1, the message wasn't sent

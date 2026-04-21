@@ -5,17 +5,17 @@ index ddab3e5..404d8fa 100644
 @@ -1,27 +1,27 @@
  [factory_reset.all]
 -script  = "/usr/bin/steamos-reset-tool"
-+script  = "@stubs@/bin/steamos-reset-tool"
++script  = "@stubs@/bin/holo-reset-tool"
  script_args = ["factory-reset", "--reset-all"]
  
  [factory_reset.os]
 -script  = "/usr/bin/steamos-reset-tool"
-+script  = "@stubs@/bin/steamos-reset-tool"
++script  = "@stubs@/bin/holo-reset-tool"
  script_args = ["factory-reset", "--reset-os"]
  
  [factory_reset.user]
 -script  = "/usr/bin/steamos-reset-tool"
-+script  = "@stubs@/bin/steamos-reset-tool"
++script  = "@stubs@/bin/holo-reset-tool"
  script_args = ["factory-reset", "--reset-user-data"]
  
  [update_bios]

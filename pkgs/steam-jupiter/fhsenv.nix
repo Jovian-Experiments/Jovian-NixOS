@@ -23,16 +23,12 @@ let
     "jovian-stubs"
     "platformArgs"
     "steam"
-    "steamos-polkit-helpers"
   ];
 
   wrappedSteam = steam.override (extraArgs // {
     extraPkgs = pkgs: (if args ? extraPkgs then args.extraPkgs pkgs else [ ]) ++ [
       dmidecode
       jovian-stubs
-
-      # FIXME: figure out how to fix pkexec (needs SUID in fhsenv, see https://github.com/NixOS/nixpkgs/issues/69338) 
-      # and readd steamos-polkit-helpers
     ];
     extraProfile = (args.extraProfile or "") + ''
       export PATH=${jovian-stubs}/bin:$PATH

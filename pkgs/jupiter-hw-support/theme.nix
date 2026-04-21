@@ -26,16 +26,13 @@ stdenv.mkDerivation {
     mkdir -p $out/share
     cp -r usr/share/icons $out/share
     cp -r usr/share/plymouth $out/share
-    cp -r usr/share/steamos $out/share
+    cp -r usr/share/holo $out/share
 
     sed -i "s|/usr/|$out/|g" $out/share/plymouth/themes/steamos/steamos.plymouth
 
-    pushd $out/share/steamos
-    xcursorgen steamos-cursor-config $out/share/icons/steam/cursors/default
+    pushd $out/share/holo
+    xcursorgen holo-cursor-config $out/share/icons/steam/cursors/default
     popd
-
-    # remove dangling symlink
-    rm $out/share/steamos/steamos.png
   '';
 
   meta = with lib; {

@@ -9,13 +9,13 @@ Content-Transfer-Encoding: 8bit
 
 Signed-off-by: Samuel Dionne-Riel <samuel@dionne-riel.com>
 ---
- usr/lib/hwsupport/steamos-automount.sh | 10 +++++++---
+ usr/lib/hwsupport/holo-automount.sh | 10 +++++++---
  1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/usr/lib/hwsupport/steamos-automount.sh b/usr/lib/hwsupport/steamos-automount.sh
+diff --git a/usr/lib/hwsupport/holo-automount.sh b/usr/lib/hwsupport/holo-automount.sh
 index 386f4d8..8583ca7 100755
---- a/usr/lib/hwsupport/steamos-automount.sh
-+++ b/usr/lib/hwsupport/steamos-automount.sh
+--- a/usr/lib/hwsupport/holo-automount.sh
++++ b/usr/lib/hwsupport/holo-automount.sh
 @@ -22,8 +22,12 @@ fi
  ACTION=$1
  DEVBASE=$2
