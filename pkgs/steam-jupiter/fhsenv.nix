@@ -3,6 +3,7 @@
 
 { writeShellScriptBin
 , dmidecode
+, hidapi
 , jovian-stubs
 , steam
 
@@ -20,6 +21,7 @@ let
     "runCommand"
     "writeShellScriptBin"
     "dmidecode"
+    "hidapi"
     "jovian-stubs"
     "platformArgs"
     "steam"
@@ -29,6 +31,8 @@ let
     extraPkgs = pkgs: (if args ? extraPkgs then args.extraPkgs pkgs else [ ]) ++ [
       dmidecode
       jovian-stubs
+      # Dependency for: ~/.local/share/Steam/bin/hardwareupdater/
+      hidapi
     ];
     extraProfile = (args.extraProfile or "") + ''
       export PATH=${jovian-stubs}/bin:$PATH
