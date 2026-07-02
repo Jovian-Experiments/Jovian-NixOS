@@ -163,7 +163,7 @@ holo-nfs-utils-tmpfiles.ignore = true
 holo-nix-offload.ignore = true
 
 # FIXME: needs matching plymouth
-holo-plymouth-themes.check = "0.6-1"
+holo-plymouth-themes.check = "0.7-1"
 
 # debug tool
 holo-realtek-firmware-toggles.ignore = true
