@@ -230,7 +230,7 @@ kmod.check = "34.2-1.1"
 kscreenlocker.check = "6.4.3-2"
 
 # hack for hidpi on internal display
-kwin.check = "6.4.3-1.12"
+kwin.check = "6.4.3-1.13"
 kwin-x11.check = "6.4.3-1.2"
 
 # backports
