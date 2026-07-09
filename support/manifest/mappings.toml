@@ -312,7 +312,7 @@ mesa-radv = { map = "mesa-radv-jupiter", pkgrel = "1", fixup = "mesa" }
 
 # we don't actually apply any of this, but it's worth checking
 # FIXME?
-networkmanager.check = "1.52.1-1.2"
+networkmanager.check = "1.52.1-1.3"
 
 # just the ladspa plugin
 noisetorch.check = "0.12.2.r47.g6d895f3-2"
