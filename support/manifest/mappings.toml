@@ -191,7 +191,7 @@ inputattach-cec-units.map = true
 inputplumber.map = true
 
 # some non-critical patches
-iwd.check = "3.9-1.1"
+iwd.check = "3.9-1.2"
 
 jupiter-dock-updater-bin = { map = true, pkgrel = 1 }
 
@@ -308,6 +308,10 @@ maliit-keyboard.check = "2.3.1-4.2"
 mangohud.check = "0.8.3.rc1.r24.g33c2c7dd-3"
 
 mesa = { map = "mesa-radeonsi-jupiter", pkgrel = "1", fixup = "mesa" }
+
+# FIXME: revisit if there's relevant changes and/or actual users on NVK
+mesa-nvk.check = "26.1.2.221562.radeonsi_26.1.2-1"
+
 mesa-radv = { map = "mesa-radv-jupiter", pkgrel = "1", fixup = "mesa" }
 
 # we don't actually apply any of this, but it's worth checking
