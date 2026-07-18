@@ -348,7 +348,7 @@ plasma-remotecontrollers.check = "5.26.90.r258.g9ace9a9-2"
 plasma-workspace.check = "6.4.3-1.4"
 
 # FIXME: lots of patches, need to investigate
-plymouth.check = "22.02.122-7.4"
+plymouth.check = "22.02.122-7.5"
 
 # packaging changes only, will probably not be relevant ever
 podman.ignore = true
