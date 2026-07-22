@@ -409,8 +409,8 @@ steamos-atomupd-client.ignore = true
 
 # applied as NixOS modules instead
 # check both to make sure we get the latest changes
-steamos-customizations-git.check = "20260602.2-1"
-steamos-customizations-jupiter.check = "20260602.2-1"
+steamos-customizations-git.check = "20260721.1-1"
+steamos-customizations-jupiter.check = "20260721.1-1"
 
 # devkit stuff
 steamos-devkit-service.ignore = true
@@ -473,8 +473,8 @@ vpower.map = true
 # no longer used
 wakehook.ignore = true
 
-# FIXME: maybe package this
-wireless-domain-setter.check = "1.0-1"
+# FIXME(deckard): maybe package this
+wireless-domain-setter.check = "1.1-1"
 
 wireplumber.map = "wireplumber-jupiter"
 
