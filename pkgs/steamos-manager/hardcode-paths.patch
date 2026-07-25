@@ -138,7 +138,7 @@ index 7a71215..cf69c56 100644
  
      fn state(&self) -> &RootState {
 diff --git a/steamos-manager/src/daemon/user.rs b/steamos-manager/src/daemon/user.rs
-index 4887314..b321a82 100644
+index 51a4d95..c10227d 100644
 --- a/steamos-manager/src/daemon/user.rs
 +++ b/steamos-manager/src/daemon/user.rs
 @@ -84,7 +84,7 @@ impl DaemonContext for UserContext {
@@ -151,7 +151,7 @@ index 4887314..b321a82 100644
  
      fn state(&self) -> &UserState {
 diff --git a/steamos-manager/src/hardware.rs b/steamos-manager/src/hardware.rs
-index 8641e69..c772101 100644
+index efd99df..686cb07 100644
 --- a/steamos-manager/src/hardware.rs
 +++ b/steamos-manager/src/hardware.rs
 @@ -39,7 +39,7 @@ const SYS_VENDOR_PATH: &str = "/sys/class/dmi/id/sys_vendor";
@@ -164,10 +164,10 @@ index 8641e69..c772101 100644
  const DEVICE_CONFIG_PATH: &str = "../data/devices";
  
 diff --git a/steamos-manager/src/manager/root.rs b/steamos-manager/src/manager/root.rs
-index 8b36e71..a117c39 100644
+index 4fe59ed..6d66475 100644
 --- a/steamos-manager/src/manager/root.rs
 +++ b/steamos-manager/src/manager/root.rs
-@@ -220,7 +220,7 @@ impl SteamOSManager {
+@@ -295,7 +295,7 @@ impl SteamOSManager {
              _ => return Vec::new(),
          };
          for index in indices {
@@ -177,10 +177,10 @@ index 8b36e71..a117c39 100644
                  Ok(as_string) => as_string.trim().parse().unwrap_or(-1.0),
                  Err(message) => {
 diff --git a/steamos-manager/src/manager/user.rs b/steamos-manager/src/manager/user.rs
-index ebd67dc..58fa63b 100644
+index 879e083..c1892c0 100644
 --- a/steamos-manager/src/manager/user.rs
 +++ b/steamos-manager/src/manager/user.rs
-@@ -1604,10 +1604,6 @@ impl Service for ScreenReaderSetupService {
+@@ -1635,10 +1635,6 @@ impl Service for ScreenReaderSetupService {
      const NAME: &'static str = "screenreader-setup";
  
      async fn run(&mut self) -> Result<()> {
@@ -218,7 +218,7 @@ index 5255428..b3987a6 100644
  const PLATFORM_PROFILE_PREFIX: &str = "/sys/class/platform-profile";
  
 diff --git a/steamos-manager/src/wifi.rs b/steamos-manager/src/wifi.rs
-index 9379fa2..415964e 100644
+index fcf84b7..01effa6 100644
 --- a/steamos-manager/src/wifi.rs
 +++ b/steamos-manager/src/wifi.rs
 @@ -33,19 +33,18 @@ use crate::{path, read_config_directory};
@@ -243,16 +243,16 @@ index 9379fa2..415964e 100644
      "/etc/NetworkManager/conf.d",
  ];
  const WIFI_BACKEND_FILE: &str = "/etc/NetworkManager/conf.d/99-valve-wifi-backend.conf";
-@@ -275,7 +274,7 @@ async fn ensure_default_interface() -> Result<()> {
-     }
+@@ -280,7 +279,7 @@ async fn ensure_default_interface() -> Result<()> {
+     };
      debug!("Missing wlan interace, creating it explicitly");
      run_script(
 -        "/usr/bin/iw",
 +        "@iw@/bin/iw",
          &[
              "phy",
-             "phy0",
-@@ -378,7 +377,7 @@ pub(crate) async fn set_wifi_backend(backend: WifiBackend, connection: &Connecti
+             phy.as_str(),
+@@ -386,7 +385,7 @@ pub(crate) async fn set_wifi_backend(backend: WifiBackend, connection: &Connecti
  }
  
  pub(crate) async fn list_wifi_interfaces() -> Result<Vec<String>> {
@@ -261,7 +261,16 @@ index 9379fa2..415964e 100644
      Ok(output
          .lines()
          .filter_map(|line| match line.trim().split_once(' ') {
-@@ -392,7 +391,7 @@ pub(crate) async fn get_wifi_power_management_state() -> Result<WifiPowerManagem
+@@ -397,7 +396,7 @@ pub(crate) async fn list_wifi_interfaces() -> Result<Vec<String>> {
+ }
+ 
+ async fn list_wifi_phys() -> Result<Vec<String>> {
+-    let output = script_output("/usr/bin/iw", &["phy"]).await?;
++    let output = script_output("@iw@/bin/iw", &["phy"]).await?;
+     Ok(output
+         .lines()
+         .filter_map(|line| match line.trim().split_once(' ') {
+@@ -411,7 +410,7 @@ pub(crate) async fn get_wifi_power_management_state() -> Result<WifiPowerManagem
      let mut found_any = false;
      for iface in list_wifi_interfaces().await? {
          let output =
@@ -270,7 +279,7 @@ index 9379fa2..415964e 100644
          for line in output.lines() {
              match line.trim() {
                  "Power save: on" => return Ok(WifiPowerManagement::Enabled),
-@@ -417,7 +416,7 @@ pub(crate) async fn set_wifi_power_management_state(
+@@ -436,7 +435,7 @@ pub(crate) async fn set_wifi_power_management_state(
  
      for iface in list_wifi_interfaces().await? {
          run_script(
