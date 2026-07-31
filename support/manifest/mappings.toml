@@ -299,6 +299,9 @@ linux-neptune-618 = { map = "linux_jovian", pkgrel = 1 }
 linux-neptune-618-devel.ignore = true
 linux-neptune-618-drm-exec.ignore = true
 
+# future kernel
+linux-neptune-72.check = "7.2.0.rc3.valve.beta1-1"
+
 # we don't identify as SteamOS
 lsb-release.ignore = true
 
@@ -380,7 +383,7 @@ rtkit.check = "0.14-1"
 # unused
 rtl88x2ce-dkms.ignore = true
 
-scx-scheds.check = "1.1.1.linux.steamos-4"
+scx-scheds.check = "1.1.2.linux.steamos-2"
 
 # FIXME: package this
 steam-im-modules.ignore = true
