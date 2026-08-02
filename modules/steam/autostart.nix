@@ -138,6 +138,8 @@ in
             ]
           )
         );
+
+        restartIfChanged = false;
       };
 
 
