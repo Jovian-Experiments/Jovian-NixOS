@@ -258,6 +258,9 @@ libssh2.ignore = true
 # some internal tooling, not shipped
 libversion.ignore = true
 
+# rebuild for some reason
+libxfont2.check = "2.0.8-1.1"
+
 # security backport
 libxml2.check = "2.14.5-1.1"
 
@@ -497,8 +500,8 @@ xdg-desktop-portal-gtk.ignore = true
 xdg-desktop-portal-kde.check = "6.4.3-2"
 
 # packaging changes + backports for small cosmetic issues
-xorg-server.check = "21.1.23-1.1"
-xorg-xwayland.check = "24.1.12-1.2"
+xorg-server.check = "21.1.24-1.1"
+xorg-xwayland.check = "24.1.13-1.1"
 
 # Arch packaging fix, we don't care
 zenity-gtk3.check = "3.44.2-4"
