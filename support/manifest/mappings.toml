@@ -25,9 +25,6 @@
 # that way.
 
 [packages]
-# rebuild
-7zip.ignore = true
-
 # we use our own upstream version
 # FIXME: maybe port Dualsense config from Valve
 alsa-ucm-conf.check = "1.2.14-2.4"
@@ -38,16 +35,10 @@ atomupd-daemon.ignore = true
 # devkit specific patches
 avahi.ignore = true
 
-# backport from 6.5
-bluedevil.check = "1:6.4.3-2"
-
 # FIXME: has some not-yet-upstream patches, maybe we want them in nixpkgs?
-bluez.check = "5.86-4.1"
+bluez.check = "5.87-2.1"
 
-# more A/B stuff
-bmap-tools.ignore = true
-
-breakpad = { map = true, pkgrel = 1, fixup = "v" }
+breakpad = { map = true, pkgrel = 2, fixup = "v" }
 
 # Installer???
 calamares.ignore = true
@@ -65,10 +56,7 @@ cecd.map = true
 ckbcomp.ignore = true
 
 # just disables tests
-clang.check = "20.1.8-1.1"
-
-# rebuilds with no changes
-cups.ignore = true
+clang.check = "22.1.8-1.1"
 
 # unused
 debos.ignore = true
@@ -77,7 +65,7 @@ debos.ignore = true
 desync.ignore = true
 
 # enables SteamOS A/B stuff
-discover.check = "6.4.3-1.5"
+discover.check = "6.7.3-1.1"
 
 # SteamOS disk encryption thing
 dirlock.ignore = true
@@ -86,21 +74,17 @@ dirlock.ignore = true
 dkms.ignore = true
 
 # foreground booster
-dmemcg-booster.map = true
+dmemcg-booster = { map = true, pkgrel = 3 }
 
 # non-critical
 # FIXME: package
 ds-inhibit.ignore = true
 
 # FIXME: dev tool, not packaged currently
-drm_info.ignore = true
 drm_info-git.ignore = true
 
 # FIXME: GPU reset thingy, package?
 drm_janitor.ignore = true
-
-# does magic telemetry we don't want
-earlyoom.ignore = true
 
 # FIXME(fremont)
 ec-log.ignore = true
@@ -110,12 +94,6 @@ f3.ignore = true
 
 # Arch stuff
 filesystem.ignore = true
-
-# not relevant to us
-firewalld.ignore = true
-
-# rebuild
-flatpak.check = "1:1.16.6-1.1"
 
 # FIXME: some internal Valve thing, investigate?
 foxnet.ignore = true
@@ -130,8 +108,6 @@ fwupd-minimal.ignore = true
 galileo-mura = { map = true, pkgrel = 1, fixup = "v" }
 
 gamescope.map = ["gamescope", "gamescope-session"]
-
-gnutls.ignore = true
 
 # FIXME: dev tool
 gpu-trace.ignore = true
@@ -177,21 +153,15 @@ holo-session-selection.map = true
 # applied as NixOS config
 holo-zram-swap.check = "0.3-0"
 
-# backport
-hwdata.check = "0.397-1.1"
-
 # FIXME: IME stuff
-ibus.ignore = true
 ibus-anthy.ignore = true
 ibus-pinyin.ignore = true
 ibus-table-cangjie-lite.ignore = true
 
 inputattach-cec-units.map = true
 
-inputplumber.map = true
-
 # some non-critical patches
-iwd.check = "3.9-1.2"
+iwd.check = "3.12-1.2"
 
 jupiter-dock-updater-bin = { map = true, pkgrel = 1 }
 
@@ -200,7 +170,7 @@ jupiter-fan-control = { map = true, pkgrel = 1 }
 # we have our own, better one
 jupiter-firewall.ignore = true
 
-jupiter-hw-support = { map = ["jupiter-hw-support", "steamdeck-hw-theme", "steamdeck-firmware", "holo-polkit-helpers"], pkgrel = 1 }
+jupiter-hw-support = { map = ["jupiter-hw-support", "steamdeck-hw-theme", "steamdeck-firmware", "holo-polkit-helpers"], pkgrel = 2 }
 
 jupiter-legacy-support.check = "1.161-1"
 
@@ -210,59 +180,29 @@ jupiter-steamos-log-submitter.ignore = true
 # FIXME: what is this?
 jupiter-validation-tools.ignore = true
 
-# backports
-kcoreaddons.check = "6.16.0-1.2"
-
 # foreground booster
-kcgroups.check = "0.0.dmemcg.experimental.3-1"
-
-# security backport
-kdeconnect.check = "25.04.3-1.1"
+kcgroups.check = "0.0.dmemcg.experimental.3-2"
 
 # debug stuff
 kdump-steamos.ignore = true
 kdumpst.ignore = true
 
 # just packaging changes
-kmod.check = "34.2-1.1"
+kmod.check = "34.2-1.2"
 
 # packaging changes for SteamOS
-kscreenlocker.check = "6.4.3-2"
+kscreenlocker.check = "6.7.3-1.1"
 
-# hack for hidpi on internal display
-kwin.check = "6.4.3-1.14"
-kwin-x11.check = "6.4.3-1.2"
+# hack for hidpi on internal display + keyboard/libei fixes
+kwin.check = "6.7.3-1.2"
 
-# backports
-kwindowsystem.check = "6.16.0-1.1"
-
-libdisplay-info.check = "0.3.0-1"
-
-libdrm.check = "2.4.133-1.1"
-
-# custom cursed patches
-libei.check = "1.4.1-3"
+libdrm.check = "2.4.120-1"
 
 # DisplayLink stuff
 libevdi.ignore = true
 
-# security backports
-libinput.check = "1.28.1-1.1"
-
-# random rebuild
-libpng.ignore = true
-
-# security backport
-libssh2.ignore = true
-
 # some internal tooling, not shipped
 libversion.ignore = true
-
-# rebuild for some reason
-libxfont2.check = "2.0.8-1.1"
-
-# security backport
-libxml2.check = "2.14.5-1.1"
 
 linux-firmware-neptune = { map = "linux-firmware-jupiter", pkgrel = 1 }
 
@@ -308,53 +248,46 @@ linux-neptune-72.check = "7.2.0.rc3.valve.beta1-1"
 # we don't identify as SteamOS
 lsb-release.ignore = true
 
+# backport crash fix
+maliit-framework.check = "2.3.0-3.1"
 # packaging changes, removes a heavy dependency
-maliit-keyboard.check = "2.3.1-4.2"
+maliit-keyboard.check = "2.3.1-4.3"
 
 mangohud.check = "0.8.3.rc1.r24.g33c2c7dd-3"
 
-mesa = { map = "mesa-radeonsi-jupiter", pkgrel = "1", fixup = "mesa" }
+mesa = { map = "mesa-radeonsi-jupiter", pkgrel = 2, fixup = "mesa" }
 
 # FIXME: revisit if there's relevant changes and/or actual users on NVK
-mesa-nvk.check = "26.1.2.221562.radeonsi_26.1.2-1"
+mesa-nvk.check = "26.1.2.221562.radeonsi_26.1.2-2"
 
-mesa-radv = { map = "mesa-radv-jupiter", pkgrel = "1", fixup = "mesa" }
+mesa-radv = { map = "mesa-radv-jupiter", pkgrel = 2, fixup = "mesa" }
 
-# we don't actually apply any of this, but it's worth checking
-# FIXME?
-networkmanager.check = "1.52.1-1.3"
+# iwd backend fixes, pending upstream
+networkmanager.check = "1.58.0-1.2"
 
 # just the ladspa plugin
-noisetorch.check = "0.12.2.r47.g6d895f3-2"
-
-openssl.check = "3.5.7-1.1"
+noisetorch.check = "0.12.2.r47.g6d895f3-3"
 
 # backport, we don't have bandwidth to deal with a11y right now :(
 orca.ignore = true
 
 # Arch stuff
-pacman-contrib.ignore = true
 paru.ignore = true
-
-pcre2.check = "10.47-1.1"
 
 pipewire = { map = "pipewire-jupiter", fixup = "epoch" }
 
-# bug fix backport
-plasma-desktop.check = "6.4.3-1"
-
 # FIXME(fremont): CEC volume patches
-plasma-pa.check = "6.4.3-3"
+plasma-pa.check = "6.7.3-1.1"
 
 # builds from master branch for Qt6
 # FIXME(fremont): needed for HDMI-CEC possibly
-plasma-remotecontrollers.check = "5.26.90.r258.g9ace9a9-2"
+plasma-remotecontrollers.check = "5.26.90.r258.g9ace9a9-3"
 
-# packaging changes for SteamOS A/B
-plasma-workspace.check = "6.4.3-1.4"
+# packaging changes for SteamOS A/B + keyboard fix
+plasma-workspace.check = "6.7.3-2.1"
 
 # FIXME: lots of patches, need to investigate
-plymouth.check = "22.02.122-7.5"
+plymouth.check = "22.02.122-7.6"
 
 # packaging changes only, will probably not be relevant ever
 podman.ignore = true
@@ -366,7 +299,7 @@ powerbuttond.ignore = true
 powerdevil.ignore = true
 
 # FIXME(fremont): required for plasma-pa CEC volume patches
-pulseaudio-qt.check = "1.7.0-2"
+pulseaudio-qt.check = "1.8.1-1.1"
 
 # some internal tooling, not shipped
 python-libversion.ignore = true
@@ -381,12 +314,10 @@ rauc.ignore = true
 renderdoc.ignore = true
 renderdoc-minimal.ignore = true
 
-rtkit.check = "0.14-1"
-
 # unused
 rtl88x2ce-dkms.ignore = true
 
-scx-scheds.check = "1.1.2.linux.steamos-2"
+scx-scheds.check = "1.1.2.linux.steamos-2.1"
 
 # FIXME: package this
 steam-im-modules.ignore = true
@@ -397,9 +328,9 @@ steam-jupiter-stable = { map = "steam-unwrapped", pkgrel = "9" }
 # we don't use this
 steam-jupiter-oobe.ignore = true
 
-steam_notif_daemon = { map = true, pkgrel = 3, fixup = "v" }
+steam_notif_daemon = { map = true, pkgrel = 4, fixup = "v" }
 
-steamdeck-dsp = { map = true, pkgrel = 1 }
+steamdeck-dsp = { map = true, pkgrel = 2 }
 
 # we don't ship those but they may be useful to reference
 steamdeck-kde-presets.check = "3.9.3-2"
@@ -415,8 +346,8 @@ steamos-atomupd-client.ignore = true
 
 # applied as NixOS modules instead
 # check both to make sure we get the latest changes
-steamos-customizations-git.check = "20260721.1-1"
-steamos-customizations-jupiter.check = "20260721.1-1"
+steamos-customizations-git.check = "20260721.1-2"
+steamos-customizations-jupiter.check = "20260721.1-2"
 
 # devkit stuff
 steamos-devkit-service.ignore = true
@@ -453,21 +384,18 @@ steamos-systemreport.ignore = true
 # applied as NixOS config
 steamos-tweak-mtu-probing.check = "1-1"
 
-# SteamOS A/B specific patches and other miscellanea
-systemd.check = "257.7-2.7"
+# SteamOS suspend related fixes that don't really affect us
+systemd.check = "261.2-1.1"
 
 # lul
 ttf-twemoji-default.ignore = true
-
-# security backport
-udisks2.check = "2.10.1-6.1"
 
 # debug tool
 umr.ignore = true
 
 # disables shutdown on battery critical, we probably don't want to do that
 # without way more validation
-upower.check = "1.90.10-1.1"
+upower.check = "1.90.10-1.2"
 
 # non-critical but would be nice to have
 # FIXME: package these
@@ -484,24 +412,17 @@ wireless-domain-setter.check = "1.1-1"
 
 wireplumber.map = "wireplumber-jupiter"
 
-# flatpak backport dep
-xdg-dbus-proxy.check = "0.1.7-1.1"
-
-# non-critical fix backports
-xdg-desktop-portal.check = "1.20.4-1.1"
-
-xdg-desktop-portal-gamescope = { map = true, pkgrel = 2 }
-xdg-desktop-portal-holo = { map = true, pkgrel = 1 }
+xdg-desktop-portal-gamescope = { map = true, pkgrel = 3 }
+xdg-desktop-portal-holo = { map = true, pkgrel = 2 }
 
 # ours is newer
 xdg-desktop-portal-gtk.ignore = true
 
-# hack for streaming
-xdg-desktop-portal-kde.check = "6.4.3-2"
+# hack to always allow Steam emulated input
+xdg-desktop-portal-kde.check = "6.7.3-1.2"
 
-# packaging changes + backports for small cosmetic issues
-xorg-server.check = "21.1.24-1.1"
-xorg-xwayland.check = "24.1.13-1.1"
+# packaging changes + backports/hacks for seamless boot
+xorg-xwayland.check = "24.1.13-1.2"
 
 # Arch packaging fix, we don't care
-zenity-gtk3.check = "3.44.2-4"
+zenity-gtk3.check = "3.44.5-1.1"

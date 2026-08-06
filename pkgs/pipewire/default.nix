@@ -1,6 +1,6 @@
 { pipewire', fetchFromGitHub }:
 pipewire'.overrideAttrs (_: {
-  version = "1.6.8-1.1";
+  version = "1.6.8-1.2"; # 1.2 is a rebuild, no source changes
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
