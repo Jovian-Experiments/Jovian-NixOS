@@ -27,7 +27,7 @@
 [packages]
 # we use our own upstream version
 # FIXME: maybe port Dualsense config from Valve
-alsa-ucm-conf.check = "1.2.14-2.4"
+alsa-ucm-conf.check = "1.2.16.1-1.1"
 
 # Valve A/B stuff
 atomupd-daemon.ignore = true
@@ -37,6 +37,9 @@ avahi.ignore = true
 
 # FIXME: has some not-yet-upstream patches, maybe we want them in nixpkgs?
 bluez.check = "5.87-2.1"
+
+# A/B stuff
+bmaptool.ignore = true
 
 breakpad = { map = true, pkgrel = 2, fixup = "v" }
 
@@ -105,7 +108,7 @@ fremont-hw-support.ignore = true
 # we use nixpkgs version
 fwupd-minimal.ignore = true
 
-galileo-mura = { map = true, pkgrel = 1, fixup = "v" }
+galileo-mura = { map = true, pkgrel = 2, fixup = "v" }
 
 gamescope.map = ["gamescope", "gamescope-session"]
 
@@ -118,13 +121,13 @@ grub.ignore = true
 # we use nixos config
 holo-dmi-rules.check = "1.1-1"
 
-holo-earlyoom.check = "1.1-1"
+holo-earlyoom.check = "1.1-2"
 
 # unused, check in case it ever becomes used again
 holo-fstab-repair.check = "0.2-1"
 
 # the split out locales
-holo-glibc-locales.check = "2.41+r65+ge7c419a29575-1"
+holo-glibc-locales.check = "2.43+r37+gfdf10644d6ee-1"
 
 # FIXME(fremont): moved to jupiter-hw-support, but also other VR stuffs
 holo-grant-cap-sys-nice.check = "1.0-1"
@@ -165,7 +168,7 @@ iwd.check = "3.12-1.2"
 
 jupiter-dock-updater-bin = { map = true, pkgrel = 1 }
 
-jupiter-fan-control = { map = true, pkgrel = 1 }
+jupiter-fan-control = { map = true, pkgrel = 2 }
 
 # we have our own, better one
 jupiter-firewall.ignore = true
@@ -204,7 +207,7 @@ libevdi.ignore = true
 # some internal tooling, not shipped
 libversion.ignore = true
 
-linux-firmware-neptune = { map = "linux-firmware-jupiter", pkgrel = 1 }
+linux-firmware-neptune = { map = "linux-firmware-jupiter", pkgrel = 2 }
 
 # some other mainline kernel build
 linux-lts.ignore = true
@@ -236,14 +239,14 @@ linux-neptune-616.ignore = true
 linux-neptune-616-drm-exec.ignore = true
 
 # new kernel
-linux-neptune-618 = { map = "linux_jovian", pkgrel = 1 }
+linux-neptune-618 = { map = "linux_jovian", pkgrel = 2 }
 
 # test kernel
 linux-neptune-618-devel.ignore = true
 linux-neptune-618-drm-exec.ignore = true
 
 # future kernel
-linux-neptune-72.check = "7.2.0.rc3.valve.beta1-1"
+linux-neptune-72.check = "7.2.0.rc3.valve.beta1-2"
 
 # we don't identify as SteamOS
 lsb-release.ignore = true
@@ -253,7 +256,7 @@ maliit-framework.check = "2.3.0-3.1"
 # packaging changes, removes a heavy dependency
 maliit-keyboard.check = "2.3.1-4.3"
 
-mangohud.check = "0.8.3.rc1.r24.g33c2c7dd-3"
+mangohud.check = "0.8.3.rc1.r24.g33c2c7dd-4"
 
 mesa = { map = "mesa-radeonsi-jupiter", pkgrel = 2, fixup = "mesa" }
 
