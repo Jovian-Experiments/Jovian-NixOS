@@ -4,8 +4,8 @@ let
   inherit (lib) versions;
 
   kernelVersion = "6.18.42";
-  vendorVersion = "valve1";
-  hash = "sha256-brYR3GFb5rCgogoLOhaLVS1hb0OegBiTZGMHYokKhT4=";
+  vendorVersion = "valve2";
+  hash = "sha256-Nkc0pd3gXmSLxO88ru1odG2YURAMAgLczN6lTbYzXdY=";
 in
 buildLinux (args // rec {
   version = "${kernelVersion}-${vendorVersion}";
