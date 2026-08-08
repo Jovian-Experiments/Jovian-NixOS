@@ -20,14 +20,16 @@ stdenv.mkDerivation {
     hash = "sha256-PmaoWVaO2ufHykjcDoQczLQ2/oYrpzzLWBV1sJ3J48U=";
   };
 
-  # Jovian: tell Mesa where to find libclang
-  patches = [ ./opencl.patch ];
-
   inherit (mesa) 
     buildInputs
-    nativeBuildInputs
     propagatedBuildInputs
   ;
+
+  # Mesa 26.1 depends on normal libclc, but nixpkgs Mesa is now at 26.2,
+  # which uses mesa-libclc, and normal libclc is gone.
+  # Since we only need libclc to build mesa-clc, just yoink it from
+  # the host (nixpkgs flavored) Mesa - it works well enough.
+  nativeBuildInputs = mesa.nativeBuildInputs ++ [ mesa.cross_tools ];
 
   # inherit fixups so we get correct paths in EGL driver/Vulkan layer manifests,
   # but fix up the fixup so we don't patchelf a thing we don't have
@@ -43,6 +45,7 @@ stdenv.mkDerivation {
     "-D b_ndebug=true"
     "-D gallium-drivers=radeonsi,llvmpipe,zink,iris,i915"
     "-D gallium-extra-hud=true"
+    "-D mesa-clc=system"
     "-D gallium-rusticl=false"
     "-D gles1=disabled"
     "-D html-docs=disabled"
@@ -58,7 +61,5 @@ stdenv.mkDerivation {
 
     # Jovian: build with our libgbm
     "-D libgbm-external=true"
-    # Jovian: inject correct libclang path
-    "-D clang-libdir=${lib.getLib llvmPackages.clang-unwrapped}/lib"
   ];
 }
