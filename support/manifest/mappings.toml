@@ -411,7 +411,7 @@ vpower.map = true
 wakehook.ignore = true
 
 # FIXME(deckard): maybe package this
-wireless-domain-setter.check = "1.1-1"
+wireless-domain-setter.check = "1.2-1"
 
 wireplumber.map = "wireplumber-jupiter"
 
