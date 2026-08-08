@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , nodejs
-, pnpm_9
+, pnpm_11
 , fetchPnpmDeps
 , pnpmConfigHook
 , python3
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonPackage rec {
   '';
 
   pnpmDeps = fetchPnpmDeps {
-    fetcherVersion = 3;
+    fetcherVersion = 4;
     inherit pname version src;
 
     # copy here because of sourceRoot
@@ -33,9 +33,9 @@ python3.pkgs.buildPythonPackage rec {
       rm pnpm-workspace.yaml
     '';
 
-    pnpm = pnpm_9;
+    pnpm = pnpm_11;
     sourceRoot = "${src.name}/frontend";
-    hash = "sha256-WgKycKbaZv9lovoo0IaCuV41qS4zUqm4vZxsMQBUdNk=";
+    hash = "sha256-OHimg85kcjk+Tq1Yv8TA9CfPDVzxdgPpzTi2mxyPs4s=";
   };
 
   pyproject = true;
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonPackage rec {
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9
+    pnpm_11
     pnpmConfigHook
   ];
 
