@@ -239,7 +239,7 @@ linux-neptune-616.ignore = true
 linux-neptune-616-drm-exec.ignore = true
 
 # new kernel
-linux-neptune-618 = { map = "linux_jovian", pkgrel = 2 }
+linux-neptune-618 = { map = "linux_jovian", pkgrel = 1 }
 
 # test kernel
 linux-neptune-618-devel.ignore = true
@@ -247,6 +247,7 @@ linux-neptune-618-drm-exec.ignore = true
 
 # future kernel
 linux-neptune-72.check = "7.2.0.rc3.valve.beta1-2"
+linux-neptune-72-devel.check = "7.2.0.rc3.valve.beta1-2"
 
 # we don't identify as SteamOS
 lsb-release.ignore = true
@@ -266,7 +267,7 @@ mesa-nvk.check = "26.1.2.221562.radeonsi_26.1.2-2"
 mesa-radv = { map = "mesa-radv-jupiter", pkgrel = 2, fixup = "mesa" }
 
 # iwd backend fixes, pending upstream
-networkmanager.check = "1.58.0-1.2"
+networkmanager.check = "1.58.0-1.3"
 
 # just the ladspa plugin
 noisetorch.check = "0.12.2.r47.g6d895f3-3"
