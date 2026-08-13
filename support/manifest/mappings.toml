@@ -334,7 +334,7 @@ steam-jupiter-oobe.ignore = true
 
 steam_notif_daemon = { map = true, pkgrel = 4, fixup = "v" }
 
-steamdeck-dsp = { map = true, pkgrel = 2 }
+steamdeck-dsp = { map = true, pkgrel = 1 }
 
 # we don't ship those but they may be useful to reference
 steamdeck-kde-presets.check = "3.9.3-2"
