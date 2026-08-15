@@ -197,7 +197,7 @@ kmod.check = "34.2-1.2"
 kscreenlocker.check = "6.7.3-1.1"
 
 # hack for hidpi on internal display + keyboard/libei fixes
-kwin.check = "6.7.3-1.2"
+kwin.check = "6.7.3-1.3"
 
 libdrm.check = "2.4.120-1"
 
@@ -337,7 +337,7 @@ steam_notif_daemon = { map = true, pkgrel = 4, fixup = "v" }
 steamdeck-dsp = { map = true, pkgrel = 1 }
 
 # we don't ship those but they may be useful to reference
-steamdeck-kde-presets.check = "3.9.3-2"
+steamdeck-kde-presets.check = "3.9.4-2"
 
 # very old, unused, but might be interesting? 
 steamfs-git.ignore = true
