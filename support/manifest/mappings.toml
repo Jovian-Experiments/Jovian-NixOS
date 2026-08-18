@@ -98,6 +98,9 @@ f3.ignore = true
 # Arch stuff
 filesystem.ignore = true
 
+# Valve CI workarounds
+flatpak.check = "1:1.18.1-1.1"
+
 # FIXME: some internal Valve thing, investigate?
 foxnet.ignore = true
 foxnetstatsd.ignore = true
@@ -415,6 +418,9 @@ wakehook.ignore = true
 wireless-domain-setter.check = "1.2-1"
 
 wireplumber.map = "wireplumber-jupiter"
+
+# Valve CI workarounds
+xdg-dbus-proxy.check = "0.1.8-1.1"
 
 xdg-desktop-portal-gamescope = { map = true, pkgrel = 3 }
 xdg-desktop-portal-holo = { map = true, pkgrel = 2 }
