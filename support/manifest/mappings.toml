@@ -199,8 +199,8 @@ kmod.check = "34.2-1.2"
 # packaging changes for SteamOS
 kscreenlocker.check = "6.7.3-1.1"
 
-# hack for hidpi on internal display + keyboard/libei fixes
-kwin.check = "6.7.3-1.3"
+# keyboard/libei fixes
+kwin.check = "6.7.3-1.4"
 
 libdrm.check = "2.4.120-1"
 
@@ -270,7 +270,7 @@ mesa-nvk.check = "26.1.2.221562.radeonsi_26.1.2-2"
 mesa-radv = { map = "mesa-radv-jupiter", pkgrel = 2, fixup = "mesa" }
 
 # iwd backend fixes, pending upstream
-networkmanager.check = "1.58.0-1.3"
+networkmanager.check = "1.58.0-1.4"
 
 # just the ladspa plugin
 noisetorch.check = "0.12.2.r47.g6d895f3-3"
