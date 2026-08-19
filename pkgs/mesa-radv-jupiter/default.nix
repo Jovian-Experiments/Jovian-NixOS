@@ -1,7 +1,7 @@
 { stdenv, mesa, fetchFromGitHub }:
 let
   version = "26.2.0";
-  jupiterVersion = "steamos-26.05.14";
+  jupiterVersion = "steamos-26.05.16";
 in stdenv.mkDerivation {
   pname = "mesa";
   version = "${version}.${jupiterVersion}";
@@ -10,7 +10,7 @@ in stdenv.mkDerivation {
     owner = "Jovian-Experiments";
     repo = "mesa";
     rev = jupiterVersion;
-    hash = "sha256-I4ufjJ7HszqWpJHmHCV2oz64uCtDpY6MiLXjyxk+PUA=";
+    hash = "sha256-m7gjwDnOw1lr6PUgXsyOqhkMqytf9Cln5mWF2WCEGOw=";
   };
 
   inherit (mesa) buildInputs nativeBuildInputs propagatedBuildInputs;
@@ -52,6 +52,6 @@ in stdenv.mkDerivation {
     "-D intel-rt=disabled"
     "-D sysprof=false"
     "-D tools=drm-shim"
-    "-D radv-build-id=5b8964a5eef0d2c6ecc9880e4ab275b1bc9d2e3d"
+    "-D radv-build-id=bd9f32d9c69a2f09efd03302a15f5f067433ab87"
   ];
 }
