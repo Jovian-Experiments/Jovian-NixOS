@@ -36,7 +36,7 @@ atomupd-daemon.ignore = true
 avahi.ignore = true
 
 # FIXME: has some not-yet-upstream patches, maybe we want them in nixpkgs?
-bluez.check = "5.87-2.1"
+bluez.check = "5.87-2.3"
 
 # A/B stuff
 bmaptool.ignore = true
@@ -200,7 +200,7 @@ kmod.check = "34.2-1.2"
 kscreenlocker.check = "6.7.3-1.1"
 
 # keyboard/libei fixes
-kwin.check = "6.7.3-1.4"
+kwin.check = "6.7.3-1.5"
 
 libdrm.check = "2.4.120-1"
 
@@ -255,11 +255,6 @@ linux-neptune-72-devel.check = "7.2.0.rc3.valve.beta1-2"
 # we don't identify as SteamOS
 lsb-release.ignore = true
 
-# backport crash fix
-maliit-framework.check = "2.3.0-3.1"
-# packaging changes, removes a heavy dependency
-maliit-keyboard.check = "2.3.1-4.3"
-
 mangohud.check = "0.8.3.rc1.r24.g33c2c7dd-4"
 
 mesa = { map = "mesa-radeonsi-jupiter", pkgrel = 2, fixup = "mesa" }
@@ -267,10 +262,10 @@ mesa = { map = "mesa-radeonsi-jupiter", pkgrel = 2, fixup = "mesa" }
 # FIXME: revisit if there's relevant changes and/or actual users on NVK
 mesa-nvk.check = "26.1.2.221562.radeonsi_26.1.2-2"
 
-mesa-radv = { map = "mesa-radv-jupiter", pkgrel = 2, fixup = "mesa" }
+mesa-radv = { map = "mesa-radv-jupiter", pkgrel = 1, fixup = "mesa" }
 
 # iwd backend fixes, pending upstream
-networkmanager.check = "1.58.0-1.4"
+networkmanager.check = "1.58.0-1.5"
 
 # just the ladspa plugin
 noisetorch.check = "0.12.2.r47.g6d895f3-3"
@@ -353,8 +348,8 @@ steamos-atomupd-client.ignore = true
 
 # applied as NixOS modules instead
 # check both to make sure we get the latest changes
-steamos-customizations-git.check = "20260721.1-2"
-steamos-customizations-jupiter.check = "20260721.1-2"
+steamos-customizations-git.check = "20260821.1-1"
+steamos-customizations-jupiter.check = "20260821.1-1"
 
 # devkit stuff
 steamos-devkit-service.ignore = true
@@ -418,6 +413,9 @@ wakehook.ignore = true
 wireless-domain-setter.check = "1.2-1"
 
 wireplumber.map = "wireplumber-jupiter"
+
+# rescan after wake speedups
+wpa_supplicant.check = "2:2.11-5.1"
 
 # Valve CI workarounds
 xdg-dbus-proxy.check = "0.1.8-1.1"
