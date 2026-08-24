@@ -161,6 +161,17 @@ in
           }
         });
       '';
+      
+      # allow lower niceness for Proton processes
+      # see: https://github.com/Jovian-Experiments/steamos-customizations-jupiter/blob/jupiter-20260823.1/misc/limits.d/15-proton-nice.conf 
+      security.pam.loginLimits = [
+        {
+          item = "nice";
+          type = "hard";
+          domain = "*";
+          value = "-8";
+        }
+      ];
 
       jovian.steam.environment = {
         # We don't support adopting a drive, yet.
