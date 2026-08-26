@@ -415,7 +415,7 @@ wireless-domain-setter.check = "1.2-1"
 wireplumber.map = "wireplumber-jupiter"
 
 # rescan after wake speedups
-wpa_supplicant.check = "2:2.11-5.1"
+wpa_supplicant.check = "2:2.12-1.2"
 
 # Valve CI workarounds
 xdg-dbus-proxy.check = "0.1.8-1.1"
