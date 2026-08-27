@@ -156,6 +156,9 @@ holo-rust-packaging-tools.ignore = true
 # implemented as nixos modules/stub
 holo-session-selection.map = true
 
+# implemented as nixos modules
+holo-upower-config.check = "1.0-1"
+
 # applied as NixOS config
 holo-zram-swap.check = "0.3-0"
 
@@ -394,10 +397,6 @@ ttf-twemoji-default.ignore = true
 
 # debug tool
 umr.ignore = true
-
-# disables shutdown on battery critical, we probably don't want to do that
-# without way more validation
-upower.check = "1.90.10-1.2"
 
 # non-critical but would be nice to have
 # FIXME: package these
