@@ -213,7 +213,7 @@ libevdi.ignore = true
 # some internal tooling, not shipped
 libversion.ignore = true
 
-linux-firmware-neptune = { map = "linux-firmware-jupiter", pkgrel = 2 }
+linux-firmware-neptune = { map = "linux-firmware-jupiter", pkgrel = 1 }
 
 # some other mainline kernel build
 linux-lts.ignore = true
