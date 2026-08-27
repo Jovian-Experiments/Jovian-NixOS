@@ -3,9 +3,9 @@
 let
   inherit (lib) versions;
 
-  kernelVersion = "6.18.45";
+  kernelVersion = "7.2.0";
   vendorVersion = "valve1";
-  hash = "sha256-xHuIHzRE316mtgtQMn0gatHD32RzzUfhQxsbkP0fnik=";
+  hash = "sha256-HMb9p3Nq3FzHq3CM5RBcaPZ6bMFyPny2jk1RhW+d+6E=";
 in
 buildLinux (args // rec {
   version = "${kernelVersion}-${vendorVersion}";
@@ -69,7 +69,8 @@ buildLinux (args // rec {
     SND_SOC_AMD_LEGACY_MACH = no;
 
     SND_SOC_AMD_SOF_MACH = module;
-    SND_SOC_AMD_RPL_ACP6x = no;
+    # Jovian: removed in 7.2
+    # SND_SOC_AMD_RPL_ACP6x = no;
 
     SND_SOC_SOF = module;
     SND_SOC_SOF_PROBE_WORK_QUEUE = yes;
@@ -160,7 +161,8 @@ buildLinux (args // rec {
     # Xbox GIP driver
     JOYSTICK_XBOX_GIP = module;
     JOYSTICK_XBOX_GIP_FF = yes;
-    JOYSTICK_XBOX_GIP_LEDS = yes;
+    # Jovian: removed in 7.2
+    # JOYSTICK_XBOX_GIP_LEDS = yes;
 
     # Disable drm panic screen
     DRM_PANIC = lib.mkForce no;

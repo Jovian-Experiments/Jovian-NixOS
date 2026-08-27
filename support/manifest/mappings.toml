@@ -244,16 +244,16 @@ linux-neptune-615.ignore = true
 linux-neptune-616.ignore = true
 linux-neptune-616-drm-exec.ignore = true
 
-# new kernel
-linux-neptune-618 = { map = "linux_jovian", pkgrel = 1 }
-
-# test kernel
+# old kernel
+linux-neptune-618.ignore = true
 linux-neptune-618-devel.ignore = true
 linux-neptune-618-drm-exec.ignore = true
 
-# future kernel
-linux-neptune-72.check = "7.2.0.rc3.valve.beta1-2"
-linux-neptune-72-devel.check = "7.2.0.rc3.valve.beta1-2"
+# new kernel
+linux-neptune-72 = { map = "linux_jovian", pkgrel = 1 }
+
+# test kernel
+linux-neptune-72-devel.ignore = true
 
 # we don't identify as SteamOS
 lsb-release.ignore = true
