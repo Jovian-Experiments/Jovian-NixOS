@@ -36,7 +36,7 @@ atomupd-daemon.ignore = true
 avahi.ignore = true
 
 # FIXME: has some not-yet-upstream patches, maybe we want them in nixpkgs?
-bluez.check = "5.87-2.3"
+bluez.check = "5.87-2.4"
 
 # A/B stuff
 bmaptool.ignore = true
@@ -82,15 +82,18 @@ dkms.ignore = true
 # foreground booster
 dmemcg-booster = { map = true, pkgrel = 3 }
 
-# non-critical
-# FIXME: package
-ds-inhibit.ignore = true
+# backports from 6.8, non-critical
+drkonqi.check = "6.7.3-1"
 
 # FIXME: dev tool, not packaged currently
 drm_info-git.ignore = true
 
 # FIXME: GPU reset thingy, package?
 drm_janitor.ignore = true
+
+# non-critical
+# FIXME: package
+ds-inhibit.ignore = true
 
 # FIXME(fremont)
 ec-log.ignore = true
@@ -123,6 +126,9 @@ gpu-trace.ignore = true
 
 # we don't use it
 grub.ignore = true
+
+# sets up vendor debuginfod server
+holo-debuginfod-config.ignore = true
 
 # we use nixos config
 holo-dmi-rules.check = "1.1-1"
@@ -271,7 +277,7 @@ mesa-nvk.check = "26.1.2.221562.radeonsi_26.1.2-2"
 mesa-radv = { map = "mesa-radv-jupiter", pkgrel = 1, fixup = "mesa" }
 
 # iwd backend fixes, pending upstream
-networkmanager.check = "1.58.0-1.5"
+networkmanager.check = "1.58.0-1.6"
 
 # just the ladspa plugin
 noisetorch.check = "0.12.2.r47.g6d895f3-3"
@@ -354,8 +360,8 @@ steamos-atomupd-client.ignore = true
 
 # applied as NixOS modules instead
 # check both to make sure we get the latest changes
-steamos-customizations-git.check = "20260823.1-1"
-steamos-customizations-jupiter.check = "20260823.1-1"
+steamos-customizations-git.check = "20260827.2-1"
+steamos-customizations-jupiter.check = "20260827.2-1"
 
 # devkit stuff
 steamos-devkit-service.ignore = true
