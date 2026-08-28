@@ -422,7 +422,7 @@ wpa_supplicant.check = "2:2.12-1.2"
 # Valve CI workarounds
 xdg-dbus-proxy.check = "0.1.8-1.1"
 
-xdg-desktop-portal-gamescope = { map = true, pkgrel = 3 }
+xdg-desktop-portal-gamescope = { map = true, pkgrel = 1 }
 xdg-desktop-portal-holo = { map = true, pkgrel = 2 }
 
 # ours is newer
