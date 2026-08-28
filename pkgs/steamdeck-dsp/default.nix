@@ -30,24 +30,15 @@ let
       dmidecode
     ];
   };
-  cec-hwconfig-solution = {
-    scripts = [ "share/cec-sysconf/cec-hwconfig" ];
-    interpreter = "${bash}/bin/bash";
-    inputs = [
-      coreutils
-      dmidecode
-      gnused
-    ];
-  };
   self = stdenv.mkDerivation(finalAttrs: {
     pname = "steamdeck-dsp";
-    version = "1.01";
+    version = "1.02";
 
     src = fetchFromGitHub {
       owner = "Jovian-Experiments";
       repo = "steamdeck-dsp";
       rev = finalAttrs.version;
-      hash = "sha256-H3CzimHkPubEcCnvQjkIW2Pc563Imsc+NjhDW9DBag4=";
+      hash = "sha256-Eh2WTU+GZYJ6EWROJ7mMsdm7/Hr0G2F8QbbqreL3/ZY=";
     };
 
     nativeBuildInputs = [
@@ -72,7 +63,6 @@ let
         pipewire-confs/systemd/system/pipewire-sysconf.service \
         wireplumber/hardware-profiles/wireplumber-hwconfig \
         wireplumber/systemd/system/wireplumber-sysconf.service \
-        cec-sysconf/systemd/system/cec-sysconf.service \
         --replace-fail "/usr/share" "$out/share"
     '';
 
@@ -86,7 +76,6 @@ let
 
       ${resholve.phraseSolution "pipewire-hwconfig" pipewire-hwconfig-solution}
       ${resholve.phraseSolution "wireplumber-hwconfig" wireplumber-hwconfig-solution}
-      ${resholve.phraseSolution "cec-hwconfig" cec-hwconfig-solution}
 
       # work around dead symlink
       touch $out/share/pipewire/hardware-profiles/valve-jupiter/filter-chain.conf.d/filter-chain-sink.conf
