@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation(finalAttrs: {
   pname = "jupiter-fan-control";
-  version = "20260422.2";
+  version = "20260902.1";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "jupiter-fan-control";
     rev = finalAttrs.version;
-    hash = "sha256-U/Gu91UaczUCdG3RpFrmD67N3le8E+SHKIlwnSheHKE=";
+    hash = "sha256-75DW3cMxakZ11CZUF4bvYV8l+d24JWleEiGRMW+kMSM=";
   };
 
   buildInputs = [

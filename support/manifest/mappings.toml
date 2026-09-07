@@ -183,7 +183,7 @@ iwd.check = "3.12-1.2"
 
 jupiter-dock-updater-bin = { map = true, pkgrel = 1 }
 
-jupiter-fan-control = { map = true, pkgrel = 2 }
+jupiter-fan-control = { map = true, pkgrel = 1 }
 
 # we have our own, better one
 jupiter-firewall.ignore = true
