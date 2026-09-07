@@ -83,7 +83,7 @@ dkms.ignore = true
 dmemcg-booster = { map = true, pkgrel = 3 }
 
 # backports from 6.8, non-critical
-drkonqi.check = "6.7.3-1"
+drkonqi.check = "6.7.3-2"
 
 # FIXME: dev tool, not packaged currently
 drm_info-git.ignore = true
