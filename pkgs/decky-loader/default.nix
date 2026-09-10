@@ -10,13 +10,13 @@
 }:
 python3.pkgs.buildPythonPackage rec {
   pname = "decky-loader";
-  version = "3.2.6";
+  version = "3.2.8";
 
   src = fetchFromGitHub {
     owner = "SteamDeckHomebrew";
     repo = "decky-loader";
     rev = "v${version}";
-    hash = "sha256-p1bkLsZedTZ29POqdaXvVpPXzg9kBTKgUxkkEAyAkT0=";
+    hash = "sha256-Y2dMTKLXtZAyXuWhnS/jbqjCYyWvSChslt/YxIBbWXw=";
   };
 
   # confuses our pnpm tooling
