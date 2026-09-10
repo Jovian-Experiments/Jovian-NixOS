@@ -269,7 +269,7 @@ lsb-release.ignore = true
 
 mangohud.check = "0.8.3.rc1.r24.g33c2c7dd-4"
 
-mesa = { map = "mesa-radeonsi-jupiter", pkgrel = 2, fixup = "mesa" }
+mesa = { map = "mesa-radeonsi-jupiter", pkgrel = 3, fixup = "mesa" }
 
 # FIXME: revisit if there's relevant changes and/or actual users on NVK
 mesa-nvk.check = "26.1.2.221562.radeonsi_26.1.2-2"
@@ -301,7 +301,7 @@ plasma-remotecontrollers.check = "5.26.90.r258.g9ace9a9-3"
 plasma-workspace.check = "6.7.3-2.1"
 
 # FIXME: lots of patches, need to investigate
-plymouth.check = "22.02.122-7.6"
+plymouth.check = "22.02.122-7.7"
 
 # packaging changes only, will probably not be relevant ever
 podman.ignore = true
@@ -380,7 +380,7 @@ steamos-media-creation-git.ignore = true
 
 # Allows switching between iwd and wpa_supplicant wifi backends from Steam
 # FIXME: doesn't seem to be wired up?
-steamos-networking-tools.check = "1.2-1"
+steamos-networking-tools.check = "1.3-1"
 
 # some A/B thing
 steamos-passwd.ignore = true
