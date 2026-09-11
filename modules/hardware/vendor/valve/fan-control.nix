@@ -1,18 +1,17 @@
-{ pkgs, config, lib, ... }:
-
-# Userspace fan control
+{ config, lib, pkgs, ... }:
 
 let
   inherit (lib)
     mkIf
+    mkMerge
     mkOption
     types
   ;
-  cfg = config.jovian.devices.steamdeck;
+  cfg = config.jovian.hardware.vendor.valve;
 in
 {
   options = {
-    jovian.devices.steamdeck = {
+    jovian.hardware.vendor.valve = {
       enableOsFanControl = mkOption {
         description = ''
           Whether to enable the OS-controlled fan curve.
@@ -21,7 +20,7 @@ in
         '';
         type = types.bool;
         default = cfg.enable;
-        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
+        defaultText = lib.literalExpression "config.jovian.hardware.vendor.valve.enable";
       };
     };
   };
