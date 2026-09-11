@@ -32,15 +32,14 @@ in
         };
 
         desktopSession = mkOption {
-          type = with types ; nullOr str // {         
-            check = userProvidedDesktopSession:
-              lib.assertMsg (userProvidedDesktopSession != null -> (str.check userProvidedDesktopSession && lib.elem userProvidedDesktopSession config.services.displayManager.sessionData.sessionNames)) ''
-                  Desktop session '${userProvidedDesktopSession}' not found.
-                  Valid values for 'jovian.steam.desktopSession' are:
-                    ${lib.concatStringsSep "\n  " config.services.displayManager.sessionData.sessionNames}
-                  If you don't want a desktop session to switch to, set 'jovian.steam.desktopSession' to 'gamescope-wayland'.
-              '';
-          };
+          type = lib.types.addCheck (with types; nullOr str) (userProvidedDesktopSession:
+              lib.assertMsg (userProvidedDesktopSession != null -> (types.str.check userProvidedDesktopSession && lib.elem userProvidedDesktopSession config.services.displayManager.sessionData.sessionNames)) ''
+                Desktop session '${userProvidedDesktopSession}' not found.
+                Valid values for 'jovian.steam.desktopSession' are:
+                  ${lib.concatStringsSep "\n  " config.services.displayManager.sessionData.sessionNames}
+                If you don't want a desktop session to switch to, set 'jovian.steam.desktopSession' to 'gamescope-wayland'.
+              ''
+          );
           default = null;
           example = "plasma";
           description = ''
