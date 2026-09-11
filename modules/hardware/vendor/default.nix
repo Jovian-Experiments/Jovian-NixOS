@@ -1,6 +1,5 @@
 {
   imports = [
-    ./amd
-    ./vendor
+    ./valve
   ];
 }
