@@ -131,7 +131,6 @@ in
       ];
 
       # From steam-jupiter
-      # FIXME: investigate LED stuff
       services.udev.extraRules = ''
         # USB devices and topological children
         SUBSYSTEMS=="usb", TAG+="uaccess"
@@ -141,8 +140,23 @@ in
 
         # Steam Controller udev write access
         KERNEL=="uinput", SUBSYSTEM=="misc", TAG+="uaccess", OPTIONS+="static_node=uinput"
+
+        # Steam Controller Wakeup Support
+        ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="1102", ATTR{power/wakeup}="enabled"
+        ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="1142", ATTR{power/wakeup}="enabled"
+        ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="1302", ATTR{power/wakeup}="enabled"
+        ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="1304", ATTR{power/wakeup}="enabled"
+        ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="1305", ATTR{power/wakeup}="enabled"
+
+        # LED Control Support
+        SUBSYSTEM=="leds", RUN+="${pkgs.systemd}/bin/systemd-tmpfiles --create --prefix=/sys/devices"
       '';
 
+      # LED Control Support
+      systemd.tmpfiles.rules = [
+        "z /sys/devices/platform/valve-leds/leds/*/* 0660 - users"
+        "z /sys/devices/*/*/*/*/steamdeck-leds/leds/*/* 0660 - users"
+      ];
       # The responsibility for the equivalent action when out of battery charge is
       # taken by a combination of vpower and SteamUI, when it dips below 0.5% (at the
       # time of writing), and it gives a 10 second margin for SteamUI to close.
