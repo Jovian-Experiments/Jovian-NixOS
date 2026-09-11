@@ -30,10 +30,14 @@ in
   };
 
   config = mkMerge [
+    (mkIf (cfg.enable) {
+      hardware.firmware = [
+        (lib.hiPrio pkgs.linux-firmware-jupister)
+      ];
+    })
     (mkIf (cfg.enableFwupdBiosUpdates) {
       services.fwupd.enable = true;
 
-      # Valve's CABs are signed against SteamOS' fwupd keyring, not nixpkgs'.
       environment.etc."fwupd/remotes.d/fremont-vendor-directory.conf".text = ''
         # Enabled by jovian.devices.steammachine.enableFwupdBiosUpdates
 
