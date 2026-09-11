@@ -336,7 +336,6 @@ scx-scheds.check = "1.1.2.linux.steamos-2.1"
 # FIXME: package this
 steam-im-modules.ignore = true
 
-# FIXME(fremont): LED udev rules
 steam-jupiter-stable = { map = "steam-unwrapped", pkgrel = 12 }
 
 # we don't use this
