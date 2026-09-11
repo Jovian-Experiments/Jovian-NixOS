@@ -45,7 +45,6 @@ in
     (mkIf (cfg.enableFwupdBiosUpdates) {
       services.fwupd.enable = true;
 
-      # Valve's CABs are signed against SteamOS' fwupd keyring, not nixpkgs'.
       environment.etc."fwupd/remotes.d/fremont-vendor-directory.conf".text = ''
         # Enabled by jovian.devices.steammachine.enableFwupdBiosUpdates
 
