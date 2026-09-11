@@ -52,6 +52,7 @@ rec {
   steam_notif_daemon = final.callPackage ./pkgs/steam_notif_daemon { };
 
   jupiter-hw-support = final.callPackage ./pkgs/jupiter-hw-support { };
+  fremont-hw-support = final.callPackage ./pkgs/fremont-hw-support { };
   steamdeck-hw-theme = final.callPackage ./pkgs/jupiter-hw-support/theme.nix { };
   steamdeck-firmware = final.callPackage ./pkgs/jupiter-hw-support/firmware.nix { };
   steamdeck-bios-fwupd = final.callPackage ./pkgs/jupiter-hw-support/bios-fwupd.nix { };
