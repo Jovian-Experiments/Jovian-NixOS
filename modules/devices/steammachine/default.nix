@@ -16,9 +16,6 @@ in
   imports = [
     ./kernel.nix
     ./firmware.nix
-    ./controller.nix
-    ./perf-control.nix
-    ./sound.nix
   ];
 
   options = {

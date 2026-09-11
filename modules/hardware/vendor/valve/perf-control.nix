@@ -6,11 +6,11 @@ let
     mkOption
     types
   ;
-  cfg = config.jovian.devices.steammachine;
+  cfg = config.jovian.hardware.vendor.valve;
 in
 {
   options = {
-    jovian.devices.steammachine = {
+    jovian.hardware.vendor.valve = {
       enablePerfControlUdevRules = mkOption {
         type = types.bool;
         default = cfg.enable;
@@ -25,7 +25,7 @@ in
       };
     };
   };
-  config = mkIf (cfg.enablePerfControlUdevRules) {
+  config = mkIf cfg.enablePerfControlUdevRules {
     services.udev.extraRules = ''
       # Enables manual GPU clock control in Steam
       # - /sys/class/drm/card0/device/power_dpm_force_performance_level
