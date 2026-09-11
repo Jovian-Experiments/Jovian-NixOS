@@ -111,8 +111,7 @@ flatpak.check = "1:1.18.1-1.1"
 foxnet.ignore = true
 foxnetstatsd.ignore = true
 
-# FIXME(fremont)
-fremont-hw-support.ignore = true
+fremont-hw-support = { map = true, pkgrel = 1 }
 
 # we use nixpkgs version
 fwupd-minimal.ignore = true
