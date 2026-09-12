@@ -6,26 +6,26 @@ let
     mkOption
     types
   ;
-  cfg = config.jovian.devices.steamdeck;
+  cfg = config.jovian.hardware.vendor.valve;
 in
 {
   options = {
-    jovian.devices.steamdeck = {
+    jovian.hardware.vendor.valve = {
       enablePerfControlUdevRules = mkOption {
         type = types.bool;
         default = cfg.enable;
-        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
+        defaultText = lib.literalExpression "config.jovian.devices.steammachine.enable";
         description = ''
           Whether to make performance-related device attributes controllable by users.
 
-          The Steam Deck Client directly modifies several device attributes to
+          The Steam client directly modifies several device attributes to
           control the display brightness and to enable performance tuning (TDP
           limit, GPU clock control).
         '';
       };
     };
   };
-  config = mkIf (cfg.enablePerfControlUdevRules) {
+  config = mkIf cfg.enablePerfControlUdevRules {
     services.udev.extraRules = ''
       # Enables manual GPU clock control in Steam
       # - /sys/class/drm/card0/device/power_dpm_force_performance_level
