@@ -1,0 +1,22 @@
+--- a/gamescope-session
++++ b/gamescope-session
+@@ -254,6 +254,12 @@
+ # Spawned in parallel to read values from gamescope
+ (read_gamescope_env &)
+ 
++# Jovian: Load custom arguments
++GAMESCOPE_ARGS=()
++if declare -p JOVIAN_GAMESCOPE_ARGS &>/dev/null; then
++    GAMESCOPE_ARGS+=( "${JOVIAN_GAMESCOPE_ARGS[@]}" )
++fi
++
+ exec gamescope \
+ 	--generate-drm-mode fixed \
+ 	--xwayland-count 2 \
+@@ -263,5 +272,5 @@
+ 	--max-scale 2 \
+ 	--fade-out-duration 200 \
+ 	-e -R "$socket" -T "$stats" \
+-	-O '*',eDP-1 \
++	"${GAMESCOPE_ARGS[@]}" \
+ 
