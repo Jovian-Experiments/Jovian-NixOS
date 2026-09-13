@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.jovian.hardware.vendor.valve;
+  cfg = config.jovian.steamos;
 
 
   alsa-ucm-conf' = pkgs.runCommand "jovian-ucm-conf" {} ''
@@ -16,10 +16,10 @@ let
 in
 {
   options = {
-    jovian.hardware.vendor.valve = {
+    jovian.steamos = {
       enableSoundSupport = lib.mkOption {
-        default = cfg.enable;
-        defaultText = lib.literalExpression "config.jovian.hardware.vendor.valve.enable";
+        default = cfg.useSteamOSConfig;
+        defaultText = lib.literalExpression "config.jovian.steamos.useSteamOSConfig";
         type = lib.types.bool;
         description = ''
           Whether to enable sound support.
@@ -32,7 +32,7 @@ in
     systemWide = config.services.pipewire.systemWide;
 
     extraEnv.ALSA_CONFIG_UCM2 = "${alsa-ucm-conf'}/share/alsa/ucm2";
-  in lib.mkIf cfg.enable {
+  in lib.mkIf cfg.enableSoundSupport {
     services.pulseaudio.enable = false;
 
     services.pipewire = {

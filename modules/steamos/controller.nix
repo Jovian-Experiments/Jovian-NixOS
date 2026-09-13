@@ -7,15 +7,15 @@ let
     mkOption
     types
   ;
-  cfg = config.jovian.hardware.vendor.valve;
+  cfg = config.jovian.steamos;
 in
 {
   options = {
-    jovian.hardware.vendor.valve = {
+    jovian.steamos = {
       enableControllerUdevRules = mkOption {
         type = types.bool;
-        default = cfg.enable;
-        defaultText = lib.literalExpression "config.jovian.hardware.vendor.valve.enable";
+        default = cfg.useSteamOSConfig;
+        defaultText = lib.literalExpression "config.jovian.steamos.useSteamOSConfig";
         description = ''
             Enables udev rules to make the controller controllable by users.
 
