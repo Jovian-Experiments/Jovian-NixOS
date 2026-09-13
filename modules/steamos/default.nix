@@ -15,6 +15,11 @@ in
     ./earlyoom.nix
     ./misc.nix
     ./sysctl.nix
+    ./fan-control.nix
+    ./controller.nix
+    ./perf-control.nix
+    ./rename.nix
+    ./sound.nix
   ];
   options = {
     jovian.steamos = {
