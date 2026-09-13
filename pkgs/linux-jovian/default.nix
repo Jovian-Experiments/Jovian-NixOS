@@ -178,6 +178,10 @@ buildLinux (args // rec {
     RTW89_8851BU = module;
     RTW89_USB = module;
 
+    # HDMI CEC used by the Steam Machine (fremont)
+    MEDIA_CEC_SUPPORT = yes;
+    CEC_CROS_EC = module;
+
     # Jovian: fix fallout from the vendor-set options
     DRM_AMD_DC_SI = lib.mkForce (option no);
     DRM_HYPERV = lib.mkForce (option no);

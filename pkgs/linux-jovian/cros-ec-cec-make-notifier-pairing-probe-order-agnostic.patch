@@ -1,0 +1,25 @@
+diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+--- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
++++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+@@ -469,6 +469,7 @@
+ 				 const char * const *conns)
+ {
+ 	struct cros_ec_cec_port *port;
++	const char *port_name;
+ 	int ret;
+
+ 	port = devm_kzalloc(dev, sizeof(*port), GFP_KERNEL);
+@@ -490,7 +491,12 @@
+ 		goto out_probe_adapter;
+ 	}
+
+-	port->notify = cec_notifier_cec_adap_register(hdmi_dev, conns[port_num],
++	if (cros_ec_cec->num_ports == 1)
++		port_name = NULL;
++	else
++		port_name = conns[port_num];
++
++	port->notify = cec_notifier_cec_adap_register(hdmi_dev, port_name,
+ 						      port->adap);
+ 	if (!port->notify) {
+ 		ret = -ENOMEM;
