@@ -69,7 +69,9 @@ rec {
     pipewire' = prev.pipewire;
   };
   wireplumber-jupiter = final.callPackage ./pkgs/wireplumber {
-    wireplumber' = prev.wireplumber;
+    wireplumber' = prev.wireplumber.override {
+      pipewire = final.pipewire-jupiter;
+    };
   };
 
   opensd = final.callPackage ./pkgs/opensd { };

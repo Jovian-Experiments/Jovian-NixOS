@@ -35,6 +35,9 @@ in
   in lib.mkIf cfg.enableSoundSupport {
     services.pulseaudio.enable = false;
 
+    # Required for 'pactl' in PATH
+    environment.systemPackages = [ pkgs.pulseaudio ];
+
     services.pipewire = {
       enable = true;
       package = pkgs.pipewire-jupiter;
