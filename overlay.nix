@@ -68,6 +68,8 @@ rec {
   pipewire-jupiter = final.callPackage ./pkgs/pipewire {
     pipewire' = prev.pipewire;
   };
+
+  # Builds 'wireplumber-jupiter' against the 'pipewire-jupiter' fork to allow Steam Client to recognize CEC support.
   wireplumber-jupiter = final.callPackage ./pkgs/wireplumber {
     wireplumber' = prev.wireplumber.override {
       pipewire = final.pipewire-jupiter;

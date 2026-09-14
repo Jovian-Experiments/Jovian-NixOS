@@ -5,6 +5,8 @@ This patch resolves a race condition based on the probing order between cros-ec-
 
 What this patch does is it passes NULL instead of the connector name when the EC exposes exactly one CEC port, NULL in this case acts as a wildcard and essentially is telling it to match any connector on the HDMI device, this allows it so no matter how the amdgpu driver decides to number the connector, both sides will pair up with each other as soon as both exist. 
 
+Vavle's SteamOS seemingly doesn't need this due to the amdgpu being built directly into the kernel image, likely because SteamOS is expected to only be installed on AMD hardware, which eliminates the chance of the race condition happening. Jovian-NixOS doesn't build the amdgpu driver into the kernel image and instead loads it as a module in the same way that cros-ec-cec is being loaded. When they get probed out of order, this is where the race condition seems to originate.
+
 ---
 
 diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
