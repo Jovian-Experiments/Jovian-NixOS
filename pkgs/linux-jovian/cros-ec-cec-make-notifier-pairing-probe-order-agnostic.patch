@@ -1,3 +1,12 @@
+From: Socks <code@olympus.moe>
+Subject: [PATCH] cros-ec-cec: Make the notifier pairing probe-order agnostic
+
+This patch resolves a race condition based on the probing order between cros-ec-cec and the amdgpu driver. If the EC's CEC driver happened to probe before amdgpu has performed it connector lookup, the registration for a specific connector name would fail to pair and would not automatically re-check. This would cause CEC not not function properly at boot until manually resetting the drivers within the proper order for the registration to be successful. 
+
+What this patch does is it passes NULL instead of the connector name when the EC exposes exactly one CEC port, NULL in this case acts as a wildcard and essentially is telling it to match any connector on the HDMI device, this allows it so no matter how the amdgpu driver decides to number the connector, both sides will pair up with each other as soon as both exist. 
+
+---
+
 diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
 --- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
 +++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c

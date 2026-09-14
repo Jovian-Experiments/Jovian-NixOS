@@ -35,7 +35,7 @@ in
   in lib.mkIf cfg.enableSoundSupport {
     services.pulseaudio.enable = false;
 
-    # Required for 'pactl' in PATH
+    # Required for 'pactl' to be available to Steam within PATH
     environment.systemPackages = [ pkgs.pulseaudio ];
 
     services.pipewire = {
