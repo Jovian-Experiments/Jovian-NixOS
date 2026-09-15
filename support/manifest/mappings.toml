@@ -274,7 +274,7 @@ lsb-release.ignore = true
 
 mangohud.check = "0.8.3.rc1.r24.g33c2c7dd-4"
 
-mesa = { map = "mesa-radeonsi-jupiter", pkgrel = 3, fixup = "mesa" }
+mesa = { map = "mesa-radeonsi-jupiter", pkgrel = 4, fixup = "mesa" }
 
 # FIXME: revisit if there's relevant changes and/or actual users on NVK
 mesa-nvk.check = "26.1.2.221562.radeonsi_26.1.2-2"
