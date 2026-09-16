@@ -1,0 +1,38 @@
+diff --git a/usr/lib/hwsupport/holo-automount.sh b/usr/lib/hwsupport/holo-automount.sh
+index 386f4d8..21932c0 100755
+--- a/usr/lib/hwsupport/holo-automount.sh
++++ b/usr/lib/hwsupport/holo-automount.sh
+@@ -67,16 +67,28 @@ do_mount()
+     #fi
+ 
+     # We need symlinks for Steam for now, so only automount ext4 as that'll Steam will format right now
+-    if [[ ${ID_FS_TYPE} != "ext4" ]]; then
+-        echo "Error mounting ${DEVICE}: wrong fstype: ${ID_FS_TYPE} - ${dev_json}"
+-        exit 2
+-    fi
+ 
+     # Try to repair the filesystem if it's known to have errors.
+     # ret=0 means no errors, 1 means that errors were corrected.
+     # In all other cases we try to mount the fs read-only and report an error.
+     ret=0
+-    fsck.ext4 -y "${DEVICE}" || ret=$?
++    case "${ID_FS_TYPE}" in
++      # null: unformatted partition
++      # ntfs: filename incompatibilities with proton
++      # exfat, udf, vfat: no symlink support
++      "null" | "ntfs" | "exfat" | "udf" | "vfat")
++        echo "Error mounting ${DEVICE}: wrong fstype: ${ID_FS_TYPE} - ${dev_json}"
++        exit ${MOUNT_ERROR}
++        ;;
++
++      # these actually have fsck implementations we can use
++      "ext4")
++        fsck.ext4 -y "${DEVICE}" || ret=$?
++        ;;
++      "f2fs")
++        fsck.f2fs -y "${DEVICE}" || ret=$?
++        ;;
++    esac
+     if (( ret != 0 && ret != 1 )); then
+         send_steam_url "system/devicemountresult" "${DEVBASE}/${FSCK_ERROR}"
+         echo "Error running fsck on ${DEVICE} (status = $ret)"
