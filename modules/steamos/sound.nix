@@ -1,7 +1,8 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.jovian.devices.steamdeck;
+  cfg = config.jovian.steamos;
+
 
   alsa-ucm-conf' = pkgs.runCommand "jovian-ucm-conf" {} ''
     cp -r --no-preserve=all ${pkgs.alsa-ucm-conf} $out
@@ -15,16 +16,16 @@ let
 in
 {
   options = {
-    jovian.devices.steamdeck = {
+    jovian.steamos = {
       enableSoundSupport = lib.mkOption {
-        default = cfg.enable;
-        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
+        default = cfg.useSteamOSConfig;
+        defaultText = lib.literalExpression "config.jovian.steamos.useSteamOSConfig";
         type = lib.types.bool;
         description = ''
           Whether to enable sound support.
         '';
       };
-    };
+    };  
   };
 
   config = let
@@ -33,6 +34,9 @@ in
     extraEnv.ALSA_CONFIG_UCM2 = "${alsa-ucm-conf'}/share/alsa/ucm2";
   in lib.mkIf cfg.enableSoundSupport {
     services.pulseaudio.enable = false;
+
+    # Required for 'pactl' to be available to Steam within PATH
+    environment.systemPackages = [ pkgs.pulseaudio ];
 
     services.pipewire = {
       enable = true;

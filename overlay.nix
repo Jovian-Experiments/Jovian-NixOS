@@ -15,6 +15,10 @@ rec {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
+      {
+        name = "cros-ec-cec-make-notifier-pairing-probe-order-agnostic";
+        patch = ./pkgs/linux-jovian/cros-ec-cec-make-notifier-pairing-probe-order-agnostic.patch;
+      }
     ];
   };
 
@@ -52,6 +56,7 @@ rec {
   steam_notif_daemon = final.callPackage ./pkgs/steam_notif_daemon { };
 
   jupiter-hw-support = final.callPackage ./pkgs/jupiter-hw-support { };
+  fremont-hw-support = final.callPackage ./pkgs/fremont-hw-support { };
   steamdeck-hw-theme = final.callPackage ./pkgs/jupiter-hw-support/theme.nix { };
   steamdeck-firmware = final.callPackage ./pkgs/jupiter-hw-support/firmware.nix { };
   steamdeck-bios-fwupd = final.callPackage ./pkgs/jupiter-hw-support/bios-fwupd.nix { };
@@ -63,8 +68,12 @@ rec {
   pipewire-jupiter = final.callPackage ./pkgs/pipewire {
     pipewire' = prev.pipewire;
   };
+
+  # Builds 'wireplumber-jupiter' against the 'pipewire-jupiter' fork to allow Steam Client to recognize CEC support.
   wireplumber-jupiter = final.callPackage ./pkgs/wireplumber {
-    wireplumber' = prev.wireplumber;
+    wireplumber' = prev.wireplumber.override {
+      pipewire = final.pipewire-jupiter;
+    };
   };
 
   opensd = final.callPackage ./pkgs/opensd { };
@@ -103,6 +112,7 @@ rec {
   };
 
   cecd = final.callPackage ./pkgs/cecd { };
+  cec-audio-control = final.callPackage ./pkgs/cec-audio-control { };
   inputattach-cec-units = final.callPackage ./pkgs/inputattach-cec-units { };
 
   dmemcg-booster = final.callPackage ./pkgs/dmemcg-booster { };

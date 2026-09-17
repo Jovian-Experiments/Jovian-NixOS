@@ -1,0 +1,36 @@
+From: Socks <code@olympus.moe>
+Subject: [PATCH] cros-ec-cec: Make the notifier pairing probe-order agnostic
+
+This patch resolves a race condition based on the probing order between cros-ec-cec and the amdgpu driver. If the EC's CEC driver happened to probe before amdgpu has performed it connector lookup, the registration for a specific connector name would fail to pair and would not automatically re-check. This would cause CEC not not function properly at boot until manually resetting the drivers within the proper order for the registration to be successful. 
+
+What this patch does is it passes NULL instead of the connector name when the EC exposes exactly one CEC port, NULL in this case acts as a wildcard and essentially is telling it to match any connector on the HDMI device, this allows it so no matter how the amdgpu driver decides to number the connector, both sides will pair up with each other as soon as both exist. 
+
+Vavle's SteamOS seemingly doesn't need this due to the amdgpu being built directly into the kernel image, likely because SteamOS is expected to only be installed on AMD hardware, which eliminates the chance of the race condition happening. Jovian-NixOS doesn't build the amdgpu driver into the kernel image and instead loads it as a module in the same way that cros-ec-cec is being loaded. When they get probed out of order, this is where the race condition seems to originate.
+
+---
+
+diff --git a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+--- a/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
++++ b/drivers/media/cec/platform/cros-ec/cros-ec-cec.c
+@@ -469,6 +469,7 @@
+ 				 const char * const *conns)
+ {
+ 	struct cros_ec_cec_port *port;
++	const char *port_name;
+ 	int ret;
+
+ 	port = devm_kzalloc(dev, sizeof(*port), GFP_KERNEL);
+@@ -490,7 +491,12 @@
+ 		goto out_probe_adapter;
+ 	}
+
+-	port->notify = cec_notifier_cec_adap_register(hdmi_dev, conns[port_num],
++	if (cros_ec_cec->num_ports == 1)
++		port_name = NULL;
++	else
++		port_name = conns[port_num];
++
++	port->notify = cec_notifier_cec_adap_register(hdmi_dev, port_name,
+ 						      port->adap);
+ 	if (!port->notify) {
+ 		ret = -ENOMEM;

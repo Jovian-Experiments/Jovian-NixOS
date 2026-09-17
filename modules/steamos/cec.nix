@@ -37,6 +37,7 @@ in
     systemd.packages = [
       pkgs.cecd
       pkgs.inputattach-cec-units
+      pkgs.cec-audio-control
     ];
 
     systemd.user.services.cecd = {
@@ -44,6 +45,17 @@ in
       wantedBy = [ "graphical-session.target" ];
       wants = [ "steamos-manager-configure-cecd.service" ];
       after = [ "steamos-manager-configure-cecd.service" ];
+    };
+
+    systemd.user.sockets.cec-audio-control = {
+      overrideStrategy = "asDropin";
+      wantedBy = [ "sockets.target" ];
+    };
+
+    systemd.user.services.cec-audio-control = {
+      overrideStrategy = "asDropin";
+      wants = [ "cecd.service" ];
+      after = [ "cecd.service" ];
     };
   };
 }
