@@ -10,7 +10,7 @@ in stdenv.mkDerivation {
     owner = "Jovian-Experiments";
     repo = "mesa";
     rev = jupiterVersion;
-    hash = "sha256-m7gjwDnOw1lr6PUgXsyOqhkMqytf9Cln5mWF2WCEGOw=";
+    hash = "sha256-IWy/ppRZAPEDvJopMhsGTUGZDKpRnAy/xmepmotZyeA=";
   };
 
   inherit (mesa) buildInputs nativeBuildInputs propagatedBuildInputs;
