@@ -16,6 +16,7 @@ in
   imports = [
     ./controller.nix
     ./fan-control.nix
+    ./fde.nix
     ./firmware.nix
     ./graphical.nix
     ./hw-support.nix
