@@ -378,8 +378,8 @@ steamos-atomupd-client.ignore = true
 
 # applied as NixOS modules instead
 # check both to make sure we get the latest changes
-steamos-customizations-git.check = "20260914.1-1"
-steamos-customizations-jupiter.check = "20260914.1-1"
+steamos-customizations-git.check = "20260914.1-2"
+steamos-customizations-jupiter.check = "20260914.1-2"
 
 # devkit stuff
 steamos-devkit-service.ignore = true
