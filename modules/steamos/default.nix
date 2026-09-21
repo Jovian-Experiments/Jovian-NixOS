@@ -11,7 +11,6 @@ in
     ./automount.nix
     ./bluetooth.nix
     ./boot.nix
-    ./cec.nix
     ./earlyoom.nix
     ./misc.nix
     ./sysctl.nix
@@ -20,6 +19,7 @@ in
     ./perf-control.nix
     ./rename.nix
     ./sound.nix
+    ./graphics.nix
   ];
   options = {
     jovian.steamos = {
