@@ -227,7 +227,7 @@ krdp.check = "6.7.3-2"
 kscreenlocker.check = "6.7.3-1.1"
 
 # keyboard/libei fixes
-kwin.check = "6.7.3-1.5"
+kwin.check = "6.7.3-1.6"
 
 libdrm.check = "2.4.120-1"
 
@@ -295,7 +295,7 @@ mesa-nvk.check = "26.1.2.221562.radeonsi_26.1.2-2"
 mesa-radv = { map = "mesa-radv-jupiter", pkgrel = 1, fixup = "mesa" }
 
 # iwd backend fixes, pending upstream
-networkmanager.check = "1.58.0-1.7"
+networkmanager.check = "1.58.0-1.8"
 
 # just the ladspa plugin
 noisetorch.check = "0.12.2.r47.g6d895f3-3"
@@ -417,7 +417,7 @@ steamos-systemreport.ignore = true
 steamos-tweak-mtu-probing.check = "1-1"
 
 # SteamOS suspend related fixes that don't really affect us
-systemd.check = "261.2-1.1"
+systemd.check = "261.2-1.2"
 
 # lul
 ttf-twemoji-default.ignore = true
@@ -444,7 +444,7 @@ wireplumber.map = "wireplumber-jupiter"
 wpa_supplicant.check = "2:2.12-1.2"
 
 # Valve CI workarounds
-xdg-dbus-proxy.check = "0.1.8-1.1"
+xdg-dbus-proxy.check = "0.1.9-0.1"
 
 xdg-desktop-portal-gamescope = { map = true, pkgrel = 1 }
 xdg-desktop-portal-holo = { map = true, pkgrel = 2 }
