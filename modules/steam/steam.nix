@@ -7,6 +7,24 @@ let
     mkMerge
   ;
 
+  ledAttrs = [
+    "brightness"
+    "brightness_scale"
+    "brightness_startup"
+    "effect"
+    "enabled"
+    "mode"
+    "multi_intensity"
+    "multi_intensity_startup"
+    "profile"
+    "speed"
+    "delay"
+    "trigger"
+    "delay_on"
+    "delay_off"
+    "led_brightness_multiplier"
+  ];
+
   cfg = config.jovian.steam;
 in
 {
@@ -131,7 +149,6 @@ in
       ];
 
       # From steam-jupiter
-      # FIXME: investigate LED stuff
       services.udev.extraRules = ''
         # USB devices and topological children
         SUBSYSTEMS=="usb", TAG+="uaccess"
@@ -141,6 +158,18 @@ in
 
         # Steam Controller udev write access
         KERNEL=="uinput", SUBSYSTEM=="misc", TAG+="uaccess", OPTIONS+="static_node=uinput"
+
+        # Steam Controller Wakeup Support
+        ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="1102", ATTR{power/wakeup}="enabled"
+        ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="1142", ATTR{power/wakeup}="enabled"
+        ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="1302", ATTR{power/wakeup}="enabled"
+        ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="1304", ATTR{power/wakeup}="enabled"
+        ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", ATTRS{idProduct}=="1305", ATTR{power/wakeup}="enabled"
+        # LED Control Access 
+        ${lib.concatMapStrings (attr: ''
+          SUBSYSTEM=="leds", RUN+="${pkgs.coreutils}/bin/chgrp users '/sys/class/leds/%k/${attr}'"
+          SUBSYSTEM=="leds", RUN+="${pkgs.coreutils}/bin/chmod 0660 '/sys/class/leds/%k/${attr}'"
+        '') ledAttrs}
       '';
 
       # The responsibility for the equivalent action when out of battery charge is

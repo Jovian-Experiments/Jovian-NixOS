@@ -111,8 +111,7 @@ flatpak.check = "1:1.18.1-1.1"
 foxnet.ignore = true
 foxnetstatsd.ignore = true
 
-# FIXME(fremont)
-fremont-hw-support.ignore = true
+fremont-hw-support = { map = true, pkgrel = 1 }
 
 # we use nixpkgs version
 fwupd-minimal.ignore = true
@@ -354,7 +353,6 @@ scx-scheds.check = "1.1.3.linux.steamos.2-1"
 # FIXME: package this
 steam-im-modules.ignore = true
 
-# FIXME(fremont): LED udev rules
 steam-jupiter-stable = { map = "steam-unwrapped", pkgrel = 12 }
 
 # we don't use this
@@ -378,8 +376,8 @@ steamos-atomupd-client.ignore = true
 
 # applied as NixOS modules instead
 # check both to make sure we get the latest changes
-steamos-customizations-git.check = "20260914.1-2"
-steamos-customizations-jupiter.check = "20260914.1-2"
+steamos-customizations-git.check = "20260910.1-1"
+steamos-customizations-jupiter.check = "20260910.1-1"
 
 # devkit stuff
 steamos-devkit-service.ignore = true
