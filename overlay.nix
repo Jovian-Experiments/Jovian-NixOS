@@ -115,4 +115,6 @@ rec {
 
   decky-loader = final.callPackage ./pkgs/decky-loader { };
   decky-loader-prerelease = final.callPackage ./pkgs/decky-loader/prerelease.nix { };
+  update-decky-plugins = final.callPackage ./support/update-decky-plugins { };
+  decky-plugins = final.callPackage ./pkgs/decky-plugins { };
 }

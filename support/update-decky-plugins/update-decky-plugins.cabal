@@ -1,0 +1,29 @@
+cabal-version:      3.0
+name:               update-decky-plugins
+version:            0.1.0.0
+license:            BSD-3-Clause
+license-file:       LICENSE
+author:             YvesStraten
+maintainer:         yves.straten@gmail.com
+build-type:         Simple
+
+common warnings
+    ghc-options: -Wall
+
+executable update-decky-plugins
+    import:           warnings
+    main-is:          Main.hs
+    other-modules: OptParse,
+                   Plugin,
+                   Version
+    build-depends:    
+      base,
+      aeson >=2.0,
+      optparse-applicative,
+      req >= 3.13.2, 
+      text,
+      async,
+      process,
+      hnix >= 0.17.0
+    hs-source-dirs:   app
+    default-language: Haskell2010

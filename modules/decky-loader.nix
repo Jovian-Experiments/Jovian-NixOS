@@ -67,6 +67,14 @@ in
             The user Decky Loader should run plugins as.
           '';
         };
+
+        plugins = mkOption {
+          type = types.listOf types.package;
+          default = [ ];
+          description = ''
+            Plugins to install
+          '';
+        };
       };
     };
   };
@@ -80,6 +88,28 @@ in
       };
       users.groups.decky = {};
     })
+
+    (lib.mkIf (cfg.plugins != []) {
+      systemd.tmpfiles.settings =  let
+        pluginsDir = pkgs.symlinkJoin {
+          name = "decky-plugins-folder";
+          paths = cfg.plugins;
+        };
+      in
+        {
+          "10-decky-plugins" = {
+            "${cfg.stateDir}/plugins" = {
+              "L+" = {
+                group = "${config.users.users.${cfg.user}.group}";
+                mode = "0755";
+                user = "${cfg.user}";
+                argument = "${pluginsDir}/plugins";
+              };
+            };
+          };
+        };
+    })
+
     {
       # As of 2023/07/16, the Decky Loader needs to run as root, even if you never
       # use plugins that require it. It setuid's to the unprivileged user to
