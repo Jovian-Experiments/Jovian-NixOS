@@ -51,7 +51,6 @@ in
         [fwupd Remote]
         Enabled=true
         Title=Fremont HW Support Updates
-        Keyring=none
         MetadataURI=file://${pkgs.fremont-hw-support}/share/fwupd/remotes.d/fremont/firmware
         ApprovalRequired=false
       '';
