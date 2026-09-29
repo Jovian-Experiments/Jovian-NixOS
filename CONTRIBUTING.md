@@ -56,6 +56,8 @@ It does not mean the contribution will be rejected outright.
 We will evaluate on a case-by-case basis.
 We value honesty, and take it into consideration.
 
+***“AI” and LLM usage MUST be disclosed IMMEDIATELY.***
+
 The same applies to interactions with the repository and community.
 Using the output of “AI” as part of your interactions such as issues, pull requests or comments is not welcome.
 
