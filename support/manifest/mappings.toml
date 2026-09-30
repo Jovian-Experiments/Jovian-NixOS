@@ -105,7 +105,7 @@ f3.ignore = true
 filesystem.ignore = true
 
 # Valve CI workarounds
-flatpak.check = "1:1.18.1-1.1"
+flatpak.check = "1:1.18.4-0.1"
 
 # FIXME: some internal Valve thing, investigate?
 foxnet.ignore = true
@@ -126,6 +126,9 @@ gpu-trace.ignore = true
 
 # we don't use it
 grub.ignore = true
+
+# applied as NixOS config
+holo-config-mtu-probing.check = "1.0-1"
 
 # sets up vendor debuginfod server
 holo-debuginfod-config.ignore = true
@@ -150,14 +153,18 @@ holo-grant-cap-sys-nice.check = "1.0-1"
 # we don't use those repos
 holo-keyring.ignore = true
 
-# huh
-holo-libva-config.check = "1.0-1"
+# Allows switching between iwd and wpa_supplicant wifi backends from Steam
+# FIXME: doesn't seem to be wired up?
+holo-networking-tools.check = "1.4-1"
 
 # immutable root stuff
 holo-nfs-utils-tmpfiles.ignore = true
 
 # lul
 holo-nix-offload.ignore = true
+
+# some A/B thing
+holo-passwd.ignore = true
 
 # FIXME: needs newer plymouth
 holo-plymouth-config.check = "1.0-1"
@@ -175,7 +182,7 @@ holo-rust-packaging-tools.ignore = true
 holo-session-selection.map = true
 
 # we don't care
-holo-sudo-config.check = "1.0-1"
+holo-sudo-config.check = "1.0-2"
 
 # implemented as nixos modules
 holo-upower-config.check = "1.0-1"
@@ -191,7 +198,7 @@ ibus-table-cangjie-lite.ignore = true
 inputattach-cec-units.map = true
 
 # some non-critical patches
-iwd.check = "3.12-1.2"
+iwd.check = "3.12-1.3"
 
 jupiter-dock-updater-bin = { map = true, pkgrel = 1 }
 
@@ -295,7 +302,7 @@ mesa-nvk.check = "26.1.2.221562.radeonsi_26.1.2-2"
 mesa-radv = { map = "mesa-radv-jupiter", pkgrel = 1, fixup = "mesa" }
 
 # iwd backend fixes, pending upstream
-networkmanager.check = "1.58.0-1.8"
+networkmanager.check = "1.58.0-1.9"
 
 # just the ladspa plugin
 noisetorch.check = "0.12.2.r47.g6d895f3-3"
@@ -378,8 +385,8 @@ steamos-atomupd-client.ignore = true
 
 # applied as NixOS modules instead
 # check both to make sure we get the latest changes
-steamos-customizations-git.check = "20260914.1-2"
-steamos-customizations-jupiter.check = "20260914.1-2"
+steamos-customizations-git.check = "20260916.1-1"
+steamos-customizations-jupiter.check = "20260916.1-1"
 
 # devkit stuff
 steamos-devkit-service.ignore = true
@@ -396,13 +403,6 @@ steamos-manager.map = true
 # not relevant to us
 steamos-media-creation-git.ignore = true
 
-# Allows switching between iwd and wpa_supplicant wifi backends from Steam
-# FIXME: doesn't seem to be wired up?
-steamos-networking-tools.check = "1.3-1"
-
-# some A/B thing
-steamos-passwd.ignore = true
-
 steamos-powerbuttond.map = "powerbuttond"
 
 # more A/B stuff
@@ -412,9 +412,6 @@ steamos-reset.ignore = true
 
 # more telemetry
 steamos-systemreport.ignore = true
-
-# applied as NixOS config
-steamos-tweak-mtu-probing.check = "1-1"
 
 # SteamOS suspend related fixes that don't really affect us
 systemd.check = "261.2-1.2"
