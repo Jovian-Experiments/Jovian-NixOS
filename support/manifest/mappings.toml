@@ -184,6 +184,9 @@ holo-session-selection.map = true
 # we don't care
 holo-sudo-config.check = "1.0-2"
 
+# more telemetry
+holo-systemreport.ignore = true
+
 # implemented as nixos modules
 holo-upower-config.check = "1.0-1"
 
@@ -384,9 +387,10 @@ steamos-alias.ignore = true
 steamos-atomupd-client.ignore = true
 
 # applied as NixOS modules instead
-# check both to make sure we get the latest changes
-steamos-customizations-git.check = "20260916.1-1"
-steamos-customizations-jupiter.check = "20260916.1-1"
+steamos-customizations.check = "20260916.1-2"
+
+# -git variant seems deprecated?
+steamos-customizations-git.check = "20260911.1-1"
 
 # devkit stuff
 steamos-devkit-service.ignore = true
@@ -409,9 +413,6 @@ steamos-powerbuttond.map = "powerbuttond"
 steamos-repair-backend-git.ignore = true
 steamos-repair-tool-git.ignore = true
 steamos-reset.ignore = true
-
-# more telemetry
-steamos-systemreport.ignore = true
 
 # SteamOS suspend related fixes that don't really affect us
 systemd.check = "261.2-1.2"
