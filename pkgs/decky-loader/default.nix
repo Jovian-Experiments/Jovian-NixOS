@@ -1,22 +1,23 @@
-{ lib
-, fetchFromGitHub
-, nodejs
-, pnpm_11
-, fetchPnpmDeps
-, pnpmConfigHook
-, python3
-, coreutils
-, psmisc
+{
+  lib,
+  fetchFromGitHub,
+  nodejs,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  python3,
+  coreutils,
+  psmisc,
 }:
 python3.pkgs.buildPythonPackage rec {
   pname = "decky-loader";
-  version = "3.2.9";
+  version = "3.2.10";
 
   src = fetchFromGitHub {
     owner = "SteamDeckHomebrew";
     repo = "decky-loader";
     rev = "v${version}";
-    hash = "sha256-XhW+bbsEhWnD/1c3QVHAQz6AAo824b/hbZ1t/VZE1po=";
+    hash = "sha256-YLv9rC9cDH+LoVTIc4jSn/tZV3S+jC37RrnK2b/q++c=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -43,7 +44,7 @@ python3.pkgs.buildPythonPackage rec {
     cd ../backend
   '';
 
-  build-system = with python3.pkgs; [ 
+  build-system = with python3.pkgs; [
     poetry-core
     poetry-dynamic-versioning
   ];
@@ -60,7 +61,12 @@ python3.pkgs.buildPythonPackage rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ coreutils psmisc ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        psmisc
+      ]
+    }"
   ];
 
   pythonRelaxDeps = [
