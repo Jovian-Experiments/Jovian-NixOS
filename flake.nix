@@ -9,20 +9,26 @@
     };
   };
 
-  outputs = { self, nixpkgs, nix-github-actions }: let
+  outputs = {
+    self,
+    nixpkgs,
+    nix-github-actions,
+  }: let
     inherit (nixpkgs) lib;
 
-    supportedSystems = [ "x86_64-linux" ];
-    eachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: let
-      pkgs = import nixpkgs {
-        inherit system;
-        config = {
-          allowAliases = false;
-          allowUnfree = true;
+    supportedSystems = ["x86_64-linux"];
+    eachSupportedSystem = f:
+      nixpkgs.lib.genAttrs supportedSystems (system: let
+        pkgs = import nixpkgs {
+          inherit system;
+          config = {
+            allowAliases = false;
+            allowUnfree = true;
+          };
+          overlays = [self.overlays.default];
         };
-        overlays = [ self.overlays.default ];
-      };
-    in f pkgs);
+      in
+        f pkgs);
   in {
     legacyPackages = eachSupportedSystem (pkgs: pkgs);
 
@@ -38,30 +44,40 @@
     };
 
     checks = eachSupportedSystem (pkgs: let
-      overlayContents = builtins.attrNames (import ./overlay.nix {} {})
-        ++ [ "steam" ];
+      overlayContents =
+        builtins.attrNames (import ./overlay.nix {} {})
+        ++ ["steam"];
       jobs = lib.foldl (ret: f: f ret) overlayContents [
         (map (attr: lib.nameValuePair attr pkgs.${attr}))
         (builtins.filter (job: lib.isDerivation job.value))
         builtins.listToAttrs
       ];
-    in jobs);
+    in
+      jobs);
 
     githubActions = nix-github-actions.lib.mkGithubMatrix {
       inherit (self) checks;
     };
 
-    devShells = eachSupportedSystem (pkgs: {
-      default = pkgs.mkShell {
-        packages = let
-          pyenv = pkgs.python3.withPackages (ps: [
-            ps.colorama
-            ps.httpx
-            ps.toml
-            (ps.callPackage ./support/manifest/pyalpm.nix {})
-          ]); 
-        in [ pyenv ];
-      };
-    });
-  };
+      devShells = eachSupportedSystem (pkgs: {
+        default = let
+          haskell_env = pkgs.update-decky-plugins.env.overrideAttrs (o:
+            with pkgs.haskellPackages; {
+              nativeBuildInputs = o.nativeBuildInputs or [ ]
+                ++ [ cabal-install haskell-language-server ];
+            });
+        in pkgs.mkShell {
+          inputsFrom = [ haskell_env ];
+          packages = let
+            pyenv = pkgs.python3.withPackages (ps: [
+              ps.colorama
+              ps.httpx
+              ps.toml
+              (ps.callPackage ./support/manifest/pyalpm.nix { })
+            ]);
+
+          in [ pyenv ];
+        };
+      });
+    };
 }
