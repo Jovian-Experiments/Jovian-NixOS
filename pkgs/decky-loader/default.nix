@@ -61,12 +61,13 @@ python3.pkgs.buildPythonPackage rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        coreutils
-        psmisc
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      coreutils
+      psmisc
+    ])
   ];
 
   pythonRelaxDeps = [
