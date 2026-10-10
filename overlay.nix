@@ -1,9 +1,52 @@
+#
+# █▀▀▀▀▀▀▀▀▀▀▀█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
+# █  WARNING  █  This overlay.nix file is not a public interface.  █
+# █▄▄▄▄▄▄▄▄▄▄▄█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
+#
+# Importing this overlay in your NixOS configuration may cause unexpected
+# errors. Import the Jovian NixOS modules in your NixOS configuration,
+# which will import this overlay correctly.
+# 
 final: prev:
 
 let
   inherit (final)
     kernelPatches
     linuxPackagesFor
+  ;
+in
+
+if prev ? linux_jovian && !( prev.__jovian_ignore_guard or false ) then builtins.throw ''
+  ${""  }The Jovian NixOS overlay was already previously imported in this
+         NixOS configuration. This is unsupported, and may cause build failures.
+
+         Please make sure that you are not adding the Jovian NixOS overlay
+         to `nixpkgs.overlays` in your NixOS configuration.
+
+         Adding the overlay is not needed when importing the Jovian NixOS
+         module in your configuration.
+
+         If you are not using the Jovian NixOS modules, make sure the
+         overlay is not being imported twice.
+
+         The overlay is not part of the public interface, and care should
+         be taken when using it directly.
+
+         * * *
+         Technical detail:
+         This is checking for `linux_jovian` being already set. If another
+         module or overlay is adding `linux_jovian` to the package set, it
+         may also trigger this error.
+         * * *
+'' else
+
+let
+  # The different parts of this tooling need to "peek" into the overlay.
+  # (Mainly to read the overlaid package metadata.)
+  pkgs'WithoutGuardClause =
+    final.appendOverlays [(_: _: {
+      __jovian_ignore_guard = true;
+    })]
   ;
 in
 rec {
@@ -73,7 +116,7 @@ rec {
   jovian-steam-protocol-handler = final.callPackage ./pkgs/jovian-steam-protocol-handler { };
   jovian-updater-logo-helper = final.callPackage ./pkgs/jovian-updater-logo-helper { };
 
-  jovian-documentation = final.callPackage ./support/docs {
+  jovian-documentation = pkgs'WithoutGuardClause.callPackage ./support/docs {
     documentationPath = final.callPackage (
       { runCommand
       }:
