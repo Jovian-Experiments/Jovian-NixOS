@@ -1,6 +1,6 @@
-# Steam Deck-specific configurations
+# Steam Machine-specific configurations
 #
-# jovian.devices.steamdeck
+# jovian.devices.steammachine
 
 { config, lib, ... }:
 
@@ -10,25 +10,21 @@ let
     mkOption
     types
   ;
-  cfg = config.jovian.devices.steamdeck;
+  cfg = config.jovian.devices.steammachine;
 in
 {
   imports = [
-    ./firmware.nix
-    ./graphical.nix
-    ./hw-support.nix
     ./kernel.nix
-    ./sdgyrodsu.nix
-    ./workarounds.nix
+    ./firmware.nix
   ];
 
   options = {
-    jovian.devices.steamdeck = {
+    jovian.devices.steammachine = {
       enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
-          Whether to enable Steam Deck-specific configurations.
+          Whether to enable Steam Machine-specific configurations.
         '';
       };
     };
