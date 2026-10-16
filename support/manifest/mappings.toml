@@ -157,6 +157,9 @@ holo-keyring.ignore = true
 # FIXME: doesn't seem to be wired up?
 holo-networking-tools.check = "1.4-1"
 
+# networkmanager defaults we probably don't want
+holo-networkmanager-config.check = "1.0-1"
+
 # immutable root stuff
 holo-nfs-utils-tmpfiles.ignore = true
 
@@ -393,7 +396,7 @@ steamos-alias.ignore = true
 steamos-atomupd-client.ignore = true
 
 # applied as NixOS modules instead
-steamos-customizations.check = "20260916.1-2"
+steamos-customizations.check = "20260930.1-2"
 
 # -git variant seems deprecated?
 steamos-customizations-git.check = "20260911.1-1"
@@ -445,7 +448,7 @@ wireless-domain-setter.check = "1.2-1"
 wireplumber.map = "wireplumber-jupiter"
 
 # rescan after wake speedups
-wpa_supplicant.check = "2:2.12-1.2"
+wpa_supplicant.check = "2:2.12-1.3"
 
 # Valve CI workarounds
 xdg-dbus-proxy.check = "0.1.9-0.1"
