@@ -58,11 +58,6 @@ def get_latest_versions(repos: list[str]):
         for pkg in fetch_valve_repo(repo):
             pkgbase = pkg['BASE'][0]
             pkgver = pkg['VERSION'][0]
-
-            # FIXME: ugly hack
-            if pkgbase == "linux-firmware-neptune":
-                pkgver = pkgver.removeprefix("jupiter.")
-
             result[pkgbase] = max_version(result.get(pkgbase), pkgver)
     return result
 

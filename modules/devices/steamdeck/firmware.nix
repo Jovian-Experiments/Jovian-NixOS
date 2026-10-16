@@ -36,7 +36,8 @@ in
   config = mkMerge [
     (mkIf (cfg.enable) {
       hardware.firmware = [
-        (lib.hiPrio pkgs.linux-firmware-jupiter)
+        pkgs.linux-firmware
+        (lib.hiPrio pkgs.linux-firmware-holo)
         (lib.hiPrio pkgs.steamdeck-dsp)
       ];
     })

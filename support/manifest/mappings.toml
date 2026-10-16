@@ -250,7 +250,10 @@ libversion.ignore = true
 # rebuild
 libxml2.ignore = true
 
-linux-firmware-neptune = { map = "linux-firmware-jupiter", pkgrel = 1 }
+linux-firmware-holo = { map = "linux-firmware-holo", pkgrel = 1 }
+
+# legacy version
+linux-firmware-neptune.ignore = true
 
 # some other mainline kernel build
 linux-lts.ignore = true

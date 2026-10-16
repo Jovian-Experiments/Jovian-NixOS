@@ -7,9 +7,7 @@ let
   ;
 in
 rec {
-  linux-firmware-jupiter = final.callPackage ./pkgs/linux-firmware {
-    linux-firmware = prev.linux-firmware;
-  };
+  linux-firmware-holo = final.callPackage ./pkgs/linux-firmware-holo { };
   linuxPackages_jovian = linuxPackagesFor final.linux_jovian;
   linux_jovian = final.callPackage ./pkgs/linux-jovian {
     kernelPatches = [
