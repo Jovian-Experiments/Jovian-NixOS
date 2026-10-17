@@ -36,8 +36,9 @@ rec {
     inputplumber' = prev.inputplumber;
   };
 
-  mangohud = final.callPackage ./pkgs/mangohud {
+  mangohud = import ./pkgs/mangohud {
     mangohud' = prev.mangohud;
+    inherit (final) fetchpatch;
   };
 
   mesa-radeonsi-jupiter = final.callPackage ./pkgs/mesa-radeonsi-jupiter {};

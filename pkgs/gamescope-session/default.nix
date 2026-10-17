@@ -31,6 +31,9 @@
 }:
 
 let
+  # we only really need mangoapp here, not the layers, so don't waste time on 32-bit ones
+  mangoapp = mangohud.override { lowerBitnessSupport = false; };
+
   gamescope-session-solution = {
     scripts = [ "lib/steamos/gamescope-session" ];
     interpreter = "${bash}/bin/bash";
@@ -138,7 +141,7 @@ in stdenv.mkDerivation(finalAttrs: {
     substituteInPlace steam-short-session-tracker --replace-fail /usr/lib/steam ${steam-unwrapped}/lib/steam
 
     substituteInPlace galileo-mura-setup.service --replace-fail /usr/bin ${galileo-mura}/bin
-    substituteInPlace gamescope-mangoapp.service --replace-fail /usr/bin ${mangohud}/bin
+    substituteInPlace gamescope-mangoapp.service --replace-fail /usr/bin ${mangoapp}/bin
     substituteInPlace gamescope-session.service --replace-fail /usr/lib $out/lib
     substituteInPlace ibus-gamescope.service --replace-fail /usr/bin ${ibus}/bin
 

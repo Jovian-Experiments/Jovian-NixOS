@@ -1,4 +1,4 @@
-{ mangohud', fetchFromGitHub, fetchpatch }:
+{ mangohud', fetchpatch }:
 # we ship a newer mangohud base, but add some backports from vendor that are still not in there
 mangohud'.overrideAttrs(old: {
   patches = old.patches or [] ++ [
