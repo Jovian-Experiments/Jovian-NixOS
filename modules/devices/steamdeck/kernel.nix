@@ -26,7 +26,7 @@ in
   };
   config = mkIf (cfg.enableKernelPatches) (mkMerge [
     {
-      boot.kernelPackages = mkDefault pkgs.linuxPackages_jovian;
+      boot.kernelPackages = mkDefault pkgs.jovianPackages.linuxPackages;
       # see https://github.com/Jovian-Experiments/steamos-customizations-jupiter/blob/jupiter-20241107.1/misc/modules-load.d/hid-preload.conf
       boot.kernelModules = ["hid_nintendo" "hid_playstation"];
       # Deck specific, not needed on latest non-vendor kernels

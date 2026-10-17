@@ -26,8 +26,8 @@ in
 
         package = mkOption {
           type = types.package;
-          default = pkgs.decky-loader;
-          defaultText = lib.literalExpression "pkgs.decky-loader";
+          default = pkgs.jovianPackages.decky-loader;
+          defaultText = lib.literalExpression "pkgs.jovianPackages.decky-loader";
           description = ''
             The loader package to use.
           '';

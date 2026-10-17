@@ -102,7 +102,7 @@ in
 
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = "${pkgs.steamos-manager}/bin/steamosctl set-default-desktop-session ${cfg.desktopSession}.desktop";
+          ExecStart = "${pkgs.jovianPackages.steamos-manager}/bin/steamosctl set-default-desktop-session ${cfg.desktopSession}.desktop";
         };
 
         wantedBy = [ "graphical-session.target" ];
@@ -142,7 +142,7 @@ in
       };
 
 
-      xdg.portal.configPackages = mkDefault [ pkgs.gamescope-session ];
+      xdg.portal.configPackages = mkDefault [ pkgs.jovianPackages.gamescope-session ];
     })
   ]);
 }

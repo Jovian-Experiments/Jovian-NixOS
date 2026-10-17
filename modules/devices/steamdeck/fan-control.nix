@@ -31,8 +31,8 @@ in
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.dmidecode ];
       serviceConfig = {
-        ExecStart = "${pkgs.jupiter-fan-control}/share/jupiter-fan-control/fancontrol.py --run";
-        ExecStopPost = "${pkgs.jupiter-fan-control}/share/jupiter-fan-control/fancontrol.py --stop";
+        ExecStart = "${pkgs.jovianPackages.jupiter-fan-control}/share/jupiter-fan-control/fancontrol.py --run";
+        ExecStopPost = "${pkgs.jovianPackages.jupiter-fan-control}/share/jupiter-fan-control/fancontrol.py --stop";
         OOMScoreAdjust = -1000;
         Restart = "on-failure";
 

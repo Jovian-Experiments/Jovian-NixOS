@@ -28,7 +28,7 @@ in
       description = "Cemuhook DSU server for the Steam Deck Gyroscope";
       wantedBy = [ "graphical-session.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.sdgyrodsu}/bin/sdgyrodsu";
+        ExecStart = "${pkgs.jovianPackages.sdgyrodsu}/bin/sdgyrodsu";
         PrivateTmp = true;
         ProtectSystem = "strict";
         ProtectHome = true;
