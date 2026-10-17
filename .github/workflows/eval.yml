@@ -14,4 +14,4 @@ jobs:
         uses: samueldr/lix-gha-installer-action@v1
 
       - name: Evaluate overlay packages
-        run: nix-instantiate .ci/get-flake.nix -A checks.x86_64-linux
+        run: nix eval .#checks
