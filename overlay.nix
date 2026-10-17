@@ -65,8 +65,6 @@ rec {
     wireplumber' = prev.wireplumber;
   };
 
-  opensd = final.callPackage ./pkgs/opensd { };
-
   jovian-stubs = final.callPackage ./pkgs/jovian-stubs { };
   jovian-steam-protocol-handler = final.callPackage ./pkgs/jovian-steam-protocol-handler { };
   jovian-updater-logo-helper = final.callPackage ./pkgs/jovian-updater-logo-helper { };
