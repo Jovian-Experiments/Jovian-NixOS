@@ -2,6 +2,8 @@ name: Docs
 on:
   pull_request:
   push:
+    branches:
+      - "development"
   workflow_call:
 
 jobs:
@@ -14,7 +16,7 @@ jobs:
       - name: Install Lix
         uses: samueldr/lix-gha-installer-action@v1
 
-      - run: nix-build -A documentation
+      - run: nix-build -A docs
 
       - name: Unwrap build output
         run: |

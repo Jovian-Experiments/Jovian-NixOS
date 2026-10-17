@@ -1,39 +1,49 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
     mkDefault
     mkIf
     mkMerge
-  ;
+    ;
 
   cfg = config.jovian.steam;
 in
 {
   config = mkIf cfg.enable (mkMerge [
     {
-      warnings = []
-        ++ lib.optional (!config.networking.networkmanager.enable)
-          "The Steam Deck UI integrates with NetworkManager (networking.networkmanager.enable) which is not enabled. NetworkManager is required to complete the first-time setup process.";
+      warnings =
+        [ ]
+        ++
+          lib.optional (!config.networking.networkmanager.enable)
+            "The Steam Deck UI integrates with NetworkManager (networking.networkmanager.enable) which is not enabled. NetworkManager is required to complete the first-time setup process.";
     }
     {
       security.wrappers.gamescope = {
         owner = "root";
         group = "root";
-        source = "${pkgs.gamescope}/bin/gamescope";
+        source = "${pkgs.jovianPackages.gamescope}/bin/gamescope";
         capabilities = "cap_sys_nice+pie";
       };
 
       security.wrappers.galileo-mura-extractor = {
         owner = "root";
         group = "root";
-        source = "${pkgs.galileo-mura}/bin/galileo-mura-extractor";
+        source = "${pkgs.jovianPackages.galileo-mura}/bin/galileo-mura-extractor";
         setuid = true;
       };
     }
     {
       # Enable the usual desktop Steam stuff
-      programs.steam.enable = mkDefault true;
+      programs.steam = {
+        enable = mkDefault true;
+        package = pkgs.jovianPackages.steam;
+      };
 
       boot.kernelModules = [ "ntsync" ];
 
@@ -44,36 +54,39 @@ in
 
       hardware.graphics = {
         enable32Bit = true;
-        extraPackages = [ pkgs.gamescope-wsi ];
-        extraPackages32 = [ pkgs.pkgsi686Linux.gamescope-wsi ];
+        extraPackages = [ pkgs.jovianPackages.gamescope-wsi ];
+        extraPackages32 = [ pkgs.pkgsi686Linux.jovianPackages.gamescope-wsi ];
       };
 
       services.pulseaudio.support32Bit = true;
       hardware.steam-hardware.enable = mkDefault true;
 
       environment.systemPackages = [
-        pkgs.gamescope
-        pkgs.gamescope-session
-        pkgs.holo-polkit-helpers
-        pkgs.steamos-manager
+        pkgs.jovianPackages.gamescope
+        pkgs.jovianPackages.gamescope-session
+        pkgs.jovianPackages.holo-polkit-helpers
+        pkgs.jovianPackages.steamos-manager
       ];
 
       systemd.packages = [
-        pkgs.dmemcg-booster
-        pkgs.gamescope-session
-        pkgs.powerbuttond
-        pkgs.steamos-manager
-        pkgs.vpower
+        pkgs.jovianPackages.dmemcg-booster
+        pkgs.jovianPackages.gamescope-session
+        pkgs.jovianPackages.powerbuttond
+        pkgs.jovianPackages.steamos-manager
+        pkgs.jovianPackages.vpower
       ];
 
       # Required by steamos-manager
-      services.inputplumber.enable = true;
+      services.inputplumber = {
+        enable = true;
+        package = pkgs.jovianPackages.inputplumber;
+      };
       services.scx = {
         enable = lib.mkDefault true;
         package = pkgs.scx.rustscheds;
         scheduler = "scx_lavd";
       };
-      systemd.services.scx.wantedBy = lib.mkForce [];
+      systemd.services.scx.wantedBy = lib.mkForce [ ];
       services.orca.enable = lib.mkDefault true;
 
       # https://github.com/Jovian-Experiments/steamos-manager/blob/5fecc6bbb47719a65d0b10aacbd0ffe873fb1e43/data/user/orca.service#L9
@@ -117,9 +130,9 @@ in
         wantedBy = [ "graphical.target" ];
       };
 
-      services.dbus.packages = [ pkgs.steamos-manager ];
+      services.dbus.packages = [ pkgs.jovianPackages.steamos-manager ];
 
-      services.displayManager.sessionPackages = [ pkgs.gamescope-session ];
+      services.displayManager.sessionPackages = [ pkgs.jovianPackages.gamescope-session ];
 
       # Conflicts with powerbuttond
       services.logind.settings.Login = {
@@ -127,7 +140,7 @@ in
       };
 
       services.udev.packages = [
-        pkgs.powerbuttond
+        pkgs.jovianPackages.powerbuttond
       ];
 
       # From steam-jupiter
@@ -170,9 +183,9 @@ in
           }
         });
       '';
-      
+
       # allow lower niceness for Proton processes
-      # see: https://github.com/Jovian-Experiments/steamos-customizations-jupiter/blob/jupiter-20260823.1/misc/limits.d/15-proton-nice.conf 
+      # see: https://github.com/Jovian-Experiments/steamos-customizations-jupiter/blob/jupiter-20260823.1/misc/limits.d/15-proton-nice.conf
       security.pam.loginLimits = [
         {
           item = "nice";

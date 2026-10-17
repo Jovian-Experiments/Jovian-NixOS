@@ -1,6 +1,11 @@
 # BIOS/Firmware updates
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -8,7 +13,7 @@ let
     mkMerge
     mkOption
     types
-  ;
+    ;
   cfg = config.jovian.devices.steamdeck;
 in
 {
@@ -37,15 +42,15 @@ in
     (mkIf (cfg.enable) {
       hardware.firmware = [
         pkgs.linux-firmware
-        (lib.hiPrio pkgs.linux-firmware-holo)
-        (lib.hiPrio pkgs.steamdeck-dsp)
+        (lib.hiPrio pkgs.jovianPackages.linux-firmware-holo)
+        (lib.hiPrio pkgs.jovianPackages.steamdeck-dsp)
       ];
     })
     (mkIf (cfg.autoUpdate) {
-      systemd.packages = [pkgs.steamdeck-firmware];
+      systemd.packages = [ pkgs.jovianPackages.steamdeck-firmware ];
 
-      systemd.services.jupiter-biosupdate.wantedBy = ["multi-user.target"];
-      systemd.services.jupiter-controller-update.wantedBy = ["multi-user.target"];
+      systemd.services.jupiter-biosupdate.wantedBy = [ "multi-user.target" ];
+      systemd.services.jupiter-controller-update.wantedBy = [ "multi-user.target" ];
     })
     (mkIf (cfg.enableFwupdBiosUpdates) {
       services.fwupd.enable = true;
@@ -57,7 +62,7 @@ in
         Enabled=true
         Title=Steam Deck BIOS
         Keyring=none
-        MetadataURI=file://${pkgs.steamdeck-bios-fwupd}
+        MetadataURI=file://${pkgs.jovianPackages.steamdeck-bios-fwupd}
         ApprovalRequired=false
       '';
     })

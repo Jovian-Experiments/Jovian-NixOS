@@ -33,32 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: Scrounge-up some more space
-        uses: samueldr/more-space-action@v2025-01-24.pre
-        with:
-          enable-lvm-span: true
-          lvm-span-mountpoint: /nix
-
       - name: Install Lix
         uses: samueldr/lix-gha-installer-action@v1
 
-      - name: Override nix-daemon build directory
-        run: |
-          (
-          PS4=" $ "
-          set -eux -o pipefail
-
-          sudo mkdir -p /nix/tmp
-          sudo chmod ug=rwx,o=rwxt /nix/tmp
-
-          sudo mkdir -p /etc/systemd/system/nix-daemon.service.d
-          sudo tee /etc/systemd/system/nix-daemon.service.d/override.conf >/dev/null <<EOF
-          [Service]
-          Environment=TMPDIR=/nix/tmp
-          EOF
-
-          sudo systemctl daemon-reload
-          sudo systemctl restart nix-daemon
-          )
-
-      - run: nix-build .ci/get-flake.nix -A "${{ matrix.attr }}"
+      - run: nix build .#${{ matrix.attr }}

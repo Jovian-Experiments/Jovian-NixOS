@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 # Misc. settings set-up by the hw-support package
 
@@ -8,7 +13,7 @@ let
     mkMerge
     mkOption
     types
-  ;
+    ;
   cfg = config.jovian.devices.steamdeck;
 in
 {

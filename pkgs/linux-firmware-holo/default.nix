@@ -1,6 +1,6 @@
 { stdenvNoCC, fetchFromGitHub }:
 
-stdenvNoCC.mkDerivation(finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "linux-firmware-holo";
   version = "20261005.1";
 

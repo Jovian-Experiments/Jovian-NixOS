@@ -1,4 +1,5 @@
-{ lib
+{
+  lib,
 }:
 
 # This does two things:
@@ -12,7 +13,7 @@
 let
   inherit (lib)
     mapAttrs
-  ;
+    ;
   # NOTE: we will not actively evaluate the overlay attribute values.
   almostOverlay = (import path) pkgs pkgs;
 in

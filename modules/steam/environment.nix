@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -9,7 +14,7 @@ let
     mkMerge
     mkOption
     types
-  ;
+    ;
 
   cfg = config.jovian.steam;
 in
@@ -18,7 +23,7 @@ in
     jovian.steam = {
       environment = mkOption {
         type = with types; attrsOf str;
-        default = {};
+        default = { };
         description = ''
           Additional environment variables or overrides to environment variables
           that will be applied to the gamescope session.
@@ -30,10 +35,7 @@ in
     {
       environment.etc."xdg/gamescope-session/environment" = {
         text = concatStringsSep "\n" (
-          mapAttrsToList (
-            key: value:
-            "export ${escapeShellArg key}=${escapeShellArg value}"
-          ) cfg.environment
+          mapAttrsToList (key: value: "export ${escapeShellArg key}=${escapeShellArg value}") cfg.environment
         );
       };
     }

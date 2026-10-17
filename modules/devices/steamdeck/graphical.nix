@@ -1,10 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
     mkIf
     mkMerge
-  ;
+    ;
   cfg = config.jovian.devices.steamdeck;
 in
 {
@@ -55,13 +60,14 @@ in
 
     (mkIf cfg.enableVendorDrivers {
       hardware.graphics = {
-        package = pkgs.mesa-radeonsi-jupiter;
-        package32 = pkgs.pkgsi686Linux.mesa-radeonsi-jupiter;
-        extraPackages = [ (lib.hiPrio pkgs.mesa-radv-jupiter) ];
-        extraPackages32 = [ (lib.hiPrio pkgs.pkgsi686Linux.mesa-radv-jupiter) ];
+        package = pkgs.jovianPackages.mesa-radeonsi;
+        package32 = pkgs.pkgsi686Linux.jovianPackages.mesa-radeonsi;
+        extraPackages = [ (lib.hiPrio pkgs.jovianPackages.mesa-radv) ];
+        extraPackages32 = [ (lib.hiPrio pkgs.pkgsi686Linux.jovianPackages.mesa-radv) ];
       };
 
-      environment.etc."drirc".source = pkgs.mesa-radv-jupiter + "/share/drirc.d/00-radv-defaults.conf";
+      environment.etc."drirc".source =
+        pkgs.jovianPackages.mesa-radv + "/share/drirc.d/00-radv-defaults.conf";
     })
   ];
 }

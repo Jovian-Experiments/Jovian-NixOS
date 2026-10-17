@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -7,7 +12,7 @@ let
     mkOption
     optionalString
     types
-  ;
+    ;
 
   cfg = config.jovian.steam;
 in
@@ -67,9 +72,9 @@ in
             # https://github.com/Jovian-Experiments/PKGBUILDs-mirror/blob/92e7fe11493915a23745e96e78ecac87af0c1a02/gamescope-session#L162-L175
             board_name=$(cat /sys/class/dmi/id/board_name)
             if [[ $board_name = "Galileo" ]]; then
-              ui_background=${pkgs.steamdeck-hw-theme}/share/plymouth/themes/steamos/steamos-galileo.png
+              ui_background=${pkgs.jovianPackages.steamdeck-hw-theme}/share/plymouth/themes/steamos/steamos-galileo.png
             else
-              ui_background=${pkgs.steamdeck-hw-theme}/share/plymouth/themes/steamos/steamos-jupiter.png
+              ui_background=${pkgs.jovianPackages.steamdeck-hw-theme}/share/plymouth/themes/steamos/steamos-jupiter.png
             fi
 
             jovian_updater_logo="$ui_background"
@@ -81,7 +86,7 @@ in
             jovian_updater_logo="--bgrt"
           ''}
 
-          ${pkgs.jovian-updater-logo-helper}/bin/jovian-updater-logo-helper "$jovian_updater_logo" "/run/jovian/steam-splash.png"
+          ${pkgs.jovianPackages.jovian-updater-logo-helper}/bin/jovian-updater-logo-helper "$jovian_updater_logo" "/run/jovian/steam-splash.png"
           )
 
           # Ensure this always terminates successfully, even if the logo thing failed

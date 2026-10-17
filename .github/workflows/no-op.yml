@@ -2,6 +2,8 @@ name: Module No-Op
 on:
   pull_request:
   push:
+    branches:
+      - "development"
 jobs:
   eval:
     runs-on: ubuntu-latest

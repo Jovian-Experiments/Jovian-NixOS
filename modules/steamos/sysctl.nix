@@ -7,7 +7,7 @@ let
     mkMerge
     mkOption
     types
-  ;
+    ;
   cfg = config.jovian.steamos;
   mkJovianDefault = lib.mkOverride 999;
 in
@@ -41,7 +41,7 @@ in
         # > if they're killed and restarted quickly - the default timeout is too large.
         #  - https://github.com/Jovian-Experiments/steamos-customizations-jupiter/commit/4c7b67cc5553ef6c15d2540a08a737019fc3cdf1
         "net.ipv4.tcp_fin_timeout" = mkDefault 5;
-        
+
         # > USE MAX_INT - MAPCOUNT_ELF_CORE_MARGIN.
         # > see comment in include/linux/mm.h in the kernel tree.
         #  - https://github.com/Jovian-Experiments/steamos-customizations-jupiter/commit/e21954bb4743635a9c53016def5158469fa6d7a8

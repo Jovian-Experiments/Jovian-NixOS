@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -6,7 +11,7 @@ let
     mkMerge
     mkOption
     types
-  ;
+    ;
   cfg = config.jovian.steamos;
 in
 {
@@ -25,7 +30,7 @@ in
   config = mkMerge [
     (mkIf (cfg.enableAutoMountUdevRules) {
       services.udev.packages = [
-        pkgs.jupiter-hw-support
+        pkgs.jovianPackages.jupiter-hw-support
       ];
     })
   ];

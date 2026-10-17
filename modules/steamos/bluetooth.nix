@@ -6,7 +6,7 @@ let
     mkIf
     mkOption
     types
-  ;
+    ;
   cfg = config.jovian.steamos;
 in
 {
