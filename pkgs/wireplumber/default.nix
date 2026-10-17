@@ -1,5 +1,5 @@
 { wireplumber', fetchFromGitHub }:
-wireplumber'.overrideAttrs(_: {
+wireplumber'.overrideAttrs (_: {
   version = "0.5.18-1.1";
 
   src = fetchFromGitHub {

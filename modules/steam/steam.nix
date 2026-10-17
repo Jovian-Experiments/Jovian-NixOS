@@ -1,20 +1,27 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
     mkDefault
     mkIf
     mkMerge
-  ;
+    ;
 
   cfg = config.jovian.steam;
 in
 {
   config = mkIf cfg.enable (mkMerge [
     {
-      warnings = []
-        ++ lib.optional (!config.networking.networkmanager.enable)
-          "The Steam Deck UI integrates with NetworkManager (networking.networkmanager.enable) which is not enabled. NetworkManager is required to complete the first-time setup process.";
+      warnings =
+        [ ]
+        ++
+          lib.optional (!config.networking.networkmanager.enable)
+            "The Steam Deck UI integrates with NetworkManager (networking.networkmanager.enable) which is not enabled. NetworkManager is required to complete the first-time setup process.";
     }
     {
       security.wrappers.gamescope = {
@@ -79,7 +86,7 @@ in
         package = pkgs.scx.rustscheds;
         scheduler = "scx_lavd";
       };
-      systemd.services.scx.wantedBy = lib.mkForce [];
+      systemd.services.scx.wantedBy = lib.mkForce [ ];
       services.orca.enable = lib.mkDefault true;
 
       # https://github.com/Jovian-Experiments/steamos-manager/blob/5fecc6bbb47719a65d0b10aacbd0ffe873fb1e43/data/user/orca.service#L9
@@ -176,9 +183,9 @@ in
           }
         });
       '';
-      
+
       # allow lower niceness for Proton processes
-      # see: https://github.com/Jovian-Experiments/steamos-customizations-jupiter/blob/jupiter-20260823.1/misc/limits.d/15-proton-nice.conf 
+      # see: https://github.com/Jovian-Experiments/steamos-customizations-jupiter/blob/jupiter-20260823.1/misc/limits.d/15-proton-nice.conf
       security.pam.loginLimits = [
         {
           item = "nice";

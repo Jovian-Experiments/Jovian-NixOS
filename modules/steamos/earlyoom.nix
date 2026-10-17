@@ -5,7 +5,7 @@ let
     mkIf
     mkOption
     types
-  ;
+    ;
   cfg = config.jovian.steamos;
 in
 {
@@ -22,7 +22,12 @@ in
     # Match vendor settings: https://github.com/Jovian-Experiments/PKGBUILDs-mirror/blob/holo-main/holo-earlyoom/holo-earlyoom.systemd.conf
     services.earlyoom = {
       enable = lib.mkDefault true;
-      extraArgs = lib.mkDefault [ "-M" "409600,307200" "-S" "409600,307200" ];
+      extraArgs = lib.mkDefault [
+        "-M"
+        "409600,307200"
+        "-S"
+        "409600,307200"
+      ];
     };
   };
 }

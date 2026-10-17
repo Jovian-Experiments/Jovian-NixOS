@@ -1,8 +1,13 @@
-{ stdenv, mesa, fetchFromGitHub }:
+{
+  stdenv,
+  mesa,
+  fetchFromGitHub,
+}:
 let
   version = "26.2.0";
   jupiterVersion = "steamos-26.05.19";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "mesa";
   version = "${version}.${jupiterVersion}";
 

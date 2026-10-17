@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -6,16 +11,18 @@ let
     mkMerge
     mkOption
     types
-  ;
+    ;
   cfg = config.jovian.hardware.amd;
   hardware = config.jovian.hardware;
-  mkHasOption = description: mkOption {
-    default = false;
-    type = types.bool;
-    description = ''
-      Whether the device has ${description}.
-    '';
-  };
+  mkHasOption =
+    description:
+    mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether the device has ${description}.
+      '';
+    };
 in
 {
   options = {

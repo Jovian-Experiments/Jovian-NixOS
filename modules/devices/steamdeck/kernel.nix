@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -7,7 +12,7 @@ let
     mkMerge
     mkOption
     types
-  ;
+    ;
 
   cfg = config.jovian.devices.steamdeck;
 in
@@ -28,9 +33,12 @@ in
     {
       boot.kernelPackages = mkDefault pkgs.jovianPackages.linuxPackages;
       # see https://github.com/Jovian-Experiments/steamos-customizations-jupiter/blob/jupiter-20241107.1/misc/modules-load.d/hid-preload.conf
-      boot.kernelModules = ["hid_nintendo" "hid_playstation"];
+      boot.kernelModules = [
+        "hid_nintendo"
+        "hid_playstation"
+      ];
       # Deck specific, not needed on latest non-vendor kernels
-      boot.kernelParams = ["fbcon=rotate:1"];
+      boot.kernelParams = [ "fbcon=rotate:1" ];
     }
   ]);
 }

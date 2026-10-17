@@ -11,7 +11,8 @@ let
     url = "https://steamdeck-packages.steamos.cloud/misc/steam-snapshots/steam_jupiter_stable_bootstrapped_${bootstrapVersion}.tar.xz";
     hash = "sha256-A6Y7+eUV4Rwwrv8u0DilxeDBvTFHMBqzL33P+YwhCTs=";
   };
-in steam-unwrapped'.overrideAttrs (old: {
+in
+steam-unwrapped'.overrideAttrs (old: {
   pname = "steam-jupiter-unwrapped";
 
   postInstall = (old.postInstall or "") + ''

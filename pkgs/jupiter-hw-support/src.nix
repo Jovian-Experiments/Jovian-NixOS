@@ -1,8 +1,8 @@
-{ 
-  stdenv, 
-  fetchFromGitHub, 
-  replaceVars, 
-  jovian-steam-protocol-handler, 
+{
+  stdenv,
+  fetchFromGitHub,
+  replaceVars,
+  jovian-steam-protocol-handler,
   systemd,
 }:
 
