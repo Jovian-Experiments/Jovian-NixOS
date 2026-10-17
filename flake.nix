@@ -47,7 +47,22 @@
         jovian = import ./overlay.nix;
       };
 
-      checks = self.legacyPackages;
+      checks = eachSupportedSystem (
+        pkgs:
+        (builtins.removeAttrs pkgs.jovianPackages [
+          # not packages
+          "callPackage"
+          "newScope"
+          "overrideScope"
+          "packages"
+
+          # package set with lots of things we should not autobuild
+          "linuxPackages"
+
+          # has a separate CI job
+          "docs"
+        ])
+      );
 
       githubActions = nix-github-actions.lib.mkGithubMatrix {
         inherit (self) checks;
