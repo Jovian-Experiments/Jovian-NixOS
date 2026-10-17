@@ -1,0 +1,21 @@
+name: Update decky-plugins
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 1 * *"
+jobs:
+  update-plugins:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Install Lix
+        uses: samueldr/lix-gha-installer-action@v1
+
+      - name: Generate updated plugin list
+        run: nix run .#update-decky-plugins -- -o ./pkgs/decky-plugins/generated.nix
+
+      - name: Push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update generated decky plugins
