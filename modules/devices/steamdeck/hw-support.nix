@@ -46,6 +46,7 @@ in
 
         # Gamepad
         "usbhid"
+        "hid-steam"
       ];
       boot.initrd.availableKernelModules = [
         "nvme"
