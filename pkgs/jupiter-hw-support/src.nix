@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     # Minor fixes against silly environments
     ./0001-steamos-automount-Harden-against-missing-run-media.patch
     ./0001-format-device-Harden-against-mountpoint-being-listed.patch
+    ./automount-support-extra-filesystems.patch
   ];
 
   # broken symlinks will be filled in later
