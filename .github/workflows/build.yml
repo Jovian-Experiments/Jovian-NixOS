@@ -36,4 +36,4 @@ jobs:
       - name: Install Lix
         uses: samueldr/lix-gha-installer-action@v1
 
-      - run: nix-build .ci/get-flake.nix -A "${{ matrix.attr }}"
+      - run: nix build .#${{ matrix.attr }}

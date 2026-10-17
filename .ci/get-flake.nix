@@ -1,1 +1,0 @@
-builtins.getFlake (toString ./..)
