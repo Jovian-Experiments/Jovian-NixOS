@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitLab
-, pkg-config
-, meson-python
-, pytest
-, libarchive
-, pacman
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitLab,
+  pkg-config,
+  meson-python,
+  pytest,
+  libarchive,
+  pacman,
 }:
 
 buildPythonPackage rec {

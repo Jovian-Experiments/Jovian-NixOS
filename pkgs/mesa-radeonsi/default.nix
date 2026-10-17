@@ -1,4 +1,4 @@
-{ 
+{
   lib,
   stdenv,
   llvmPackages,
@@ -20,10 +20,10 @@ stdenv.mkDerivation {
     hash = "sha256-PmaoWVaO2ufHykjcDoQczLQ2/oYrpzzLWBV1sJ3J48U=";
   };
 
-  inherit (mesa) 
+  inherit (mesa)
     buildInputs
     propagatedBuildInputs
-  ;
+    ;
 
   # Mesa 26.1 depends on normal libclc, but nixpkgs Mesa is now at 26.2,
   # which uses mesa-libclc, and normal libclc is gone.
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   separateDebugInfo = true;
 
   mesonAutoFeatures = "auto";
-  
+
   # See https://github.com/Jovian-Experiments/PKGBUILDs-mirror/blob/jupiter-main/mesa-radeonsi/PKGBUILD
   mesonFlags = [
     "-D android-libbacktrace=disabled"

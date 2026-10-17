@@ -1,7 +1,8 @@
-{ writeShellApplication
-, lib
-, drm_info
-, imagemagick
+{
+  writeShellApplication,
+  lib,
+  drm_info,
+  imagemagick,
 
 }:
 

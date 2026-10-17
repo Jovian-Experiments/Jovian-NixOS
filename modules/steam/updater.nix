@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -7,7 +12,7 @@ let
     mkOption
     optionalString
     types
-  ;
+    ;
 
   cfg = config.jovian.steam;
 in

@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, callPackage
-, xcursorgen
+{
+  lib,
+  stdenv,
+  callPackage,
+  xcursorgen,
 }:
 
 let

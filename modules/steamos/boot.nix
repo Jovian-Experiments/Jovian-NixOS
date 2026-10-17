@@ -6,7 +6,7 @@ let
     mkMerge
     mkOption
     types
-  ;
+    ;
   cfg = config.jovian.steamos;
 in
 {

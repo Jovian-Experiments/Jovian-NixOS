@@ -1,11 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
     mkIf
     mkOption
     types
-  ;
+    ;
   cfg = config.jovian.devices.steamdeck;
 in
 {

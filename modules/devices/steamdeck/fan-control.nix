@@ -1,4 +1,9 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 # Userspace fan control
 
@@ -7,7 +12,7 @@ let
     mkIf
     mkOption
     types
-  ;
+    ;
   cfg = config.jovian.devices.steamdeck;
 in
 {

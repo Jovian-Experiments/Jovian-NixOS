@@ -1,8 +1,9 @@
-{ stdenv
-, runCommandLocal
-, writeShellScriptBin
-, lessc
-, svgo
+{
+  stdenv,
+  runCommandLocal,
+  writeShellScriptBin,
+  lessc,
+  svgo,
 }:
 
 let
@@ -42,18 +43,21 @@ let
     rm -rf $in.tmp
   '';
 
-  embedded-svg = runCommandLocal "embedded-svg.less" {
-    nativeBuildInputs = [
-      embedSVG
-    ];
-    src = ./assets;
-  } ''
-    echo $src
-    mkdir -p ./assets
-    cp $src/* ./assets
-    chmod -R +w ./assets
-    embed-svg ./assets $out
-  '';
+  embedded-svg =
+    runCommandLocal "embedded-svg.less"
+      {
+        nativeBuildInputs = [
+          embedSVG
+        ];
+        src = ./assets;
+      }
+      ''
+        echo $src
+        mkdir -p ./assets
+        cp $src/* ./assets
+        chmod -R +w ./assets
+        embed-svg ./assets $out
+      '';
 
   styles = stdenv.mkDerivation {
     name = "jovian-nixos-docs-styles";
@@ -88,4 +92,4 @@ let
     '';
   };
 in
-  styles
+styles

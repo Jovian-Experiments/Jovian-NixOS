@@ -1,10 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
     mkIf
     mkMerge
-  ;
+    ;
   cfg = config.jovian.devices.steamdeck;
 in
 {
@@ -61,7 +66,8 @@ in
         extraPackages32 = [ (lib.hiPrio pkgs.pkgsi686Linux.jovianPackages.mesa-radv) ];
       };
 
-      environment.etc."drirc".source = pkgs.jovianPackages.mesa-radv + "/share/drirc.d/00-radv-defaults.conf";
+      environment.etc."drirc".source =
+        pkgs.jovianPackages.mesa-radv + "/share/drirc.d/00-radv-defaults.conf";
     })
   ];
 }

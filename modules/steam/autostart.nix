@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -7,7 +12,7 @@ let
     mkMerge
     mkOption
     types
-  ;
+    ;
   cfg = config.jovian.steam;
 in
 {
@@ -32,8 +37,17 @@ in
         };
 
         desktopSession = mkOption {
-          type = lib.types.addCheck (with types; nullOr str) (userProvidedDesktopSession:
-              lib.assertMsg (userProvidedDesktopSession != null -> (types.str.check userProvidedDesktopSession && lib.elem userProvidedDesktopSession config.services.displayManager.sessionData.sessionNames)) ''
+          type = lib.types.addCheck (with types; nullOr str) (
+            userProvidedDesktopSession:
+            lib.assertMsg
+              (
+                userProvidedDesktopSession != null
+                -> (
+                  types.str.check userProvidedDesktopSession
+                  && lib.elem userProvidedDesktopSession config.services.displayManager.sessionData.sessionNames
+                )
+              )
+              ''
                 Desktop session '${userProvidedDesktopSession}' not found.
                 Valid values for 'jovian.steam.desktopSession' are:
                   ${lib.concatStringsSep "\n  " config.services.displayManager.sessionData.sessionNames}
@@ -72,7 +86,6 @@ in
         to keep this behavior.
       '';
 
-
       services.displayManager = {
         autoLogin = {
           enable = true;
@@ -89,7 +102,8 @@ in
       };
 
       # replicate vendor failsafe in case the system is rebooted with a broken config
-      systemd.services.display-manager.serviceConfig.ExecStartPre = "-${pkgs.coreutils}/bin/rm /etc/sddm.conf.d/zzt-steamos-temp-login.conf";
+      systemd.services.display-manager.serviceConfig.ExecStartPre =
+        "-${pkgs.coreutils}/bin/rm /etc/sddm.conf.d/zzt-steamos-temp-login.conf";
 
       # tell steamos-manager it's allowed to manage our session
       environment.etc."sddm.conf.d/holo.conf".text = "";
@@ -124,11 +138,14 @@ in
           ]
           # Add any globally defined well-known XKB_DEFAULT environment variables to the session
           # This is the closest wayland sessions have to generic keyboard configurations.
-          ++ (map (var:
-            (mkIf (config.environment.variables ? "${var}") {
-              "${var}" = mkDefault config.environment.variables."${var}";
-            })
-          ) [
+          ++ (map
+            (
+              var:
+              (mkIf (config.environment.variables ? "${var}") {
+                "${var}" = mkDefault config.environment.variables."${var}";
+              })
+            )
+            [
               "XKB_DEFAULT_LAYOUT"
               "XKB_DEFAULT_OPTIONS"
               "XKB_DEFAULT_MODEL"
@@ -140,7 +157,6 @@ in
 
         restartIfChanged = false;
       };
-
 
       xdg.portal.configPackages = mkDefault [ pkgs.jovianPackages.gamescope-session ];
     })
