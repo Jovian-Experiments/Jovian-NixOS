@@ -1,18 +1,17 @@
-{ pkgs, config, lib, ... }:
-
-# Userspace fan control
+{ config, lib, pkgs, ... }:
 
 let
   inherit (lib)
     mkIf
+    mkMerge
     mkOption
     types
   ;
-  cfg = config.jovian.devices.steamdeck;
+  cfg = config.jovian.steamos;
 in
 {
   options = {
-    jovian.devices.steamdeck = {
+    jovian.steamos = {
       enableOsFanControl = mkOption {
         description = ''
           Whether to enable the OS-controlled fan curve.
@@ -20,8 +19,8 @@ in
           This is enabled by default since SteamOS 3.2.
         '';
         type = types.bool;
-        default = cfg.enable;
-        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
+        default = cfg.useSteamOSConfig;
+        defaultText = lib.literalExpression "config.jovian.steamos.useSteamOSConfig";
       };
     };
   };
