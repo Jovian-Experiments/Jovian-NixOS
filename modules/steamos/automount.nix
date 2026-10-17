@@ -25,7 +25,7 @@ in
   config = mkMerge [
     (mkIf (cfg.enableAutoMountUdevRules) {
       services.udev.packages = [
-        pkgs.jupiter-hw-support
+        pkgs.jovianPackages.jupiter-hw-support
       ];
     })
   ];

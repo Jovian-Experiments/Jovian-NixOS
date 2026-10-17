@@ -7,7 +7,7 @@ let
     cp -r --no-preserve=all ${pkgs.alsa-ucm-conf} $out
 
     # override acp5x configs with Jovian stuff
-    cp -rf ${pkgs.steamdeck-dsp}/share/alsa $out/share
+    cp -rf ${pkgs.jovianPackages.steamdeck-dsp}/share/alsa $out/share
     
     # remove more specific upstream symlink so Valve acp5x config is picked
     rm $out/share/alsa/ucm2/conf.d/acp5x/Valve-Jupiter-1.conf
@@ -36,17 +36,17 @@ in
 
     services.pipewire = {
       enable = true;
-      package = pkgs.pipewire-jupiter;
+      package = pkgs.jovianPackages.pipewire;
       pulse.enable = true;
       alsa.enable = true;
-      configPackages = [ pkgs.steamdeck-dsp ];
-      wireplumber.package = pkgs.wireplumber-jupiter;
-      wireplumber.configPackages = [ pkgs.steamdeck-dsp ];
+      configPackages = [ pkgs.jovianPackages.steamdeck-dsp ];
+      wireplumber.package = pkgs.jovianPackages.wireplumber;
+      wireplumber.configPackages = [ pkgs.jovianPackages.steamdeck-dsp ];
     };
 
     environment.variables = extraEnv;
 
-    systemd.packages = [ pkgs.steamdeck-dsp ];
+    systemd.packages = [ pkgs.jovianPackages.steamdeck-dsp ];
 
     systemd.services.pipewire.environment = lib.mkIf systemWide extraEnv;
     systemd.user.services.pipewire.environment = lib.mkIf (!systemWide) extraEnv;

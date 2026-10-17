@@ -28,15 +28,15 @@ in
   };
 
   config = mkIf cfg.enableHdmiCecIntegration {
-    environment.systemPackages = [ pkgs.cecd ];
-    services.dbus.packages = [ pkgs.cecd ];
+    environment.systemPackages = [ pkgs.jovianPackages.cecd ];
+    services.dbus.packages = [ pkgs.jovianPackages.cecd ];
     services.udev.packages = [
-      pkgs.cecd
-      pkgs.inputattach-cec-units
+      pkgs.jovianPackages.cecd
+      pkgs.jovianPackages.inputattach-cec-units
     ];
     systemd.packages = [
-      pkgs.cecd
-      pkgs.inputattach-cec-units
+      pkgs.jovianPackages.cecd
+      pkgs.jovianPackages.inputattach-cec-units
     ];
 
     systemd.user.services.cecd = {

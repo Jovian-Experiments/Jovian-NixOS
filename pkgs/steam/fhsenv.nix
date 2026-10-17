@@ -5,7 +5,8 @@
 , dmidecode
 , jovian-stubs
 , holo-session-selection
-, steam
+, steam-unwrapped
+, steam'
 
 # We need to add this flag when Steam is started directly (e.g., desktop mode)
 # so we have the correct client version. This is important even for desktop
@@ -24,10 +25,12 @@ let
     "jovian-stubs"
     "holo-session-selection"
     "platformArgs"
-    "steam"
+    "steam'"
   ];
 
-  wrappedSteam = steam.override (extraArgs // {
+  wrappedSteam = steam'.override (extraArgs // {
+    inherit steam-unwrapped;
+
     extraPkgs = pkgs: (if args ? extraPkgs then args.extraPkgs pkgs else [ ]) ++ [
       dmidecode
       jovian-stubs
