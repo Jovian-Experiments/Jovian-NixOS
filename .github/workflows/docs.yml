@@ -2,6 +2,8 @@ name: Docs
 on:
   pull_request:
   push:
+    branches:
+      - "development"
   workflow_call:
 
 jobs:
