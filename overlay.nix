@@ -96,7 +96,7 @@ final: prev: {
     # misc third party stuff
     sdgyrodsu = self.callPackage ./pkgs/sdgyrodsu { };
 
-    decky-loader = self.callPackage ./pkgs/decky-loader { };
+    decky-loader = self.callPackage ./pkgs/decky-loader/stable.nix { };
     decky-loader-prerelease = self.callPackage ./pkgs/decky-loader/prerelease.nix { };
 
     # Jovian internal-ish tooling

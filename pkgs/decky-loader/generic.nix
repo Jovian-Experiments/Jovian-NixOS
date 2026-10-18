@@ -1,4 +1,9 @@
 {
+  version,
+  srcHash,
+  depsHash,
+}:
+{
   lib,
   fetchFromGitHub,
   nodejs,
@@ -9,23 +14,23 @@
   coreutils,
   psmisc,
 }:
-python3.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage (finalAttrs: {
   pname = "decky-loader";
-  version = "3.2.10";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "SteamDeckHomebrew";
     repo = "decky-loader";
-    rev = "v${version}";
-    hash = "sha256-YLv9rC9cDH+LoVTIc4jSn/tZV3S+jC37RrnK2b/q++c=";
+    rev = "v${finalAttrs.version}";
+    hash = srcHash;
   };
 
   pnpmDeps = fetchPnpmDeps {
     fetcherVersion = 4;
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     pnpm = pnpm_11;
-    sourceRoot = "${src.name}/frontend";
-    hash = "sha256-w4UFsNqy8fYjpQ5jgPRQ4bfVZJb3aitYUsnf4PP8Itc=";
+    sourceRoot = "${finalAttrs.src.name}/frontend";
+    hash = depsHash;
   };
 
   pyproject = true;
@@ -84,4 +89,4 @@ python3.pkgs.buildPythonPackage rec {
     platforms = platforms.linux;
     license = licenses.gpl2Only;
   };
-}
+})
