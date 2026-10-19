@@ -97,7 +97,12 @@ final: prev: {
     sdgyrodsu = self.callPackage ./pkgs/sdgyrodsu { };
 
     decky-loader = self.callPackage ./pkgs/decky-loader/stable.nix { };
-    decky-loader-prerelease = self.callPackage ./pkgs/decky-loader/prerelease.nix { };
+    decky-loader-prerelease =
+      let
+        prerelease = self.callPackage ./pkgs/decky-loader/prerelease.nix { };
+        stable = self.decky-loader;
+      in
+      if final.lib.versionOlder prerelease.version stable.version then stable else prerelease;
 
     # Jovian internal-ish tooling
     jovian-hardware-survey = self.callPackage ./pkgs/jovian-hardware-survey { };
