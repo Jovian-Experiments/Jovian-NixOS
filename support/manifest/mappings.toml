@@ -463,7 +463,7 @@ xdg-desktop-portal-gtk.ignore = true
 xdg-desktop-portal-kde.check = "6.7.3-1.2"
 
 # packaging changes + backports/hacks for seamless boot
-xorg-server.check = "21.1.25-1.1"
+xorg-server.check = "21.1.25-2.1"
 xorg-xwayland.check = "24.1.14-1.1"
 
 # Arch packaging fix, we don't care
