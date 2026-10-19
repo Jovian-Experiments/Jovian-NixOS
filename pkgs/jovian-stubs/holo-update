@@ -1,4 +1,7 @@
-#!/bin/sh
+#!/usr/bin/env bash
+
+set -euo pipefail
+
 >&2 echo "[JOVIAN] $0: stub called with: $*"
 # Exit codes according to vendor:
 # 0 - update success
@@ -6,6 +9,31 @@
 # 7 - no update available
 # 8 - need reboot
 
-[ "$(readlink /run/booted-system/kernel)" != "$(readlink /nix/var/nix/profiles/system/kernel)" ] && exit 8
+same() {
+	test "$1" -ef "$2"
+}
 
+
+# A new system profile was made and the kernel is different than the booted kernel.
+# (i.e. a `nixos-rebuild boot`.)
+# NOTE: Checking /run/current-system is meaningless, it may be from `nixos-rebuild test`.
+if ! same /run/booted-system/kernel /nix/var/nix/profiles/system/kernel; then
+	exit 8
+fi
+
+# We're currently in the same system as the current profile (and no kernel update is needed).
+if same /run/current-system /nix/var/nix/profiles/system; then
+	exit 7
+fi
+
+# There is a new update compared to current boot.
+# Since the previous check failed, we know it was not `switch`-ed into.
+# This is a successful update, which Steam will prompt for rebooting into.
+if ! same /run/booted-system /nix/var/nix/profiles/system; then
+	exit 0
+fi
+
+# NOTE: We have no scenario that could be an update error.
+
+# No update.
 exit 7
