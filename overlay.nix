@@ -22,6 +22,9 @@ final: prev: {
     steamdeck-bios-fwupd = self.callPackage ./pkgs/jupiter-hw-support/bios-fwupd.nix { };
     jupiter-dock-updater-bin = self.callPackage ./pkgs/jupiter-dock-updater-bin { };
 
+    # Steam Machine hardware support
+    fremont-hw-support = self.callPackage ./pkgs/fremont-hw-support { };
+
     # Steam Machine CEC bits
     cecd = self.callPackage ./pkgs/cecd { };
     inputattach-cec-units = self.callPackage ./pkgs/inputattach-cec-units { };
