@@ -43,7 +43,6 @@ in
       hardware.firmware = [
         pkgs.linux-firmware
         (lib.hiPrio pkgs.jovianPackages.linux-firmware-holo)
-        (lib.hiPrio pkgs.jovianPackages.steamdeck-dsp)
       ];
     })
     (mkIf (cfg.autoUpdate) {

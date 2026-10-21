@@ -6,7 +6,7 @@
 }:
 
 let
-  cfg = config.jovian.devices.steamdeck;
+  cfg = config.jovian.hardware.valve;
 
   alsa-ucm-conf' = pkgs.runCommand "jovian-ucm-conf" { } ''
     cp -r --no-preserve=all ${pkgs.alsa-ucm-conf} $out
@@ -20,15 +20,15 @@ let
 in
 {
   options = {
-    jovian.devices.steamdeck = {
-      enableSoundSupport = lib.mkOption {
-        default = cfg.enable;
-        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
-        type = lib.types.bool;
-        description = ''
-          Whether to enable sound support.
-        '';
-      };
+    jovian.hardware.valve.steamdeck-dsp.enable = lib.mkOption {
+      default = cfg.enable;
+      defaultText = "config.jovian.hardware.valve.enable";
+      type = lib.types.bool;
+      description = ''
+        Whether to enable custom sound post-processing for Valve hardware.
+
+        This is generally a no-op on non-Valve devices, but costs additional rebuilds.
+      '';
     };
   };
 
@@ -38,7 +38,11 @@ in
 
       extraEnv.ALSA_CONFIG_UCM2 = "${alsa-ucm-conf'}/share/alsa/ucm2";
     in
-    lib.mkIf cfg.enableSoundSupport {
+    lib.mkIf cfg.steamdeck-dsp.enable {
+      hardware.firmware = [
+        (lib.hiPrio pkgs.jovianPackages.steamdeck-dsp)
+      ];
+
       services.pulseaudio.enable = false;
 
       services.pipewire = {

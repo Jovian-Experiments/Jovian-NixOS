@@ -4,34 +4,24 @@
   lib,
   ...
 }:
-
-# Userspace fan control
-
 let
-  inherit (lib)
-    mkIf
-    mkOption
-    types
-    ;
-  cfg = config.jovian.devices.steamdeck;
+  cfg = config.jovian.hardware.valve;
 in
 {
   options = {
-    jovian.devices.steamdeck = {
-      enableOsFanControl = mkOption {
-        description = ''
-          Whether to enable the OS-controlled fan curve.
+    jovian.hardware.valve.fan-control.enable = lib.mkOption {
+      default = cfg.enable;
+      defaultText = "config.jovian.hardware.valve.enable";
+      description = ''
+        Whether to enable software fan controls for Valve hardware.
 
-          This is enabled by default since SteamOS 3.2.
-        '';
-        type = types.bool;
-        default = cfg.enable;
-        defaultText = lib.literalExpression "config.jovian.devices.steamdeck.enable";
-      };
+        This is generally a no-op on non-Valve devices.
+      '';
+      type = lib.types.bool;
     };
   };
 
-  config = mkIf (cfg.enableOsFanControl) {
+  config = lib.mkIf (cfg.fan-control.enable) {
     systemd.services.jupiter-fan-control = {
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.dmidecode ];
@@ -44,9 +34,7 @@ in
         # disable debug journal logging
         StandardOutput = "null";
       };
-      environment = {
-        PYTHONUNBUFFERED = "1";
-      };
+      environment.PYTHONUNBUFFERED = "1";
     };
   };
 }

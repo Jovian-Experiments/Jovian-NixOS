@@ -13,6 +13,8 @@ in
     ./boot.nix
     ./cec.nix
     ./earlyoom.nix
+    ./kernel.nix
+    ./mesa.nix
     ./misc.nix
     ./sysctl.nix
   ];
