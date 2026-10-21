@@ -143,19 +143,6 @@ in
         pkgs.jovianPackages.powerbuttond
       ];
 
-      # From steam-jupiter
-      # FIXME: investigate LED stuff
-      services.udev.extraRules = ''
-        # USB devices and topological children
-        SUBSYSTEMS=="usb", TAG+="uaccess"
-
-        # HID devices over hidraw
-        KERNEL=="hidraw*", TAG+="uaccess"
-
-        # Steam Controller udev write access
-        KERNEL=="uinput", SUBSYSTEM=="misc", TAG+="uaccess", OPTIONS+="static_node=uinput"
-      '';
-
       # The responsibility for the equivalent action when out of battery charge is
       # taken by a combination of vpower and SteamUI, when it dips below 0.5% (at the
       # time of writing), and it gives a 10 second margin for SteamUI to close.
