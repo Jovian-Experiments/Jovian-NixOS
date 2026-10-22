@@ -23,16 +23,11 @@ let
   optionsJSONFile = "${optionsJSON}/share/doc/nixos/options.json";
 
   # Overlay
-  evalOverlay = callPackage ./lib/eval-overlay.nix { };
-  overlay = evalOverlay {
-    path = ../../overlay.nix;
-    inherit pkgs;
-  };
   makeOverlayDoc = callPackage ./lib/overlay-doc.nix { };
   inherit
     (
       (makeOverlayDoc {
-        inherit overlay;
+        overlay = pkgs.jovianPackages;
         prefix = ../../.;
       })
     )
