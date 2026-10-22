@@ -55,6 +55,7 @@
           "newScope"
           "overrideScope"
           "packages"
+          "callOverride"
 
           # package set with lots of things we should not autobuild
           "linuxPackages"

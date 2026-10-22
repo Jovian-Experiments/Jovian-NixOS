@@ -1,5 +1,23 @@
-final: prev: {
+final: prev:
+let
+  # A very simplified version of callPackageWith, minus the nice error messages
+  # and the makeOverridable call at the very end. Used to import overrides
+  # without a lot of boilerplate.
+  callOverrideWith =
+    autoArgs: fn: args:
+    let
+      f = if builtins.isFunction fn then fn else import fn;
+      fargs = final.lib.functionArgs f;
+      # All arguments that will be passed to the function
+      # This includes automatic ones and ones passed explicitly
+      allArgs = builtins.intersectAttrs fargs autoArgs // args;
+    in
+    f allArgs;
+in
+{
   jovianPackages = final.lib.makeScope final.newScope (self: {
+    callOverride = callOverrideWith (final // self);
+
     # vendor kernel/firmware
     linux = self.callPackage ./pkgs/linux {
       kernelPatches = [
@@ -30,26 +48,24 @@ final: prev: {
     steamdeck-dsp = self.callPackage ./pkgs/steamdeck-dsp { };
     noisetorch-ladspa = self.callPackage ./pkgs/noisetorch-ladspa { };
     # requires vendor patches to work
-    pipewire = self.callPackage ./pkgs/pipewire {
+    pipewire = self.callOverride ./pkgs/pipewire {
       pipewire' = prev.pipewire;
     };
-    wireplumber = self.callPackage ./pkgs/wireplumber {
+    wireplumber = self.callOverride ./pkgs/wireplumber {
       wireplumber' = prev.wireplumber;
     };
 
     # Steam session parts
-    gamescope = import ./pkgs/gamescope {
+    gamescope = self.callOverride ./pkgs/gamescope {
       gamescope' = prev.gamescope;
-      inherit (final) fetchFromGitHub;
     };
     gamescope-wsi = self.gamescope.override {
       enableExecutable = false;
       enableWsi = true;
     };
 
-    mangohud = import ./pkgs/mangohud {
+    mangohud = self.callOverride ./pkgs/mangohud {
       mangohud' = prev.mangohud;
-      inherit (final) fetchpatch;
     };
 
     gamescope-session = self.callPackage ./pkgs/gamescope-session { };
@@ -65,7 +81,7 @@ final: prev: {
 
     # Steam session input device glue
     powerbuttond = self.callPackage ./pkgs/powerbuttond { };
-    inputplumber = self.callPackage ./pkgs/inputplumber {
+    inputplumber = self.callOverride ./pkgs/inputplumber {
       inputplumber' = prev.inputplumber;
     };
 
@@ -80,10 +96,10 @@ final: prev: {
     jovian-stubs = self.callPackage ./pkgs/jovian-stubs { };
     jovian-steam-protocol-handler = self.callPackage ./pkgs/jovian-steam-protocol-handler { };
 
-    steam-unwrapped = self.callPackage ./pkgs/steam/unwrapped.nix {
+    steam-unwrapped = self.callOverride ./pkgs/steam/unwrapped.nix {
       steam-unwrapped' = prev.steam-unwrapped;
     };
-    steam = self.callPackage ./pkgs/steam/fhsenv.nix {
+    steam = self.callOverride ./pkgs/steam/fhsenv.nix {
       steam' = prev.steam;
     };
     steam-run = self.steam.run;
