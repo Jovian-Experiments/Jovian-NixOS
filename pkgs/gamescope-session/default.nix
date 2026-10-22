@@ -127,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./environment.patch
+    ./gamescope-args.patch
     (replaceVars ./portals.patch {
       gamescope-portals = symlinkJoin {
         name = "gamescope-portals";
