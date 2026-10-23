@@ -344,7 +344,7 @@ plasma-pa.check = "6.7.3-1.1"
 plasma-remotecontrollers.check = "5.26.90.r258.g9ace9a9-3"
 
 # packaging changes for SteamOS A/B + keyboard fix
-plasma-workspace.check = "6.7.3-2.1"
+plasma-workspace.check = "6.7.3-2.2"
 
 # FIXME: lots of patches, need to investigate
 plymouth.check = "22.02.122-7.7"
