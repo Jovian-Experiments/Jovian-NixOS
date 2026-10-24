@@ -302,7 +302,7 @@ linux-neptune-618-devel.ignore = true
 linux-neptune-618-drm-exec.ignore = true
 
 # new kernel
-linux-neptune-72 = { map = "linux", pkgrel = 1 }
+linux-neptune-72 = { map = "linux", pkgrel = 2 }
 
 # test kernel
 linux-neptune-72-devel.ignore = true
