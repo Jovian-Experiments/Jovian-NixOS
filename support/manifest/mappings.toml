@@ -147,6 +147,9 @@ holo-dmi-rules.check = "1.1-1"
 
 holo-earlyoom.check = "1.1-2"
 
+# SteamOS A/B stuff
+holo-fs-offload.ignore = true
+
 # unused, check in case it ever becomes used again
 holo-fstab-repair.check = "0.2-1"
 
@@ -408,7 +411,7 @@ steamos-alias.ignore = true
 steamos-atomupd-client.ignore = true
 
 # applied as NixOS modules instead
-steamos-customizations.check = "20261021.1-1"
+steamos-customizations.check = "20261021.2-1"
 
 # -git variant seems deprecated?
 steamos-customizations-git.check = "20260911.1-1"
