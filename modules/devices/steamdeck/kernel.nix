@@ -38,7 +38,7 @@ in
         "hid_playstation"
       ];
       # Deck specific, not needed on latest non-vendor kernels
-      # 
+      #
       boot.kernelParams = [
         "fbcon=rotate:1"
 
