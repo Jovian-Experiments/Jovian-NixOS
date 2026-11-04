@@ -51,8 +51,14 @@ in
 
         # it currently causes black/white flashes when showing/hiding planes
         # https://github.com/Jovian-Experiments/jupiter-hw-support/commit/1a2776307a58d065c619d4d7350be6d5a202e991
-        "amdgpu.dcdebugmask=0x20000"
-
+        # Holo: amdgpu.dcdebugmask=0x40000 bit is set to disable the custom backlight
+        # brightness curve support. Needed in order to
+        # 1. Fix bug causing only 97% of brightness to be usable
+        # 2. Allow the kernel to move closer to upstream
+        # 3. Not break userspace currently expecting linear mapping
+        # See
+        # https://gitlab.steamos.cloud/holo-team/tasks/-/work_items/2237#note_358276
+        "amdgpu.dcdebugmask=0x60000"
       ];
 
       # Ensures modules missing from the vendor kernel don't cause a generation build failure.
