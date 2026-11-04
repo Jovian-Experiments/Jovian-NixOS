@@ -38,7 +38,22 @@ in
         "hid_playstation"
       ];
       # Deck specific, not needed on latest non-vendor kernels
-      boot.kernelParams = [ "fbcon=rotate:1" ];
+      # 
+      boot.kernelParams = [
+        "fbcon=rotate:1"
+
+        # Valve says:
+        # amdgpu.sched_hw_submission is set to 4 to avoid bubbles of lack-of work
+        # with the default (2).
+        # 4 is the maximum that is supported across RDNA2 + RDNA3.
+        # Any more results in a hang at startup on RDNA3.
+        "amdgpu.sched_hw_submission=4"
+
+        # it currently causes black/white flashes when showing/hiding planes
+        # https://github.com/Jovian-Experiments/jupiter-hw-support/commit/1a2776307a58d065c619d4d7350be6d5a202e991
+        "amdgpu.dcdebugmask=0x20000"
+
+      ];
 
       # Ensures modules missing from the vendor kernel don't cause a generation build failure.
       jovian.workarounds.ignoreMissingKernelModules = mkDefault true;
