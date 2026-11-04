@@ -112,7 +112,7 @@ gpu-trace.ignore = true
 grub.ignore = true
 
 # applied as NixOS config
-holo-config-mtu-probing.check = "1.0-1"
+holo-config-kernel.check = "1.0-1"
 
 # sets up vendor debuginfod server
 holo-debuginfod-config.ignore = true
@@ -373,7 +373,7 @@ steamos-alias.ignore = true
 steamos-atomupd-client.ignore = true
 
 # applied as NixOS modules instead
-steamos-customizations.check = "20261021.2-1"
+steamos-customizations.check = "20261027.1-2"
 
 # -git variant seems deprecated?
 steamos-customizations-git.check = "20260911.1-1"
