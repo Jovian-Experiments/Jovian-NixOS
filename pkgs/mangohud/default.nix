@@ -1,14 +1,28 @@
-{ mangohud', fetchpatch }:
-# we ship a newer mangohud base, but add some backports from vendor that are still not in there
-mangohud'.overrideAttrs (old: {
-  patches = old.patches or [ ] ++ [
-    (fetchpatch {
-      url = "https://github.com/flightlessmango/MangoHud/commit/0805396e579c5f1ea27e2e2a78030d8ef6ce1994.diff";
-      hash = "sha256-pk2ZYTjAsnGqeyk2m9nVkF6XA7bw1cSiE0I1WVuCDjM=";
-    })
-    (fetchpatch {
-      url = "https://github.com/flightlessmango/MangoHud/commit/2c1dc5283c045e9a7e424dc913fbafcdcc7e3be1.diff";
-      hash = "sha256-+EIJ5Ci0wXYIu9+p92O9RyyKFI9f9LUNB7XAA48JtPs=";
-    })
+{
+  mangohud',
+  libdrm,
+  libxi,
+  vulkan-loader,
+}:
+# we only really need mangoapp here, not the layers, so don't waste time on 32-bit ones
+(mangohud'.override { lowerBitnessSupport = false; }).overrideAttrs (old: {
+  version = "0.8.4.r235";
+
+  src = old.src.override {
+    tag = null;
+    rev = "8d76620f71e92e5f686940404bfa7625a9034213";
+    hash = "sha256-mVaTJE/G+w5Hr0VFQZrymV1kEkiKmciETK4r2/r/elY=";
+  };
+
+  patches = builtins.filter (
+    p: (builtins.match "hardcode-dependencies.patch" (toString p)) != null
+  ) old.patches;
+
+  mesonFlags = old.mesonFlags ++ [ "-Dwith_mangohud_next=false" ];
+
+  buildInputs = old.buildInputs ++ [
+    libdrm
+    libxi
+    vulkan-loader
   ];
 })
