@@ -80,7 +80,10 @@
                 (ps.callPackage ./support/manifest/pyalpm.nix { })
               ]);
             in
-            [ pyenv ];
+            [
+              pyenv
+              pkgs.nixfmt-tree
+            ];
         };
       });
     };
