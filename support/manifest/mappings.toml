@@ -282,7 +282,7 @@ linux-neptune-72-devel.ignore = true
 # we don't identify as SteamOS
 lsb-release.ignore = true
 
-mangohud.check = "0.8.3.rc1.r24.g33c2c7dd-4"
+mangohud.check = "0.8.4.r235.g8d76620f-1"
 
 mesa = { map = "mesa-radeonsi", pkgrel = 5, fixup = "mesa" }
 
