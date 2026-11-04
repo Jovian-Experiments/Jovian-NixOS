@@ -203,7 +203,7 @@ jupiter-firewall.ignore = true
 # temporary hack, not forcing this on users
 jupiter-hibernate-disable.ignore = true
 
-jupiter-hw-support = { map = ["jupiter-hw-support", "steamdeck-hw-theme", "steamdeck-firmware", "holo-polkit-helpers"], pkgrel = 1 }
+jupiter-hw-support = { map = ["jupiter-hw-support", "steamdeck-hw-theme", "steamdeck-firmware", "holo-polkit-helpers"], pkgrel = 2 }
 
 jupiter-legacy-support.check = "1.161-1"
 
