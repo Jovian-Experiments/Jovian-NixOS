@@ -1,6 +1,6 @@
 { wireplumber', fetchFromGitHub }:
 wireplumber'.overrideAttrs (_: {
-  version = "0.5.18-1.2";
+  version = "0.5.18-1.3"; # 1.3 is a rebuild
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
