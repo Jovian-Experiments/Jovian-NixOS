@@ -104,6 +104,9 @@ in
     };
     steam-run = self.steam.run;
 
+    # perf tweaks not enabled by default yet
+    scx-scheds = self.callPackage ./pkgs/scx-scheds { };
+
     # desktop VRAM optimizations
     dmemcg-booster = self.callPackage ./pkgs/dmemcg-booster { };
     kcgroups = self.callPackage ./pkgs/kcgroups { };

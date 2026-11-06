@@ -17,7 +17,7 @@
   gsettings-desktop-schemas,
   speechd-minimal,
   udev,
-  scx,
+  scx-scheds,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "steamos-manager";
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
       traceCmd = trace-cmd;
       iw = iw;
       dmidecode = dmidecode;
-      scx = scx.rustscheds;
+      scx = scx-scheds;
       out = null;
     })
     ./fix-sddm-config-path.patch

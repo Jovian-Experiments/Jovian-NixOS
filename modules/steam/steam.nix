@@ -93,7 +93,7 @@ in
         };
         serviceConfig = {
           Type = "simple";
-          ExecStart = "${pkgs.scx.rustscheds}/bin/scx_lavd --pinned-slice-us 500 --dd-max-wait-us 0";
+          ExecStart = "${pkgs.jovianPackages.scx-scheds}/bin/scx_lavd --pinned-slice-us 500 --dd-max-wait-us 0";
           Restart = "on-failure";
           StandardError = "journal";
         };
