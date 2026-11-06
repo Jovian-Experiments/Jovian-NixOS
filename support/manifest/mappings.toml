@@ -406,6 +406,9 @@ systemd.check = "262.1-2.1"
 # lul
 ttf-twemoji-default.ignore = true
 
+# not sure why they have this
+tzdata.check = "2026f-1"
+
 # debug tool
 umr.ignore = true
 
