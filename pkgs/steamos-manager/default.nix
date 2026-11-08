@@ -65,6 +65,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   strictDeps = true;
+  separateDebugInfo = true;
 
   nativeBuildInputs = [
     glib
