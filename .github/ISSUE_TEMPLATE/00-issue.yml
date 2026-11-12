@@ -1,0 +1,22 @@
+name: Generic issue
+description: For all issues
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > [!NOTE]
+        > For discussions and questions, please use the [Discussions](https://github.com/Jovian-Experiments/Jovian-NixOS/discussions) area.
+  - type: checkboxes
+    attributes:
+      label: Contributors guidelines
+      description:
+        Please review and check the relevant boxes.
+      options:
+        - label: I have read and understood the [contributing guidelines](https://github.com/Jovian-Experiments/Jovian-NixOS/blob/development/CONTRIBUTING.md) for this project.
+          required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: "Description"
+    validations:
+      required: true
