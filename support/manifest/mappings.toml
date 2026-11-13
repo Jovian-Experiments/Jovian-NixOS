@@ -95,8 +95,7 @@ filesystem.ignore = true
 foxnet.ignore = true
 foxnetstatsd.ignore = true
 
-# FIXME(fremont)
-fremont-hw-support.ignore = true
+fremont-hw-support = { map = true, pkgrel = 1 }
 
 # we use nixpkgs version
 fwupd-minimal.ignore = true
@@ -356,7 +355,6 @@ sddm.check = "0.21.0-7.3"
 # FIXME: package this
 steam-im-modules.ignore = true
 
-# FIXME(fremont): LED udev rules
 steam-jupiter-stable = { map = "steam-unwrapped", pkgrel = 12 }
 
 # we don't use this
