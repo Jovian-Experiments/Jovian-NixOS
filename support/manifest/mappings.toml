@@ -276,11 +276,13 @@ linux-neptune-618.ignore = true
 linux-neptune-618-devel.ignore = true
 linux-neptune-618-drm-exec.ignore = true
 
-# new kernel
-linux-neptune-72 = { map = "linux", pkgrel = 3 }
-
-# test kernel
+# old kernel
+linux-neptune-72.ignore = true
 linux-neptune-72-devel.ignore = true
+
+# current kernel
+linux-neptune-73 = { map = "linux", pkgrel = 1 }
+linux-neptune-73-devel.ignore = true
 
 # we don't identify as SteamOS
 lsb-release.ignore = true

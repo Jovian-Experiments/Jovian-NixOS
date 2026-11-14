@@ -8,9 +8,9 @@
 let
   inherit (lib) versions;
 
-  kernelVersion = "7.2.10";
+  kernelVersion = "7.3.1";
   vendorVersion = "valve1";
-  hash = "sha256-PyxJIBdDyYGuq+pL49+6YAqukU5yfSmLknRQVLJULGs=";
+  hash = "sha256-1DfIP23y9LWc9XWycPXLy+CcTxyM9CwvRQlm/HMrdP4=";
 in
 buildLinux (
   args
