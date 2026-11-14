@@ -49,13 +49,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "galileo-mura";
-  version = "0.10";
+  version = "0.20";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "galileo-mura";
     rev = "v${version}";
-    hash = "sha256-F32mGpFA25kbQK2/ZhUSTHfn2IKdjumoW/VyKUpUEbI=";
+    hash = "sha256-RIhO7odXDLCZN3wgS6T+QPxtDA73cLJacDu7pompKag=";
   };
 
   patches = [ ./home.patch ];

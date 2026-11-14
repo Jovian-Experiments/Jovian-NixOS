@@ -101,7 +101,7 @@ fremont-hw-support.ignore = true
 # we use nixpkgs version
 fwupd-minimal.ignore = true
 
-galileo-mura = { map = true, pkgrel = 3, fixup = "v" }
+galileo-mura = { map = true, pkgrel = 1, fixup = "v" }
 
 gamescope.map = ["gamescope", "gamescope-session"]
 
