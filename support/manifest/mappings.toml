@@ -294,7 +294,7 @@ mesa = { map = "mesa-radeonsi", pkgrel = 5, fixup = "mesa" }
 # FIXME: revisit if there's relevant changes and/or actual users on NVK
 mesa-nvk.check = "26.2.6.227269.nvk_steamos_26.11.0-3"
 
-mesa-radv = { map = "mesa-radv", pkgrel = 2, fixup = "mesa" }
+mesa-radv = { map = "mesa-radv", pkgrel = 1, fixup = "mesa" }
 
 # iwd backend fixes, pending upstream
 networkmanager.check = "1.58.1-3.3"
