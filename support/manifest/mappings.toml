@@ -451,3 +451,6 @@ xorg-xwayland.check = "24.1.15-1.1"
 
 # Arch packaging fix, we don't care
 zenity-gtk3.check = "3.44.5-1.2"
+
+# packaging changes for holo
+zlib.ignore = true
