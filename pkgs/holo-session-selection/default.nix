@@ -4,13 +4,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "holo-session-selection";
-  version = "1.0-1";
+  version = "1.1-1";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";
     repo = "PKGBUILDs-mirror";
     rev = "holo-main/holo-session-selection-${finalAttrs.version}";
-    hash = "sha256-7ENfj+28936u9eqBQxc66FLUG8Wsc4VXd+k5TEEyg1s=";
+    hash = "sha256-Uzg2XdcK6ZbPibuEeoSrB8P5T3FkaBnuJv1omTM674o=";
   };
 
   # SDDM config set via NixOS module instead
