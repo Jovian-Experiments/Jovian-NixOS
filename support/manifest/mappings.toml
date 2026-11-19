@@ -297,7 +297,7 @@ mesa-nvk.check = "26.2.6.227269.nvk_steamos_26.11.0-3"
 mesa-radv = { map = "mesa-radv", pkgrel = 1, fixup = "mesa" }
 
 # iwd backend fixes, pending upstream
-networkmanager.check = "1.58.1-3.3"
+networkmanager.check = "1.58.1-3.4"
 
 # just the ladspa plugin
 noisetorch.check = "0.12.2.r47.g6d895f3-4"
@@ -314,7 +314,7 @@ pipewire = { map = true, fixup = "epoch" }
 plasma-pa.check = "6.8.2-1.1"
 
 # Steam OSK fixes
-plasma-desktop.check = "6.8.2-2"
+plasma-desktop.check = "6.8.2-3"
 
 # packaging changes for SteamOS A/B
 plasma-workspace.check = "6.8.2-1.2"
