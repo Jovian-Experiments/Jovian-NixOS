@@ -7,7 +7,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kcgroups";
-  version = "dmemcg-experimental-3";
+  version = "dmemcg-experimental-4";
 
   src = fetchFromGitHub {
     owner = "Jovian-Experiments";

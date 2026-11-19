@@ -214,7 +214,7 @@ jupiter-steamos-log-submitter.ignore = true
 jupiter-validation-tools.ignore = true
 
 # foreground booster
-kcgroups.check = "0.0.dmemcg.experimental.3-3"
+kcgroups.check = "0.0.dmemcg.experimental.4-1"
 
 # debug stuff
 kdump-steamos.ignore = true
