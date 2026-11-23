@@ -11,6 +11,7 @@ in
     ./steam.nix
     ./autostart.nix
     ./environment.nix
+    ./gamescope.nix
     ./updater.nix
   ];
   options = {
