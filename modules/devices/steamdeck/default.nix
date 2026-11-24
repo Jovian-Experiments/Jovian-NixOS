@@ -18,6 +18,9 @@ in
     ./hw-support.nix
     ./sdgyrodsu.nix
     ./workarounds.nix
+
+    # Renames added in November 2026
+    ./rename.nix
   ];
 
   options = {
