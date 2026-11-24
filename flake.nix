@@ -55,6 +55,7 @@
           "newScope"
           "overrideScope"
           "packages"
+          "callOverride"
 
           # package set with lots of things we should not autobuild
           "linuxPackages"
@@ -79,7 +80,10 @@
                 (ps.callPackage ./support/manifest/pyalpm.nix { })
               ]);
             in
-            [ pyenv ];
+            [
+              pyenv
+              pkgs.nixfmt-tree
+            ];
         };
       });
     };

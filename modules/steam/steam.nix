@@ -81,12 +81,24 @@ in
         enable = true;
         package = pkgs.jovianPackages.inputplumber;
       };
-      services.scx = {
-        enable = lib.mkDefault true;
-        package = pkgs.scx.rustscheds;
-        scheduler = "scx_lavd";
+
+      # from vendor packaging, simplified
+      systemd.services.scx = {
+        enable = true;
+        description = "Start scx_scheduler";
+        unitConfig = {
+          ConditionPathIsDirectory = "/sys/kernel/sched_ext";
+          StartLimitIntervalSec = 30;
+          StartLimitBurst = 2;
+        };
+        serviceConfig = {
+          Type = "simple";
+          ExecStart = "${pkgs.scx.rustscheds}/bin/scx_lavd --pinned-slice-us 500 --dd-max-wait-us 0";
+          Restart = "on-failure";
+          StandardError = "journal";
+        };
       };
-      systemd.services.scx.wantedBy = lib.mkForce [ ];
+
       services.orca.enable = lib.mkDefault true;
 
       # https://github.com/Jovian-Experiments/steamos-manager/blob/5fecc6bbb47719a65d0b10aacbd0ffe873fb1e43/data/user/orca.service#L9
