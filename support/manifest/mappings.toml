@@ -91,6 +91,9 @@ f3.ignore = true
 # Arch stuff
 filesystem.ignore = true
 
+# security/packaging fix
+flatpak.check = "1:1.18.6-0.1"
+
 # FIXME: some internal Valve thing, investigate?
 foxnet.ignore = true
 foxnetstatsd.ignore = true
@@ -149,9 +152,6 @@ holo-networkmanager-config.check = "1.0-1"
 
 # immutable root stuff
 holo-nfs-utils-tmpfiles.ignore = true
-
-# lul
-holo-nix-offload.ignore = true
 
 # some A/B thing
 holo-passwd.ignore = true
@@ -227,7 +227,7 @@ kmod.check = "34.2-1.3"
 kscreenlocker.check = "6.8.2-2"
 
 # libei/brightness/scaling fixes
-kwin.check = "6.8.2-1.3"
+kwin.check = "6.8.2-1.4"
 
 libdrm.check = "2.4.120-1"
 
