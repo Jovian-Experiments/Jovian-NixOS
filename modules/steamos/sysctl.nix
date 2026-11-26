@@ -44,7 +44,7 @@ in
         #
         # JOVIAN: said service tries to tweak settings that no longer exist on latest kernels.
         # The settings that do still exist are in the following tmpfiles rules.
-        "kernel.sched_cfs_bandwidth_slice_u" = mkDefault 3000;
+        "kernel.sched_cfs_bandwidth_slice_us" = mkDefault 3000;
 
         # Prevents intentional slowdowns in case games experience split locks
         # This is valid for kernels v6.0+
